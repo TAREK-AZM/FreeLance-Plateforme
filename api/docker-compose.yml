@@ -1,0 +1,56 @@
+version: "3.9"
+services:
+  postgres_db:
+    container_name: postgres_db
+    image: postgres:16.2
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: pgufc
+      POSTGRES_DB: springboot
+      PGDATA: /var/lib/postgresql/data/pgdata
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - spring_network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  spring_app:
+    container_name: spring_app
+    build:
+      context: .
+      args:
+        - PROFILE=dev
+        - APP_VERSION=1.0.0
+    image: spring_app_image
+    ports:
+      - "9090:9090"
+
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres_db:5432/springboot
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=pgufc
+      - SPRING_PROFILES_ACTIVE=dev
+    networks:
+      - spring_network
+    depends_on:
+      postgres_db:
+        condition: service_healthy
+    restart: on-failure
+
+  # Optional: Add additional services as needed
+  # For example, you might want to add a mail service, frontend, etc.
+
+networks:
+  spring_network:
+    driver: bridge
+
+volumes:
+  postgres_data:
+    driver: local
