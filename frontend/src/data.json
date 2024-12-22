@@ -1,0 +1,126 @@
+{
+  "providerData": {
+    "name": "John Doe",
+    "email": "john@example.com",
+    "phone": "123-456-7890",
+    "score": 4.8,
+    "isVerified": true,
+    "certifications": [
+      { "id": 1, "title": "Web Development", "img_url": "/placeholder.svg?height=200&width=300" },
+      { "id": 2, "title": "UI/UX Design", "img_url": "/placeholder.svg?height=200&width=300" },
+      { "id": 3, "title": "Mobile App Development", "img_url": "/placeholder.svg?height=200&width=300" },
+      { "id": 4, "title": "Cloud Computing", "img_url": "/placeholder.svg?height=200&width=300" }
+    ],
+    "skills": [
+      { "id": 1, "title": "React", "description": "Frontend Development" },
+      { "id": 2, "title": "Node.js", "description": "Backend Development" },
+      { "id": 3, "title": "Python", "description": "Data Analysis" },
+      { "id": 4, "title": "AWS", "description": "Cloud Infrastructure" },
+      { "id": 5, "title": "Docker", "description": "Containerization" }
+    ]
+  },
+  "services": [
+    {
+      "id": 1,
+      "title": "Web Development",
+      "description": "Full stack web development services",
+      "price": 500,
+      "status": true
+    },
+    {
+      "id": 2,
+      "title": "UI/UX Design",
+      "description": "Professional design services",
+      "price": 300,
+      "status": true
+    },
+    {
+      "id": 3,
+      "title": "Mobile App Development",
+      "description": "iOS and Android app development",
+      "price": 800,
+      "status": true
+    },
+    {
+      "id": 4,
+      "title": "Cloud Consulting",
+      "description": "AWS and Azure consulting services",
+      "price": 400,
+      "status": false
+    },
+    {
+      "id": 5,
+      "title": "Data Analysis",
+      "description": "Big data analysis and visualization",
+      "price": 600,
+      "status": true
+    }
+  ],
+  "clientRequests": [
+    {
+      "id": 1,
+      "title": "E-commerce Website",
+      "description": "Need a full e-commerce solution",
+      "status": "PENDING"
+    },
+    {
+      "id": 2,
+      "title": "Mobile App Design",
+      "description": "Looking for UI/UX designer",
+      "status": "PENDING"
+    },
+    {
+      "id": 3,
+      "title": "Database Optimization",
+      "description": "Need help optimizing MySQL database",
+      "status": "IN PROGRESS"
+    },
+    {
+      "id": 4,
+      "title": "AI Chatbot Integration",
+      "description": "Want to add an AI chatbot to our website",
+      "status": "PENDING"
+    },
+    {
+      "id": 5,
+      "title": "Cloud Migration",
+      "description": "Need assistance migrating to AWS",
+      "status": "COMPLETED"
+    }
+  ],
+  "jobPostings": [
+    {
+      "id": 1,
+      "title": "Develop E-commerce Website",
+      "description": "Looking for an experienced developer to create a full-featured e-commerce website with payment integration and inventory management.",
+      "budget": 5000,
+      "deadline": "2023-08-15",
+      "skills": ["React", "Node.js", "MongoDB", "Stripe"]
+    },
+    {
+      "id": 2,
+      "title": "Mobile App UI/UX Design",
+      "description": "Need a talented designer to create intuitive and visually appealing UI/UX for a fitness tracking mobile app.",
+      "budget": 3000,
+      "deadline": "2023-07-30",
+      "skills": ["UI/UX Design", "Figma", "Mobile App Design"]
+    },
+    {
+      "id": 3,
+      "title": "Data Analysis for Marketing Campaign",
+      "description": "Seeking a data analyst to help interpret customer data and provide insights for our upcoming marketing campaign.",
+      "budget": 2000,
+      "deadline": "2023-08-05",
+      "skills": ["Python", "Data Analysis", "Visualization", "Marketing"]
+    },
+    {
+      "id": 4,
+      "title": "AWS Cloud Migration",
+      "description": "Looking for a cloud expert to help migrate our on-premise infrastructure to AWS, ensuring scalability and security.",
+      "budget": 7000,
+      "deadline": "2023-09-01",
+      "skills": ["AWS", "Cloud Migration", "DevOps", "Security"]
+    }
+  ]
+}
+
