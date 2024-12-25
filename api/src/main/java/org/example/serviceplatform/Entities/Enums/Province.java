@@ -1,0 +1,36 @@
+package org.example.serviceplatform.Entities.Enums;
+
+public enum Province {
+    AGADIR_IDA_OUTANAN,
+    AL_HAOUZ,
+    AZILAL,
+    BENI_MELLAL,
+    BERRECHID,
+    CASABLANCA,
+    CHEFCHAOUEN,
+    CHICHAOUA,
+    EL_JADIDA,
+    EL_KELAA_DES_SRAGHNA,
+    ERRACHIDIA,
+    ESSAOUIRA,
+    FES,
+    GUELMIM,
+    IFRANE,
+    KENITRA,
+    KHOURIBGA,
+    LAAYOUNE,
+    MARRAKECH,
+    MEKNES,
+    NADOR,
+    OUARZAZATE,
+    OUJDA_ANGAD,
+    RABAT,
+    SAFI,
+    SALE,
+    SETTAT,
+    TANGER_ASSILAH,
+    TAROUDANT,
+    TETOUAN,
+    TIZNIT
+
+}
