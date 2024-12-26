@@ -17,15 +17,8 @@ public class Competence {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+    @Enumerated(EnumType.STRING)
     private CompetenceType name; // Nom de la compétence (ex : "Java", "Gestion de projet")
 
-
-    @ManyToMany
-    @JoinTable(
-            name = "prestataire_competence",
-            joinColumns = @JoinColumn(name = "competence_id"),
-            inverseJoinColumns = @JoinColumn(name = "prestataire_id")
-    )
-    private List<Prestataire> prestataires;
 
 }

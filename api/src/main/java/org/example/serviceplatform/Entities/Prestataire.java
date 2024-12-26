@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -23,8 +24,13 @@ public class Prestataire extends Utilisateur {
     @OneToMany(mappedBy = "prestataire", cascade = CascadeType.ALL)
     private List<Certification> certifications; // Certifications du prestataire
 
-    @ManyToMany(mappedBy = "prestataires", cascade = CascadeType.ALL)
-    private List<Competence> competences; // Compétences du prestataire
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "prestataire_competence", // Nom de la table de liaison
+            joinColumns = @JoinColumn(name = "prestataire_id"),
+            inverseJoinColumns = @JoinColumn(name = "competence_id")
+    )
+    private List<Competence> competences = new ArrayList<>();
 
     @OneToMany(mappedBy = "prestataire", cascade = CascadeType.ALL)
     private List<Postulation> postulats; // Liste des postulats effectués par ce prestataire

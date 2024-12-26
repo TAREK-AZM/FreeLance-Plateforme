@@ -39,15 +39,15 @@ public abstract class Utilisateur implements UserDetails {
     private Role role;
 
     //reclatmation
-    @OneToMany(mappedBy = "utilisateur", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "utilisateur",cascade = CascadeType.ALL)
     private List<Reclamation> reclamations;
 
     //notification
-    @OneToMany(mappedBy = "receiver", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "receiver",cascade = CascadeType.ALL)
     private List<Notification> notifications;
     //region
     @ManyToOne
-    @JoinColumn(name = "region_id", nullable = false)
+    @JoinColumn(name = "region_id")
     private Region region;
 
 

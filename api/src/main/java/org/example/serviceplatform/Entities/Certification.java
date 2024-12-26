@@ -20,6 +20,6 @@ public class Certification {
     private String imageUrl; // URL de l'image de la certification
 
     @ManyToOne
-    @JoinColumn(name = "prestataire_id", nullable = false)
+    @JoinColumn(name = "prestataire_id")
     private Prestataire prestataire; // Prestataire associé à la certification
 }

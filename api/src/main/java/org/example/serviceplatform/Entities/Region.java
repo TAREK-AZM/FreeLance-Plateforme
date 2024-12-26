@@ -27,8 +27,6 @@ public class Region {
 
     private String adresse; // Adresse complète de la région
 
-    @OneToMany(cascade = CascadeType.ALL)
-    private List<Utilisateur> utilisateurs;
 
 
 }
