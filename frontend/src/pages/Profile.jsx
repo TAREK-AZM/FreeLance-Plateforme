@@ -1,10 +1,34 @@
-import { providerData } from "../data.json";
+import { useState, useEffect } from "react";
+import axios from "axios";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { PlusCircle, Pencil } from "lucide-react";
 
 function Profile() {
+    const [providerData, setProviderData] = useState(null);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+
+    useEffect(() => {
+        const fetchProviderData = async () => {
+            try {
+                const response = await axios.get(`${import.meta.env.VITE_API}/providerData`); // Replace with your API URL
+                setProviderData(response.data);
+            } catch (err) {
+                console.error("Error fetching provider data:", err);
+                setError(err);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchProviderData();
+    }, []); // Runs only once after the component mounts
+
+    if (loading) return <div>Loading profile...</div>;
+    if (error) return <div>Error: {error.message}</div>;
+
     return (
         <div className="space-y-6">
             {/* Personal Information */}
@@ -56,9 +80,9 @@ function Profile() {
                                 </CardHeader>
                                 <CardContent>
                                     <img
-                                        src={cert.img_url}
+                                        src={`${import.meta.env.VITE_FRONTEND}${cert.img}`}
                                         alt={cert.title}
-                                        className="w-full h-32 object-cover rounded-md"
+                                        className="w-full h-64 object-cover rounded-md"
                                     />
                                 </CardContent>
                             </Card>

@@ -1,17 +1,39 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import axios from "axios";
 import RequestCard from "../components/RequestCard";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Search } from "lucide-react";
-import { clientRequests } from "../data.json";
 
 function Requests() {
     const [searchTerm, setSearchTerm] = useState("");
+    const [clientRequests, setClientRequests] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+
+    useEffect(() => {
+        const fetchClientRequests = async () => {
+            try {
+                const response = await axios.get(`${import.meta.env.VITE_API}/clientRequests`); // Replace with your API URL
+                setClientRequests(response.data);
+            } catch (err) {
+                console.error("Error fetching client requests:", err);
+                setError(err);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchClientRequests();
+    }, []); // Runs only once after the component mounts
 
     const filteredRequests = clientRequests.filter(request =>
         request.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
         request.description.toLowerCase().includes(searchTerm.toLowerCase())
     );
+
+    if (loading) return <div>Loading requests...</div>;
+    if (error) return <div>Error: {error.message}</div>;
 
     return (
         <div>

@@ -1,26 +1,34 @@
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Briefcase, Cog, MessageSquare, User } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
+import { useEffect } from "react";
 
 function NavigationTabs({ activeTab, setActiveTab }) {
     const navigate = useNavigate();
+    const location = useLocation();
 
     const handleTabChange = (value) => {
         setActiveTab(value); // Update the active tab state
         navigate(`/${value}`); // Navigate to the corresponding route
     };
 
+    // Sync the activeTab state with the current URL path
+    useEffect(() => {
+        const path = location.pathname.slice(1); // Remove the leading slash
+        setActiveTab(path || ""); // Update activeTab to the current path or default to the dashboard
+    }, [location.pathname, setActiveTab]);
+
     return (
-        <Tabs value={activeTab} onValueChange={handleTabChange} className="space-y-6">
-            <div className="lg:hidden">
-                <TabsList className="grid w-full grid-cols-1 gap-2">
-                    <TabsTrigger value="">Dashboard</TabsTrigger>
-                    <TabsTrigger value="services">Services</TabsTrigger>
-                    <TabsTrigger value="requests">Client Requests</TabsTrigger>
-                    <TabsTrigger value="jobboard">Job Board</TabsTrigger>
-                    <TabsTrigger value="profile">Profile</TabsTrigger>
-                </TabsList>
-            </div>
+        <Tabs value={activeTab} onValueChange={handleTabChange} className="space-y-6 border-t border-b border-gray-300">
+            {/*<div className="lg:hidden">*/}
+            {/*    <TabsList className="grid w-full grid-cols-1 gap-2 shadow-2xl">*/}
+            {/*        <TabsTrigger value="">Dashboard</TabsTrigger>*/}
+            {/*        <TabsTrigger value="services">Services</TabsTrigger>*/}
+            {/*        <TabsTrigger value="requests">Client Requests</TabsTrigger>*/}
+            {/*        <TabsTrigger value="jobboard">Job Board</TabsTrigger>*/}
+            {/*        <TabsTrigger value="profile">Profile</TabsTrigger>*/}
+            {/*    </TabsList>*/}
+            {/*</div>*/}
             <div className="hidden lg:block">
                 <TabsList className="grid w-full grid-cols-5">
                     <TabsTrigger value="" className="flex items-center gap-2">

@@ -1,18 +1,40 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import axios from "axios";
 import JobCard from "../components/JobCard";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Search } from "lucide-react";
-import { jobPostings } from "../data.json";
 
 function JobBoard() {
     const [searchTerm, setSearchTerm] = useState("");
+    const [jobPostings, setJobPostings] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+
+    useEffect(() => {
+        const fetchJobPostings = async () => {
+            try {
+                const response = await axios.get(`${import.meta.env.VITE_API}/jobPostings`); // Replace with your API URL
+                setJobPostings(response.data);
+            } catch (err) {
+                console.error("Error fetching job postings:", err);
+                setError(err);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchJobPostings();
+    }, []); // Runs only once after the component mounts
 
     const filteredJobs = jobPostings.filter(job =>
         job.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
         job.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
         job.skills.some(skill => skill.toLowerCase().includes(searchTerm.toLowerCase()))
     );
+
+    if (loading) return <div>Loading job postings...</div>;
+    if (error) return <div>Error: {error.message}</div>;
 
     return (
         <div>
