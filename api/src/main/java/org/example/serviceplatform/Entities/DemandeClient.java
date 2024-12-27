@@ -11,7 +11,7 @@ public class DemandeClient {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-
+    @Enumerated(EnumType.STRING)
     private StatusDemande status; // ex: enAttente, enCours, terminé,annulé
     private LocalDateTime dateDemande;
 

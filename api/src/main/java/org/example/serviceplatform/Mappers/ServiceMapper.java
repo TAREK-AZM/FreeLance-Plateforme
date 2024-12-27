@@ -1,6 +1,6 @@
 package org.example.serviceplatform.Mappers;
 
-import org.example.serviceplatform.DPO.ServiceDTO;
+import org.example.serviceplatform.DTO.ServiceDTO;
 import org.example.serviceplatform.Entities.Service;
 
 public class ServiceMapper {
@@ -11,6 +11,8 @@ public class ServiceMapper {
                 .titre(service.getTitre())
                 .prix(service.getPrix())
                 .status(service.getStatus())
+                //.categoryDTO(CategoryMapper.toCategoryDTO(service.getCategory()))
+                .category(service.getCategory())
                 .build();
 
     }

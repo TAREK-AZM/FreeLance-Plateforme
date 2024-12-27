@@ -1,9 +1,10 @@
-package org.example.serviceplatform.DPO;
+package org.example.serviceplatform.DTO;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.example.serviceplatform.Entities.Category;
 
 @Builder
 @Data
@@ -13,6 +14,8 @@ public class ServiceDTO {
     private Integer id;
     private String titre;
     private String description;
-    private Float prix; // Prix du service
-    private Boolean status; // Disponibilité du serv
+    private Double prix; // Prix du service
+    private Boolean status;
+    //private CategoryDTO categoryDTO;// Disponibilité du serv
+    private Category category;
 }

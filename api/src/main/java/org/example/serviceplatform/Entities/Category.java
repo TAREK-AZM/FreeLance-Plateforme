@@ -1,5 +1,6 @@
 package org.example.serviceplatform.Entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,10 +18,11 @@ public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-
+      @Enumerated(EnumType.STRING)
     private TypeCategory name;        // Nom de la catégorie
     private String description; // Description de la catégorie
 
-    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "category")
+    @JsonIgnore
     private List<Service> services; // Liste des services appartenant à cette catégorie
 }

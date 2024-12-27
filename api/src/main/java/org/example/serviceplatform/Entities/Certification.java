@@ -1,5 +1,6 @@
 package org.example.serviceplatform.Entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -21,5 +22,6 @@ public class Certification {
 
     @ManyToOne
     @JoinColumn(name = "prestataire_id")
+    @JsonIgnore
     private Prestataire prestataire; // Prestataire associé à la certification
 }

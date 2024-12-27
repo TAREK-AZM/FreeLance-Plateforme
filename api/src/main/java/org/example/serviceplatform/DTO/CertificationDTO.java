@@ -1,4 +1,4 @@
-package org.example.serviceplatform.DPO;
+package org.example.serviceplatform.DTO;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

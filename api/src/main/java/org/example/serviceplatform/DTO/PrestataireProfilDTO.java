@@ -1,4 +1,4 @@
-package org.example.serviceplatform.DPO;
+package org.example.serviceplatform.DTO;
 
 
 import lombok.AllArgsConstructor;
@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import org.example.serviceplatform.Entities.Certification;
 import org.example.serviceplatform.Entities.Competence;
 import org.example.serviceplatform.Entities.Region;
 
@@ -25,6 +26,6 @@ public class PrestataireProfilDTO {
     private String imageUrl;
     private Region region;
     List<Competence> competences;
-    List<CertificationDTO> certifications;
+    List<Certification> certifications;
 
 }

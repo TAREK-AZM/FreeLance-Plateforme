@@ -31,7 +31,7 @@ public class SecurityConfig {
                         .requestMatchers("/UpdatePassword").permitAll()
                         .requestMatchers("/newpassword").permitAll()
                         .requestMatchers("/api/prestataire/**").permitAll()
-                        .anyRequest().authenticated())
+                        .anyRequest().permitAll())
                        .sessionManagement(httpSecuritySessionManagementConfigurer ->{
                     httpSecuritySessionManagementConfigurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS);
                        });

@@ -19,6 +19,7 @@ public class Competence {
     private Integer id;
     @Enumerated(EnumType.STRING)
     private CompetenceType name; // Nom de la compétence (ex : "Java", "Gestion de projet")
+    private String description;
 
 
 }

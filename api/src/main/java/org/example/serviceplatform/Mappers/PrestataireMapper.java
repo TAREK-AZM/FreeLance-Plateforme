@@ -1,7 +1,6 @@
 package org.example.serviceplatform.Mappers;
 
-import org.example.serviceplatform.DPO.PrestataireProfilDTO;
-import org.example.serviceplatform.Entities.Certification;
+import org.example.serviceplatform.DTO.PrestataireProfilDTO;
 import org.example.serviceplatform.Entities.Prestataire;
 
 import java.util.stream.Collectors;
@@ -19,7 +18,7 @@ public class PrestataireMapper {
                .imageUrl(prestataire.getImageUrl())
                .region(prestataire.getRegion()) // Associer l'objet Region
                .competences(prestataire.getCompetences()) // Ajouter les compétences
-               .certifications(prestataire.getCertifications().stream().map(cert->CertificationMapper.toCertificatinDTO(cert)).collect(Collectors.toList()))// Ajouter les certifications
+               .certifications(prestataire.getCertifications())// Ajouter les certifications
                .build();
    }
 }

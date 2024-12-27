@@ -1,6 +1,6 @@
 package org.example.serviceplatform.Mappers;
 
-import org.example.serviceplatform.DPO.CertificationDTO;
+import org.example.serviceplatform.DTO.CertificationDTO;
 import org.example.serviceplatform.Entities.Certification;
 
 public class CertificationMapper {

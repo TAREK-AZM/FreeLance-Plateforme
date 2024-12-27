@@ -1,5 +1,6 @@
 package org.example.serviceplatform.Entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import lombok.Data;
@@ -36,14 +37,17 @@ public abstract class Utilisateur implements UserDetails {
     private Integer score;
     //role
     @ManyToOne(cascade = CascadeType.ALL)
+    @JsonIgnore
     private Role role;
 
     //reclatmation
     @OneToMany(mappedBy = "utilisateur",cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<Reclamation> reclamations;
 
     //notification
     @OneToMany(mappedBy = "receiver",cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<Notification> notifications;
     //region
     @ManyToOne
