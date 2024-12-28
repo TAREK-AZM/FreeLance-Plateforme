@@ -31,6 +31,12 @@ public class UtilisateurService implements UserDetailsService {
     @Override
     public Utilisateur loadUserByUsername(String username) throws UsernameNotFoundException {
         return  utilisateurRepo.findByEmail(username).orElseThrow(()->new UsernameNotFoundException("no user found"));
+    }
 
+    public void deleteUser(Integer id){
+        if(utilisateurRepo.existsById(id)){
+            utilisateurRepo.deleteById(id);
+        }
+        else throw new UsernameNotFoundException("user not found");
     }
 }

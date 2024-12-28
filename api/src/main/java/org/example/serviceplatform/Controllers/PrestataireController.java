@@ -27,10 +27,7 @@ public class PrestataireController {
     private PrestataireService prestataireService;
     @Autowired
     private ServiceService serviceService;
-    @Autowired
-    private DemandeRepo demandeRepo;
-    @Autowired
-    private ServiceRepo serviceRepo;
+
     @Autowired
     private PrestataireRepo prestataireRepo;
     @Autowired
@@ -143,7 +140,7 @@ public class PrestataireController {
     @DeleteMapping("/mesServices/{idService}/delete")
     public ResponseEntity<String>  deleteService(@PathVariable Integer idService) {
         serviceService.deleteService(idService);
-        return ResponseEntity.ok("la service est delete");
+        return ResponseEntity.ok("la service est deleted");
     }
 
 

@@ -50,7 +50,7 @@ public abstract class Utilisateur implements UserDetails {
     @JsonIgnore
     private List<Notification> notifications;
     //region
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "region_id")
     private Region region;
 
