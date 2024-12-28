@@ -23,6 +23,6 @@ public class Category {
     private String description; // Description de la catégorie
 
     @OneToMany(mappedBy = "category")
-    @JsonIgnore
+
     private List<Service> services; // Liste des services appartenant à cette catégorie
 }

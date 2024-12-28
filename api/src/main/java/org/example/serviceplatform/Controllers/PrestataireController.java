@@ -3,6 +3,7 @@ package org.example.serviceplatform.Controllers;
 import org.example.serviceplatform.DTO.CertificationDTO;
 import org.example.serviceplatform.DTO.DemandeDTO;
 import org.example.serviceplatform.DTO.PrestataireProfilDTO;
+import org.example.serviceplatform.Entities.Category;
 import org.example.serviceplatform.Entities.Certification;
 import org.example.serviceplatform.Entities.Prestataire;
 import org.example.serviceplatform.Entities.Service;
@@ -27,20 +28,12 @@ public class PrestataireController {
     private PrestataireService prestataireService;
     @Autowired
     private ServiceService serviceService;
-
-    @Autowired
-    private PrestataireRepo prestataireRepo;
     @Autowired
     private DemandeService demandeService;
     @Autowired
     private CertificationService certificationService;
-    @Autowired
-    private CertificationRepo certificationRepo;
 
                             //////////////////////////////GESTION DE PROFIL /////////////////////
-
-
-
     ///////get  les infos personnels de prestataire
     @GetMapping("/profil")
     public PrestataireProfilDTO profil() {
@@ -54,7 +47,6 @@ public class PrestataireController {
          prestataireService.updatePrestataire(idPrest,prestataireProfilDTO);
           return ResponseEntity.ok("Profil updated");
     }
-
 
 
 
@@ -110,7 +102,7 @@ public class PrestataireController {
 
                    ///////////////////////////////GESTION DES SERVICES ///////////////////////
 
-    /////////////////////voir mes service////////////
+    /////////////////////voir mes services triés selon les categories////////////
     @GetMapping("/mesServices")
     public List<Service> getMesServices() {
         Integer idPrest=1;
@@ -129,7 +121,7 @@ public class PrestataireController {
     @PutMapping("/mesServices")
     public ResponseEntity<String> updateService(@RequestBody Service service )  {
         serviceService.updateService(service);
-        return ResponseEntity.ok("la service est update");
+        return ResponseEntity.ok("la service est updated");
     }
     //////// le details d'une service/////////
     @GetMapping("/mesServices/{idService}/serviceDetails")
