@@ -3,18 +3,12 @@ package org.example.serviceplatform.Controllers;
 import org.example.serviceplatform.DTO.CertificationDTO;
 import org.example.serviceplatform.DTO.DemandeDTO;
 import org.example.serviceplatform.DTO.PrestataireProfilDTO;
-import org.example.serviceplatform.Entities.Category;
-import org.example.serviceplatform.Entities.Certification;
-import org.example.serviceplatform.Entities.Prestataire;
-import org.example.serviceplatform.Entities.Service;
+import org.example.serviceplatform.Entities.*;
 import org.example.serviceplatform.Repositories.CertificationRepo;
 import org.example.serviceplatform.Repositories.DemandeRepo;
 import org.example.serviceplatform.Repositories.PrestataireRepo;
 import org.example.serviceplatform.Repositories.ServiceRepo;
-import org.example.serviceplatform.Services.CertificationService;
-import org.example.serviceplatform.Services.DemandeService;
-import org.example.serviceplatform.Services.PrestataireService;
-import org.example.serviceplatform.Services.ServiceService;
+import org.example.serviceplatform.Services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -32,8 +26,10 @@ public class PrestataireController {
     private DemandeService demandeService;
     @Autowired
     private CertificationService certificationService;
+    @Autowired
+    private PostulationService postulationService;
 
-                            //////////////////////////////GESTION DE PROFIL /////////////////////
+    //////////////////////////////GESTION DE PROFIL /////////////////////
     ///////get  les infos personnels de prestataire
     @GetMapping("/profil")
     public PrestataireProfilDTO profil() {
@@ -133,6 +129,17 @@ public class PrestataireController {
     public ResponseEntity<String>  deleteService(@PathVariable Integer idService) {
         serviceService.deleteService(idService);
         return ResponseEntity.ok("la service est deleted");
+    }
+
+
+                                     ///////////GESTION DES OFFRES/////////////
+
+    //poustuler pour une offre d'une client
+    @PostMapping("/offres/{id}/postulation")
+    public ResponseEntity<String>  postulation(@PathVariable Integer id,@RequestBody Postulation postulation) {
+        Integer idPrest=1;
+        postulationService.storePostulation(id,idPrest,postulation);
+        return ResponseEntity.ok("postulation stored");
     }
 
 

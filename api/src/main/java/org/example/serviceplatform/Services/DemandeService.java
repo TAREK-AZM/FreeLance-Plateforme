@@ -33,12 +33,12 @@ public class DemandeService {
         List<DemandeDTO> demandes=demandeRepo.findDemandesByPrestataireId(idPrestataire).stream().map(d-> DemandeMapper.toDemandeDTO(d)).collect(Collectors.toList());
            return demandes;
     }
-    public void envoyerDemande(DemandeClient demandeClient) {
+    public void envoyerDemande(Integer idClient, Integer idService, DemandeClient demandeClient) {
         // Vérifier que le service existe
-        Service service = serviceRepo.findById(demandeClient.getService().getId())
+        Service service = serviceRepo.findById(idService)
                 .orElseThrow(() -> new RuntimeException("Service non trouvé"));
         // Vérifier que le client existe
-        Client client = clientRepo.findById(demandeClient.getClient().getId()).orElseThrow(()->new RuntimeException("le client n'existe pas"));
+        Client client = clientRepo.findById(idClient).orElseThrow(()->new RuntimeException("le client n'existe pas"));
         // Vérifier si une demande active existe déjà
         boolean existeDemande = demandeRepo.existsByServiceAndClientAndStatusIn(
                 service,
@@ -50,7 +50,12 @@ public class DemandeService {
             throw new RuntimeException("Une demande active existe déjà pour ce service.");
         }
         //  enregistrer la nouvelle demande
-        demandeRepo.save(demandeClient);
+        DemandeClient demande=new DemandeClient();
+        demande.setService(service);
+        demande.setClient(client);
+        demande.setStatus(StatusDemande.EN_ATTENTE);
+        demande.setDateDemande(demandeClient.getDateDemande());
+        demandeRepo.save(demande);
     }
     public void accepterDemande(Integer idDemande) {
         DemandeClient demande=demandeRepo.findById(idDemande).get();

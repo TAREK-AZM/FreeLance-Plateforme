@@ -23,20 +23,20 @@ public class CommentaireService {
     private ServiceRepo serviceRepo;
 
 //STORE
-    public CommentaireDTO  StoreCommentaire(Commentaire commentaire){
-        // Vérifiez si le client existe
-        if (commentaire.getClient() == null || commentaire.getClient().getId() == null) {
-            throw new RuntimeException("Client is required for a Commentaire");
-        }
-        Client client = clientRepo.findById(commentaire.getClient().getId())
+    public CommentaireDTO  StoreCommentaire(Integer idClient, Commentaire commentaireStored){
+
+        Client client = clientRepo.findById(idClient)
                 .orElseThrow(() -> new RuntimeException("Client not found"));
         // Vérifiez si le service existe
-        if (commentaire.getService() == null || commentaire.getService().getId() == null) {
+        if (commentaireStored.getService() == null || commentaireStored.getService().getId() == null) {
             throw new RuntimeException("Service is required for a Commentaire");
         }
-        Service service = serviceRepo.findById(commentaire.getService().getId())
+        Service service = serviceRepo.findById(commentaireStored.getService().getId())
                 .orElseThrow(() -> new RuntimeException("Service not found"));
         // Associez le client et le service au commentaire
+        Commentaire commentaire=new Commentaire();
+        commentaire.setContent(commentaireStored.getContent());
+        commentaire.setDatePosted(commentaireStored.getDatePosted());
         commentaire.setClient(client);
         commentaire.setService(service);
         // Sauvegardez le commentaire

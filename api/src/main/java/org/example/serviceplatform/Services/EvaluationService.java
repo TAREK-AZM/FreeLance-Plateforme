@@ -23,20 +23,22 @@ public class EvaluationService {
     @Autowired
     private ServiceRepo serviceRepo;
 
-    public void storeEvaluation(Evaluation evaluation) {
+    public void storeEvaluation(Integer idClient, Evaluation evaluationStored) {
         // Vérifier si le client existe
-        Client client = clientRepo.findById(evaluation.getClient().getId())
+        Client client = clientRepo.findById(idClient)
                 .orElseThrow(() -> new RuntimeException("Client introuvable"));
 
         // Vérifier si le service existe
-        org.example.serviceplatform.Entities.Service service = serviceRepo.findById(evaluation.getService().getId())
+        org.example.serviceplatform.Entities.Service service = serviceRepo.findById(evaluationStored.getService().getId())
                 .orElseThrow(() -> new RuntimeException("Service introuvable"));
 
         // Enregistrer l'évaluation
+        Evaluation evaluation=new Evaluation();
         evaluation.setClient(client);
         evaluation.setService(service);
+        evaluation.setEtoiles(evaluationStored.getEtoiles());
         evaluationRepo.save(evaluation);
-        evaluationRepo.save(evaluation);
+
     }
 
     public List<EvaluationDTO> getEvaluationsByServiceId(Integer serviceId) {
@@ -44,5 +46,12 @@ public class EvaluationService {
         return evaluations.stream()
                 .map(EvaluationMapper::toevalutationDTO)
                 .collect(Collectors.toList());
+    }
+  //update evaluation
+    public void updateEvaluation( Evaluation updatedEvaluation) {
+        Evaluation evaluation = evaluationRepo.findById(updatedEvaluation.getId())
+                .orElseThrow(() -> new RuntimeException("Evaluation not found with "));
+        evaluation.setEtoiles(updatedEvaluation.getEtoiles());
+        evaluationRepo.save(evaluation);
     }
 }
