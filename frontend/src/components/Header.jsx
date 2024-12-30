@@ -90,7 +90,7 @@ function Header({ name, email, activeTab, setActiveTab }) {
 
   return (
       <>
-        <header className="bg-gradient-to-r from-cyan-950 to-gray-900 backdrop-blur-lg shadow-lg border-b">
+        <header className="bg-gradient-to-r from-cyan-950/90 to-gray-900/95 backdrop-blur-lg shadow-lg border-b">
           <div className="container mx-auto px-8 py-6">
             <div className="flex items-center justify-between">
               {/* Left Section: Sidebar Toggle and Title */}
