@@ -45,13 +45,11 @@ function JobBoard() {
                         placeholder="Search jobs..."
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
-                        className="pl-10 pr-4 py-2 w-full"
+                        className="pl-10 pr-4 py-2 w-full border border-gray-400"
                     />
-                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-stone-500" />
+                    <Search className=" absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-stone-500" />
                 </div>
-                <Button className="bg-blue-600 hover:bg-blue-700 text-white">
-                    Search
-                </Button>
+
             </form>
             <div className="grid gap-6 md:grid-cols-2">
                 {filteredJobs.map(job => (

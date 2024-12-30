@@ -90,7 +90,7 @@ const ServiceDetails = () => {
             </div>
 
             {/* Two-Column Layout with Proper Shadow */}
-            <div className="relative bg-white rounded-lg shadow-2xl overflow-hidden flex flex-col md:flex-row">
+            <div className="relative bg-white rounded-lg border border-gray-400 shadow-2xl overflow-hidden flex flex-col md:flex-row">
                 {/* Shadow Behind */}
                 <div
                     className="absolute -top-4 left-0 w-full h-4 bg-gradient-to-b from-gray-300 to-transparent rounded-t-lg"

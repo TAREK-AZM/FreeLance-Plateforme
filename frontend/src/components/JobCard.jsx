@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button"
 
  function JobCard({ title, description, budget, deadline, skills }) {
   return (
-    <Card className="border-stone-200 shadow-md hover:shadow-lg transition-all duration-200 ease-in-out hover:scale-105">
+    <Card className="border border-gray-400 shadow-md hover:shadow-lg transition-all duration-200 ease-in-out hover:scale-105">
       <CardHeader>
         <div className="flex items-center justify-between">
           <CardTitle>{title}</CardTitle>

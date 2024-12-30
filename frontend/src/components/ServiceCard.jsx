@@ -2,28 +2,39 @@ import { Link } from "react-router-dom";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { motion } from "framer-motion";
 
-// Default placeholder image
 const DEFAULT_IMAGE = "https://via.placeholder.com/300x200?text=No+Image+Available";
 
-function ServiceCard({ id, title, description, price, status, img, onEdit, onDelete }) {
-    img = `${import.meta.env.VITE_FRONTEND}${img}`
-    console.log(img)
-    return (
-        <Card className="bg-gray-50 border border-gray-200 shadow-md hover:shadow-lg transition-all duration-200 ease-in-out hover:scale-105">
-            <Link to={`/services/${id}`} className="block">
-                <CardHeader>
-                    {/* Picture Section with Fallback */}
+const cardVariants = {
+    initial: { opacity: 0, y: 20 },
+    animate: { opacity: 1, y: 0 },
+    hover: { scale: 1.05, transition: { duration: 0.3 } },
+};
 
-                    <img
-                        src={img || DEFAULT_IMAGE}
-                        alt={title}
-                        className="w-full h-40 object-cover rounded-t-md"
-                        onError={(e) => {
-                            e.target.src = DEFAULT_IMAGE; // Fallback if the image fails to load
-                        }}
-                    />
-                    <CardTitle className="text-gray-900 mt-2">{title}</CardTitle>
+function ServiceCard({ id, title, description, price, status, img, onEdit, onDelete }) {
+    img = `${import.meta.env.VITE_FRONTEND}${img}`;
+
+    return (
+        <motion.div
+            variants={cardVariants}
+            initial="initial"
+            animate="animate"
+            whileHover="hover"
+            className="bg-gray-50 border border-gray-400  shadow-2xl border-solid relative rounded-lg"
+        >
+            <Link to={`/services/${id}`} className="block">
+                <motion.img
+                    src={img || DEFAULT_IMAGE}
+                    alt={title}
+                    className="w-full h-40 object-cover rounded-t-md"
+                    onError={(e) => {
+                        e.target.src = DEFAULT_IMAGE;
+                    }}
+                    whileHover={{ scale: 1.1 }}
+                />
+                <CardHeader className="p-4">
+                    <CardTitle className="text-gray-900">{title}</CardTitle>
                     <CardDescription className="text-gray-600">{description}</CardDescription>
                 </CardHeader>
             </Link>
@@ -64,7 +75,7 @@ function ServiceCard({ id, title, description, price, status, img, onEdit, onDel
                     </div>
                 </div>
             </CardContent>
-        </Card>
+        </motion.div>
     );
 }
 

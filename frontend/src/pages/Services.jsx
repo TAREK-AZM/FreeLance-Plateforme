@@ -51,6 +51,7 @@ function Services() {
             await axios.delete(`${import.meta.env.VITE_API}/services/${id}`);
             setServices((prevServices) => prevServices.filter((service) => service.id !== id));
             console.log(`Service with ID ${id} deleted successfully`);
+            toast.success("Service deleted successfully!");
         } catch (err) {
             console.error("Error deleting service:", err);
         }
@@ -84,7 +85,7 @@ function Services() {
                         placeholder="Search services..."
                         value={searchTerm}
                         onChange={(e) => setSearchTerm(e.target.value)}
-                        className="pl-10 pr-4 py-2 w-full"
+                        className="pl-10 pr-4 py-2 w-full border border-gray-400"
                     />
                     <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-stone-500" />
                 </div>
