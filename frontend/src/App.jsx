@@ -6,8 +6,9 @@ import ServiceDetails from "./pages/ServiceDetails";
 import Requests from "./pages/Requests";
 import JobBoard from "./pages/JobBoard";
 import Profile from "./pages/Profile";
-import LoginPage from "./pages/LoginPage.jsx";
-import SignUpPage from "./pages/SignUpPage.jsx";
+import LoginPage from "./pages/LoginPage";
+import SignUpPage from "./pages/SignUpPage";
+import UserDetails from "./pages/UserDetails";
 
 const router = createBrowserRouter(
     createRoutesFromElements(
@@ -21,6 +22,7 @@ const router = createBrowserRouter(
                 <Route index element={<Dashboard />} />
                 <Route path="/services" element={<Services />} />
                 <Route path="/services/:id" element={<ServiceDetails />} />
+                <Route path="/user/:userId" element={<UserDetails />} />
                 <Route path="/requests" element={<Requests />} />
                 <Route path="/jobboard" element={<JobBoard />} />
                 <Route path="/profile" element={<Profile />} />

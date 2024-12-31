@@ -143,9 +143,9 @@ const ServiceDetails = () => {
                     </div>
 
                     {/* Comments Section */}
-                    <div className="bg-gray-50 p-6 rounded-lg mt-6">
-                        <h2 className="text-xl font-semibold mb-4">Comments</h2>
-                        <hr className="my-4 border-gray-300" />
+                    <div className="bg-gray-50 dark:bg-gray-800 p-6 rounded-lg mt-6">
+                        <h2 className="text-xl font-semibold mb-4 text-gray-800 dark:text-gray-100">Comments</h2>
+                        <hr className="my-4 border-gray-300 dark:border-gray-700" />
                         {comments.length > 0 ? (
                             <ul>
                                 {comments.map((comment) => {
@@ -153,26 +153,33 @@ const ServiceDetails = () => {
                                     return (
                                         <li
                                             key={comment.id}
-                                            className="mb-4 p-4 bg-gray-100 rounded-lg flex items-center space-x-4"
+                                            className="mb-4 p-4 bg-gray-100 dark:bg-gray-900 rounded-lg flex items-center space-x-4"
                                         >
                                             <img
                                                 src={`${import.meta.env.VITE_FRONTEND}${user.profileImg}` || DEFAULT_PROFILE_IMG}
                                                 alt={`${user.name} ${user.lastName}`}
                                                 className="w-12 h-12 rounded-full object-cover"
-
                                             />
                                             <div>
-                                                <p className="font-semibold text-gray-800">{`${user.name} ${user.lastName}`}</p>
-                                                <p className="text-gray-800">{comment.content}</p>
+                                                <Link
+                                                    to={`/user/${comment.user_id}`}
+                                                    state={{ serviceId: id }} // Pass the service ID as state
+                                                    className="font-semibold text-indigo-500 hover:underline"
+                                                >
+                                                    {user.name} {user.lastName}
+                                                </Link>
+                                                <p className="text-gray-800 dark:text-gray-300">{comment.content}</p>
                                             </div>
                                         </li>
                                     );
                                 })}
                             </ul>
                         ) : (
-                            <p className="text-gray-500">No comments yet.</p>
+                            <p className="text-gray-500 dark:text-gray-400">No comments yet.</p>
                         )}
                     </div>
+
+
                 </div>
             </div>
 

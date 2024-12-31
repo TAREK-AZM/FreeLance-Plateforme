@@ -16,7 +16,7 @@ export function NotificationDropdown() {
   const [notifications, setNotifications] = useState([]);
   const [unreadCount, setUnreadCount] = useState(0);
 
-  const API_URL = `http://localhost:8000/notifications`;
+  const API_URL = `${import.meta.env.VITE_API}/notifications`;
 
   // Fetch notifications
   const fetchNotifications = async () => {
