@@ -46,11 +46,9 @@ public class Service {
 
     @ManyToOne
     @JoinColumn(name = "category_id", nullable = false)
-    @JsonIgnore
     private Category category;
 
     @ManyToOne
     @JoinColumn(name = "prestataire_id", nullable = false)
-    @JsonIgnore
     private Prestataire prestataire;
 }

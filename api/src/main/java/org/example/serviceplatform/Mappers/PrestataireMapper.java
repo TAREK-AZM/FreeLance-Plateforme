@@ -19,7 +19,7 @@ public class PrestataireMapper {
                .imageUrl(prestataire.getImageUrl())
                .region(prestataire.getRegion()) // Associer l'objet Region
                .competences(prestataire.getCompetences()) // Ajouter les compétences
-               .certifications(prestataire.getCertifications())// Ajouter les certifications
+               .certifications(prestataire.getCertifications().stream().map(CertificationMapper::toCertificatinDTO).collect(Collectors.toList()))// Ajouter les certifications
                .build();
    }
     public static PrestataireDTO toPrestataireDTO(Prestataire prestataire) {

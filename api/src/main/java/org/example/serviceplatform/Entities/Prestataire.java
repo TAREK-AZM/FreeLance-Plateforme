@@ -1,5 +1,6 @@
 package org.example.serviceplatform.Entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,6 +20,7 @@ public class Prestataire extends Utilisateur {
     private String imageUrl;    // URL de l'image de profil du prestataire
 
     @OneToMany(mappedBy = "prestataire", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<Service> services; // Liste des services proposés par le prestataire
 
     @OneToMany(mappedBy = "prestataire", cascade = CascadeType.ALL)
@@ -33,6 +35,7 @@ public class Prestataire extends Utilisateur {
     private List<Competence> competences = new ArrayList<>();
 
     @OneToMany(mappedBy = "prestataire", cascade = CascadeType.ALL)
+    @JsonIgnore
     private List<Postulation> postulats; // Liste des postulats effectués par ce prestataire
 
 

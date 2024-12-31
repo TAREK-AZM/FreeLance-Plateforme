@@ -1,9 +1,6 @@
 package org.example.serviceplatform.Controllers;
 
-import org.example.serviceplatform.DTO.ClientDTO;
-import org.example.serviceplatform.DTO.CommentaireDTO;
-import org.example.serviceplatform.DTO.EvaluationDTO;
-import org.example.serviceplatform.DTO.PostulationDTO;
+import org.example.serviceplatform.DTO.*;
 import org.example.serviceplatform.Entities.*;
 import org.example.serviceplatform.Repositories.ClientRepo;
 import org.example.serviceplatform.Repositories.CommentaireRepo;
@@ -70,8 +67,8 @@ public class ClientController {
     }
     //voir les services pour une categorie
     @GetMapping("/categories/{idCateg}/services")
-    public List<Service> getAllServices(@PathVariable Integer idCateg){
-        return categoryService.getAllServices(idCateg);
+    public List<ServiceClientDTO> getAllServicesOfCategory(@PathVariable Integer idCateg){
+        return categoryService.getAllServicesByCategory(idCateg);
     }
 
 

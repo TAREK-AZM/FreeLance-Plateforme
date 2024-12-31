@@ -22,6 +22,5 @@ public class Certification {
 
     @ManyToOne
     @JoinColumn(name = "prestataire_id")
-    @JsonIgnore
     private Prestataire prestataire; // Prestataire associé à la certification
 }

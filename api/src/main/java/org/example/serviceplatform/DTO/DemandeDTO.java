@@ -13,6 +13,6 @@ public class DemandeDTO {
     private Integer id;
     private String status;
     private LocalDateTime dateDemande;
-    private Service service;
+    private ServiceDTO service;
     private ClientDTO client;
 }

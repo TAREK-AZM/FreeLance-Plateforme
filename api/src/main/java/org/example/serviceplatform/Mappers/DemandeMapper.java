@@ -8,7 +8,8 @@ public class DemandeMapper {
         return DemandeDTO.builder()
                 .id(demande.getId())
                 .status(demande.getStatus().toString())
-                .service(demande.getService())
+                .dateDemande(demande.getDateDemande())
+                .service(ServiceMapper.toServiceDTO(demande.getService()) )
                 .client(ClientMapper.toClientDTO(demande.getClient()))
                 .build();
     }

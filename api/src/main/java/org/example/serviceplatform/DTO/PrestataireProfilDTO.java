@@ -26,6 +26,6 @@ public class PrestataireProfilDTO {
     private String imageUrl;
     private Region region;
     List<Competence> competences;
-    List<Certification> certifications;
+    List<CertificationDTO> certifications;
 
 }

@@ -22,17 +22,16 @@ public class PrestataireService {
         }
         return PrestataireMapper.toPrestProfilDTO(prestataireRepo.findById(id).orElseThrow(()->new RuntimeException("not found ")));
     }
-    public void updatePrestataire(Integer idPrest,PrestataireProfilDTO prestataireDTO) {
+    public void updatePrestataire(Integer idPrest,Prestataire prestataireUpdated) {
         Prestataire prestataire=prestataireRepo.findById(idPrest).orElse(null);
-        prestataire.setNom(prestataireDTO.getNom());
-        prestataire.setPrenom(prestataireDTO.getPrenom());
-        prestataire.setDescription(prestataireDTO.getDescription());
-        prestataire.setImageUrl(prestataireDTO.getImageUrl());
-        prestataire.setEmail(prestataireDTO.getEmail());
-        prestataire.setTelephone(prestataireDTO.getTelephone());
-        prestataire.setCompetences(prestataireDTO.getCompetences());
+        prestataire.setNom(prestataireUpdated.getNom());
+        prestataire.setPrenom(prestataireUpdated.getPrenom());
+        prestataire.setDescription(prestataireUpdated.getDescription());
+        prestataire.setImageUrl(prestataireUpdated.getImageUrl());
+        prestataire.setEmail(prestataireUpdated.getEmail());
+        prestataire.setTelephone(prestataireUpdated.getTelephone());
         //verification de la ceation de region
-        Region region=regionService.verifyOrCreateRegion(prestataireDTO.getRegion());
+        Region region=regionService.verifyOrCreateRegion(prestataireUpdated.getRegion());
         prestataire.setRegion(region);
         prestataireRepo.save(prestataire);
     }

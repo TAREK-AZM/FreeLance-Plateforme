@@ -3,6 +3,7 @@ package org.example.serviceplatform.Controllers;
 import org.example.serviceplatform.DTO.CertificationDTO;
 import org.example.serviceplatform.DTO.DemandeDTO;
 import org.example.serviceplatform.DTO.PrestataireProfilDTO;
+import org.example.serviceplatform.DTO.ServiceDTO;
 import org.example.serviceplatform.Entities.*;
 import org.example.serviceplatform.Repositories.CertificationRepo;
 import org.example.serviceplatform.Repositories.DemandeRepo;
@@ -30,6 +31,9 @@ public class PrestataireController {
     private PostulationService postulationService;
 
     //////////////////////////////GESTION DE PROFIL /////////////////////
+
+
+
     ///////get  les infos personnels de prestataire
     @GetMapping("/profil")
     public PrestataireProfilDTO profil() {
@@ -38,14 +42,11 @@ public class PrestataireController {
     }
     /////// UPDATE  les infos personnels de prestataire
     @PutMapping("/profil")
-    public ResponseEntity<String> updateProfil(@RequestBody PrestataireProfilDTO prestataireProfilDTO) {
+    public ResponseEntity<String> updateProfil(@RequestBody Prestataire prestataire) {
         Integer idPrest=1;
-         prestataireService.updatePrestataire(idPrest,prestataireProfilDTO);
+         prestataireService.updatePrestataire(idPrest,prestataire);
           return ResponseEntity.ok("Profil updated");
     }
-
-
-
 
                     ////////////////////////////// Gestion de certification//////////////////////////////
 
@@ -94,13 +95,11 @@ public class PrestataireController {
     }
 
 
-
-
                    ///////////////////////////////GESTION DES SERVICES ///////////////////////
 
     /////////////////////voir mes services triés selon les categories////////////
     @GetMapping("/mesServices")
-    public List<Service> getMesServices() {
+    public List<ServiceDTO> getMesServices() {
         Integer idPrest=1;
         return serviceService.getServices(idPrest);
  }
@@ -110,18 +109,17 @@ public class PrestataireController {
         Integer idPrest=1;
          serviceService.storeService(idPrest,service);
         return ResponseEntity.ok("votre service est bien ajoutée");
-
     }
 
     //////////////modifier une service///////
-    @PutMapping("/mesServices")
+    @PutMapping("/mesServices/update")
     public ResponseEntity<String> updateService(@RequestBody Service service )  {
         serviceService.updateService(service);
         return ResponseEntity.ok("la service est updated");
     }
     //////// le details d'une service/////////
     @GetMapping("/mesServices/{idService}/serviceDetails")
-    public Service afficherService(@PathVariable Integer idService) {
+    public ServiceDTO afficherService(@PathVariable Integer idService) {
         return serviceService.getService(idService);
     }
     /////////delete une service////////////
@@ -130,7 +128,6 @@ public class PrestataireController {
         serviceService.deleteService(idService);
         return ResponseEntity.ok("la service est deleted");
     }
-
 
                                      ///////////GESTION DES OFFRES/////////////
 
@@ -141,6 +138,7 @@ public class PrestataireController {
         postulationService.storePostulation(id,idPrest,postulation);
         return ResponseEntity.ok("postulation stored");
     }
+    //voir la liste des offres
 
 
 

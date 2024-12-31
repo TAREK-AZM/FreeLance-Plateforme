@@ -26,13 +26,13 @@ public class ServiceService {
     private CategoryRepo categoryRepo;
 
     //////////// GETserices///////////
-    public List<Service> getServices(Integer id) {
+    public List<ServiceDTO> getServices(Integer id) {
         Prestataire prest=prestataireRepo.findById(id).orElse(null);
-        return prest.getServices();
+        return prest.getServices().stream().map(ServiceMapper::toServiceDTO).collect(Collectors.toList()) ;
     }
     //////////////// Get Detials Service/////////
-    public Service getService(Integer id) {
-        return serviceRepo.findById(id).orElseThrow(()->new RuntimeException("Service not found"));
+    public ServiceDTO getService(Integer id) {
+        return ServiceMapper.toServiceDTO( serviceRepo.findById(id).orElseThrow(()->new RuntimeException("Service not found")));
     }
     //////// store service//////////
     public void storeService(Integer id, Service service) {
