@@ -102,7 +102,7 @@
       "id": "1",
       "title": "Mobile App Development",
       "description": "iOS and Android app development",
-      "price": "812",
+      "price": "816",
       "status": true,
       "img": "/src/assets/service-img/img1.png"
     },
@@ -110,7 +110,7 @@
       "id": "2",
       "title": "Cloud Consulting",
       "description": "AWS and Azure consulting services",
-      "price": "403",
+      "price": "405",
       "status": true,
       "img": "/src/assets/service-img/img2.jpeg"
     },
@@ -118,16 +118,9 @@
       "id": "3",
       "title": "Laravel",
       "description": "description kvojrojf",
-      "price": "454849",
+      "price": "454850",
       "status": true,
       "img": "/src/assets/service-img/img3.jpg"
-    },
-    {
-      "id": "4",
-      "title": "AI and machine learning",
-      "description": "sending requests to ai api no science behind what I do",
-      "price": "9988",
-      "status": true
     }
   ],
   "clientRequests": [
@@ -173,6 +166,7 @@
         "React",
         "Node.js",
         "MongoDB",
+        "Figma",
         "Stripe"
       ]
     },
@@ -239,6 +233,43 @@
       "service_id": "3",
       "user_id": "4",
       "content": "Amazing quality and quick delivery."
+    }
+  ],
+  "notifications": [
+    {
+      "id": "1",
+      "title": "New message",
+      "description": "You have a new message from John Doe",
+      "time": "5 min ago",
+      "read": true
+    },
+    {
+      "id": "2",
+      "title": "Project update",
+      "description": "Your project 'Web Development' has been updated",
+      "time": "1 hour ago",
+      "read": true
+    },
+    {
+      "id": "3",
+      "title": "New job posting",
+      "description": "A new job matching your skills has been posted",
+      "time": "2 hours ago",
+      "read": true
+    },
+    {
+      "id": "4",
+      "title": "Payment received",
+      "description": "You received a payment for your recent project",
+      "time": "1 day ago",
+      "read": true
+    },
+    {
+      "id": "5",
+      "title": "Profile view",
+      "description": "Someone viewed your profile",
+      "time": "2 days ago",
+      "read": true
     }
   ]
 }

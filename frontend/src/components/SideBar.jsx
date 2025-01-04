@@ -14,7 +14,7 @@ function Sidebar({ isOpen, onClose, activeTab, setActiveTab }) {
 
             {/* Sidebar */}
             <div
-                className={`fixed inset-y-0 left-0 bg-neutral-950 bg-opacity-90 transform ${
+                className={`fixed inset-y-0 left-0 bg-gray-900 bg-opacity-90 transform ${
                     isOpen ? "translate-x-0" : "-translate-x-full"
                 } transition-transform duration-300 ease-in-out w-64 z-50`}
             >

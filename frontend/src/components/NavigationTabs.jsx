@@ -20,15 +20,6 @@ function NavigationTabs({ activeTab, setActiveTab }) {
 
     return (
         <Tabs value={activeTab} onValueChange={handleTabChange} className="space-y-6 border-t border-b border-gray-300">
-            {/*<div className="lg:hidden">*/}
-            {/*    <TabsList className="grid w-full grid-cols-1 gap-2 shadow-2xl">*/}
-            {/*        <TabsTrigger value="">Dashboard</TabsTrigger>*/}
-            {/*        <TabsTrigger value="services">Services</TabsTrigger>*/}
-            {/*        <TabsTrigger value="requests">Client Requests</TabsTrigger>*/}
-            {/*        <TabsTrigger value="jobboard">Job Board</TabsTrigger>*/}
-            {/*        <TabsTrigger value="profile">Profile</TabsTrigger>*/}
-            {/*    </TabsList>*/}
-            {/*</div>*/}
             <div className="hidden lg:block">
                 <TabsList className="grid w-full grid-cols-5">
                     <TabsTrigger value="" className="flex items-center gap-2">

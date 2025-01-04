@@ -32,7 +32,7 @@ function Profile() {
     return (
         <div className="space-y-6">
             {/* Personal Information */}
-            <Card className="border-stone-200 shadow-md hover:shadow-lg transition-all duration-200 ease-in-out hover:scale-105">
+            <Card className="border border-gray-400 shadow-md hover:shadow-lg transition-all duration-200 ease-in-out hover:scale-105">
                 <CardHeader>
                     <CardTitle>Personal Information</CardTitle>
                 </CardHeader>
@@ -64,7 +64,7 @@ function Profile() {
             </Card>
 
             {/* Certifications */}
-            <Card className="border-stone-200 shadow-md hover:shadow-lg transition-all duration-200 ease-in-out hover:scale-105">
+            <Card className="border border-gray-400 shadow-md hover:shadow-lg transition-all duration-200 ease-in-out hover:scale-105">
                 <CardHeader>
                     <CardTitle>Certifications</CardTitle>
                 </CardHeader>
@@ -88,7 +88,7 @@ function Profile() {
                             </Card>
                         ))}
                         <Card className="flex items-center justify-center min-h-[200px] border-stone-200 shadow-sm hover:shadow-md transition-all duration-200 ease-in-out hover:scale-105">
-                            <Button variant="outline" className="transition-all duration-200 ease-in-out hover:shadow-lg hover:scale-105">
+                            <Button variant="outline" className="transition-all duration-200 ease-in-out hover:shadow-lg hover:scale-105 border border-gray-400">
                                 <PlusCircle className="mr-2 h-4 w-4" /> Add Certification
                             </Button>
                         </Card>
@@ -97,7 +97,7 @@ function Profile() {
             </Card>
 
             {/* Skills */}
-            <Card className="border-stone-200 shadow-md hover:shadow-lg transition-all duration-200 ease-in-out hover:scale-105">
+            <Card className="border border-gray-400 shadow-md hover:shadow-lg transition-all duration-200 ease-in-out hover:scale-105">
                 <CardHeader>
                     <CardTitle>Skills</CardTitle>
                 </CardHeader>
@@ -106,7 +106,7 @@ function Profile() {
                         {providerData.skills.map((skill) => (
                             <div
                                 key={skill.id}
-                                className="flex items-center justify-between p-2 rounded-lg border border-stone-200 shadow-sm hover:shadow-md transition-all duration-200 ease-in-out hover:scale-105"
+                                className="flex items-center justify-between p-2 rounded-lg border border-stone-200 shadow-sm hover:shadow-md transition-all duration-200 ease-in-out hover:scale-105 border border-gray-400"
                             >
                                 <div>
                                     <h4 className="font-medium">{skill.title}</h4>
@@ -117,7 +117,7 @@ function Profile() {
                                 </Button>
                             </div>
                         ))}
-                        <Button variant="outline" className="w-full transition-all duration-200 ease-in-out hover:shadow-lg hover:scale-105">
+                        <Button variant="outline" className="w-full transition-all duration-200 ease-in-out hover:shadow-lg hover:scale-105 border border-gray-400">
                             <PlusCircle className="mr-2 h-4 w-4" /> Add Skill
                         </Button>
                     </div>
