@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { Cog, MessageSquare, Briefcase, User } from "lucide-react";
 
-function Sidebar({ isOpen, onClose, activeTab, setActiveTab }) {
+function SideBar({ isOpen, onClose, activeTab, setActiveTab }) {
     return (
         <>
             {/* Overlay for closing the sidebar */}
@@ -97,4 +97,4 @@ function Sidebar({ isOpen, onClose, activeTab, setActiveTab }) {
     );
 }
 
-export default Sidebar;
+export default SideBar;

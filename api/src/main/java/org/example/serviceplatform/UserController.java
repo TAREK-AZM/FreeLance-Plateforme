@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 @Controller // Changed from @RestController to @Controller
 @RequestMapping("/users")
+@CrossOrigin(origins = "http://react_frontend:80")
 public class UserController {
 
     private final UserService userService;
