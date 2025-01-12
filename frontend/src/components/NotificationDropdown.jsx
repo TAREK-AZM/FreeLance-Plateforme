@@ -48,11 +48,11 @@ export function NotificationDropdown() {
     try {
       const unreadNotifications = notifications.filter((n) => !n.read);
       await Promise.all(
-          unreadNotifications.map((notification) =>
+          unreadNotifications?.map((notification) =>
               axios.patch(`${API_URL}/${notification.id}`, { read: true })
           )
       );
-      const updatedNotifications = notifications.map((n) => ({
+      const updatedNotifications = notifications?.map((n) => ({
         ...n,
         read: true,
       }));

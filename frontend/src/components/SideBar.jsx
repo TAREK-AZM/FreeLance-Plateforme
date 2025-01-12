@@ -34,6 +34,17 @@ function SideBar({ isOpen, onClose, activeTab, setActiveTab }) {
                             <Briefcase className="mr-2 w-5 h-5"/>
                             Dashboard
                         </Link>
+                        {/*// added likns*/}
+                        <Link
+                            to="/users"
+                            className={`flex items-center px-4 py-2 text-white rounded ${
+                                activeTab === "dashboard" ? "bg-gray-700" : ""
+                            }`}
+
+                        >
+                            <Briefcase className="mr-2 w-5 h-5"/>
+                            Users
+                        </Link>
                         <hr/>
                         <Link
                             to="/services"

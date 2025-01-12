@@ -8,10 +8,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.stereotype.Controller; // Make sure to import this
 import org.springframework.web.bind.annotation.*;
-
-@Controller // Changed from @RestController to @Controller
+import java.util.List;
+@RestController // Changed from @RestController to @Controller
 @RequestMapping("/users")
-@CrossOrigin(origins = "http://react_frontend:80")
+//@CrossOrigin(origins = "http://react_frontend:80")
+@CrossOrigin(origins = "http://localhost:3000")
+
 public class UserController {
 
     private final UserService userService;
@@ -39,10 +41,21 @@ public class UserController {
         return "redirect:/";
     }
 
+//    @GetMapping("/all")
+//    public String showAllUsers(Model model) {
+//        model.addAttribute("users", userService.getAllUsers());
+//        return "usersList"; // Ensure you have an allUsers.html template
+//    }
+// Create a new user
+@PostMapping("/create_user")
+public ResponseEntity<AppUser> createUser(@RequestBody AppUser user) {
+    AppUser createdUser = userService.createUser(user);
+    return new ResponseEntity<>(createdUser, HttpStatus.CREATED);
+}
     @GetMapping("/all")
-    public String showAllUsers(Model model) {
-        model.addAttribute("users", userService.getAllUsers());
-        return "usersList"; // Ensure you have an allUsers.html template
+    public ResponseEntity<List<AppUser>> getAllUsers() {
+        List<AppUser> users = userService.getAllUsers();
+        return ResponseEntity.ok(users); // Returns JSON response
     }
 
     // REST API Endpoints
