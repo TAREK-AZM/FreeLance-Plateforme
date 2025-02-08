@@ -22,7 +22,7 @@ public class CategoryService {
     private PrestataireRepo prestataireRepo;
 
     public List<Category> getAllCategories() {
-        return categoryRepo.findAll();
+             return categoryRepo.findAll();
     }
     public List<ServiceClientDTO> getAllServicesByCategory(Integer categoryId) {
         Category category = categoryRepo.findById(categoryId).get();

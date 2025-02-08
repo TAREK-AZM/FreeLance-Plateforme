@@ -44,7 +44,6 @@ public class AuthenticationService {
     public AuthenticationResponse registerClient(RegisterRequest request) throws RoleNotFoundException {
         validateRegistration(request.getEmail());
         Utilisateur user = buildUser(request, RoleType.CLIENT);
-        System.out.println("Il arrive ici (Service)");
         return completeRegistration(user);
     }
 
@@ -118,7 +117,6 @@ public class AuthenticationService {
     }
 
     private AuthenticationResponse completeRegistration(Utilisateur user) {
-        user = utilisateurRepo.save(user);
         validationService.enregistrer(user);
 
         return AuthenticationResponse.builder()

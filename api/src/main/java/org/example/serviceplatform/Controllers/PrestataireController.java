@@ -29,6 +29,8 @@ public class PrestataireController {
     private CertificationService certificationService;
     @Autowired
     private PostulationService postulationService;
+    @Autowired
+    private UtilisateurService utilisateurService;
 
     //////////////////////////////GESTION DE PROFIL /////////////////////
 
@@ -37,13 +39,13 @@ public class PrestataireController {
     ///////get  les infos personnels de prestataire
     @GetMapping("/profil")
     public PrestataireProfilDTO profil() {
-        Integer idPrest=1;    //le id de user authentifié
+        Integer idPrest=utilisateurService.getAuthenticatedUserId(); //le id de user authentifié
        return prestataireService.getPrestataire(idPrest);
     }
     /////// UPDATE  les infos personnels de prestataire
     @PutMapping("/profil")
     public ResponseEntity<String> updateProfil(@RequestBody Prestataire prestataire) {
-        Integer idPrest=1;
+        Integer idPrest=utilisateurService.getAuthenticatedUserId();
          prestataireService.updatePrestataire(idPrest,prestataire);
           return ResponseEntity.ok("Profil updated");
     }
@@ -52,7 +54,7 @@ public class PrestataireController {
 
     @PostMapping("/certification/add")
     public ResponseEntity<String>  ajouterCertification(@RequestBody Certification certification) {
-        Integer idPrest=1;
+        Integer idPrest=utilisateurService.getAuthenticatedUserId();
         certificationService.StoreCertification(idPrest,certification);
          return ResponseEntity.ok("Certification stored");
 
@@ -77,7 +79,7 @@ public class PrestataireController {
    ////////////////voir les demandes /////////////////////
     @GetMapping("/demandes")
     public List<DemandeDTO> demandes() {
-        Integer idPrest=1;
+        Integer idPrest=utilisateurService.getAuthenticatedUserId();
         return demandeService.getDemandes(idPrest);
     }
 
@@ -100,13 +102,13 @@ public class PrestataireController {
     /////////////////////voir mes services triés selon les categories////////////
     @GetMapping("/mesServices")
     public List<ServiceDTO> getMesServices() {
-        Integer idPrest=1;
+        Integer idPrest=utilisateurService.getAuthenticatedUserId();
         return serviceService.getServices(idPrest);
  }
     /////////ajouter une service//////////
     @PostMapping("/mesServices/add")
     public ResponseEntity<String>  addService(@RequestBody Service service) {
-        Integer idPrest=1;
+        Integer idPrest=utilisateurService.getAuthenticatedUserId();
          serviceService.storeService(idPrest,service);
         return ResponseEntity.ok("votre service est bien ajoutée");
     }
@@ -134,7 +136,7 @@ public class PrestataireController {
     //poustuler pour une offre d'une client
     @PostMapping("/offres/{id}/postulation")
     public ResponseEntity<String>  postulation(@PathVariable Integer id,@RequestBody Postulation postulation) {
-        Integer idPrest=1;
+        Integer idPrest=utilisateurService.getAuthenticatedUserId();
         postulationService.storePostulation(id,idPrest,postulation);
         return ResponseEntity.ok("postulation stored");
     }

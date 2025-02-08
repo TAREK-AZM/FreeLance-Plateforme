@@ -22,8 +22,8 @@ public class ClientService {
         return ClientMapper.toClientDTO(clientRepo.findById(id).orElseThrow(()->new RuntimeException("this client not found"))) ;
     }
     //update client
-    public void updateClient(ClientDTO clientDTO){
-        Client  client=clientRepo.findById(clientDTO.getId()).orElseThrow(()->new RuntimeException("this client not found"));
+    public void updateClient(Integer idClient,ClientDTO clientDTO){
+        Client  client=clientRepo.findById(idClient).orElseThrow(()->new RuntimeException("this client not found"));
         client.setNom(clientDTO.getNom());
         client.setPrenom(clientDTO.getPrenom());
         client.setEmail(clientDTO.getEmail());
