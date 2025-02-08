@@ -4,11 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.example.serviceplatform.DTO.AuthenticationRequest;
 import org.example.serviceplatform.DTO.AuthenticationResponse;
 import org.example.serviceplatform.DTO.RegisterRequest;
+import org.example.serviceplatform.Entities.*;
 import org.example.serviceplatform.Entities.Enums.RoleType;
-import org.example.serviceplatform.Entities.Role;
-import org.example.serviceplatform.Entities.Token;
-import org.example.serviceplatform.Entities.Utilisateur;
-import org.example.serviceplatform.Entities.Validation;
 import org.example.serviceplatform.Exceptions.AuthenticationException;
 import org.example.serviceplatform.Exceptions.ValidationException;
 import org.example.serviceplatform.Repositories.RoleRepo;
@@ -86,19 +83,38 @@ public class AuthenticationService {
         }
     }
 
-    private Utilisateur buildUser(RegisterRequest request, RoleType roleType) throws RoleNotFoundException {
-        Role role = roleRepo.findByRoleName(roleType)
+    private Utilisateur buildUser(RegisterRequest request, RoleType roleName) throws RoleNotFoundException {
+        Role role = roleRepo.findByRoleName(roleName)
                 .orElseThrow(() -> new RoleNotFoundException("Role non trouvé"));
         System.out.println(request);
-        return Utilisateur.builder()
-                .prenom(request.getPrenom())
-                .nom(request.getNom())
-                .email(request.getEmail())
-                .motDePasse(passwordEncoder.encode(request.getMotDePasse()))
-                .telephone(request.getTelephone())
-                .role(role)
-                .actif(false)
-                .build();
+        if (roleName == RoleType.CLIENT) {
+            return Client.builder()
+                    .prenom(request.getPrenom())
+                    .nom(request.getNom())
+                    .email(request.getEmail())
+                    .motDePasse(passwordEncoder.encode(request.getMotDePasse()))
+                    .telephone(request.getTelephone())
+                    .ville(request.getVille())
+                    .adresse(request.getAdresse())
+                    .role(role)
+                    .actif(false)
+                    .build();
+        } else if (roleName == RoleType.PRESTATAIRE) {
+            return Prestataire.builder()
+                    .prenom(request.getPrenom())
+                    .nom(request.getNom())
+                    .email(request.getEmail())
+                    .motDePasse(passwordEncoder.encode(request.getMotDePasse()))
+                    .telephone(request.getTelephone())
+                    .ville(request.getVille())
+                    .adresse(request.getAdresse())
+                    .role(role)
+                    .actif(false)
+                    .build();
+        } else {
+            throw new IllegalArgumentException("Type d'utilisateur non supporté");
+        }
+
     }
 
     private AuthenticationResponse completeRegistration(Utilisateur user) {

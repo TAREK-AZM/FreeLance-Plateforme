@@ -15,6 +15,7 @@ import org.antlr.v4.runtime.misc.NotNull;
 @AllArgsConstructor
 
 public class RegisterRequest {
+
     @jakarta.validation.constraints.NotNull(message = "Le prénom est obligatoire")
     private String prenom;
 
@@ -30,4 +31,6 @@ public class RegisterRequest {
     private String motDePasse;
 
     private String telephone;
+    private String ville;
+    private String adresse;
 }

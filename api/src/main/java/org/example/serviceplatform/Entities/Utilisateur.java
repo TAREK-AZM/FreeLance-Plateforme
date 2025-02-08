@@ -39,6 +39,8 @@ public  class Utilisateur implements UserDetails {
     private String motDePasse;
     private boolean actif = false;
     private Integer score;
+    private String ville;
+    private String adresse;
     //role
     @ManyToOne(cascade = CascadeType.ALL)
     @JsonIgnore
@@ -53,10 +55,6 @@ public  class Utilisateur implements UserDetails {
     @OneToMany(mappedBy = "receiver",cascade = CascadeType.ALL)
     @JsonIgnore
     private List<Notification> notifications;
-    //region
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "region_id")
-    private Region region;
 
 
 

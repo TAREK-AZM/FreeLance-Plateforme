@@ -6,9 +6,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import org.example.serviceplatform.Entities.Certification;
 import org.example.serviceplatform.Entities.Competence;
-import org.example.serviceplatform.Entities.Region;
 
 import java.util.List;
 
@@ -24,7 +22,8 @@ public class PrestataireProfilDTO {
     private String telephone;
     private String description;
     private String imageUrl;
-    private Region region;
+    private String adresse;
+    private String ville;
     List<Competence> competences;
     List<CertificationDTO> certifications;
 

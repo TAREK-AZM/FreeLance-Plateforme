@@ -15,6 +15,6 @@ public class Role {
     Integer id;
 
     @Enumerated(EnumType.STRING) // Indique que RoleType sera stocké comme une chaîne
-    private RoleType roleName=RoleType.CLIENT;
+    private RoleType roleName;
 
 }

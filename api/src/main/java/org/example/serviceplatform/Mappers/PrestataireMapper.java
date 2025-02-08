@@ -17,7 +17,8 @@ public class PrestataireMapper {
                .telephone(prestataire.getTelephone())
                .description(prestataire.getDescription())
                .imageUrl(prestataire.getImageUrl())
-               .region(prestataire.getRegion()) // Associer l'objet Region
+               .ville(prestataire.getVille())
+               .adresse(prestataire.getAdresse())// Associer l'objet Region
                .competences(prestataire.getCompetences()) // Ajouter les compétences
                .certifications(prestataire.getCertifications().stream().map(CertificationMapper::toCertificatinDTO).collect(Collectors.toList()))// Ajouter les certifications
                .build();
@@ -31,7 +32,8 @@ public class PrestataireMapper {
                 .telephone(prestataire.getTelephone())
                 .description(prestataire.getDescription())
                 .imageUrl(prestataire.getImageUrl())
-                .region(prestataire.getRegion())
+                .ville(prestataire.getVille())
+                .adresse(prestataire.getAdresse())
                 .build();
     }
 }

@@ -12,7 +12,8 @@ public class ClientMapper {
                 .email(client.getEmail())
                 .telephone(client.getTelephone())
                 .score(client.getScore())
-                .region(client.getRegion())
+                .ville(client.getVille())
+                .adresse(client.getAdresse())
                 .build();
 
     }

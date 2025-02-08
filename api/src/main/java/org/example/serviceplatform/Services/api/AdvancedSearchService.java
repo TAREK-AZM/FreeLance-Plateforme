@@ -1,7 +1,6 @@
 package org.example.serviceplatform.Services.api;
 
 import org.example.serviceplatform.DTO.ServiceClientDTO;
-import org.example.serviceplatform.Entities.Region;
 import org.example.serviceplatform.Entities.Service;
 import org.example.serviceplatform.Mappers.ServiceMapper;
 import org.example.serviceplatform.Repositories.ServiceRepo;
@@ -47,12 +46,11 @@ public class AdvancedSearchService {
 
         // Correspondance des données de localisation
         boolean locationMatch = true;
-        Region region = service.getPrestataire().getRegion();
-        if (region != null) {
-            String regionText = (region.getVille() + " " + region.getProvince() + " " + region.getAdresse()).toLowerCase();
-            locationMatch = locationData.values().stream()
+
+        String regionText = (service.getPrestataire().getVille() + " " + service.getPrestataire().getAdresse()).toLowerCase();
+        locationMatch = locationData.values().stream()
                     .anyMatch(location -> isFuzzyMatch(regionText, location));
-        }
+
 
         return keywordMatch && locationMatch;
     }

@@ -22,7 +22,7 @@ public class UtilisateurService implements UserDetailsService {
     //recuperer l'id du user authentifié
     public Integer getAuthenticatedUserId() {
          Object object = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        String email=((Prestataire) object).getEmail();
+        String email=((Utilisateur) object).getEmail();
 
         return utilisateurRepo.findByEmail(email)
                 .orElseThrow(() -> new RuntimeException("Utilisateur non trouvé"))

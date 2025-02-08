@@ -2,23 +2,19 @@ package org.example.serviceplatform.Services;
 
 import org.example.serviceplatform.DTO.ClientDTO;
 import org.example.serviceplatform.Entities.Client;
-import org.example.serviceplatform.Entities.Region;
 import org.example.serviceplatform.Mappers.ClientMapper;
 import org.example.serviceplatform.Repositories.ClientRepo;
-import org.example.serviceplatform.Repositories.RegionRepo;
 import org.springframework.stereotype.Service;
 
 @Service
 public class ClientService {
 
     private final ClientRepo clientRepo;
-    private final RegionRepo regionRepo;
-    private final RegionService regionService;
 
-    public ClientService(ClientRepo clientRepo, RegionRepo regionRepo, RegionService regionService, RegionService regionService1) {
+
+    public ClientService(ClientRepo clientRepo) {
         this.clientRepo = clientRepo;
-        this.regionRepo = regionRepo;
-        this.regionService = regionService1;
+
     }
 
     //GET CLIENT
@@ -33,8 +29,8 @@ public class ClientService {
         client.setEmail(clientDTO.getEmail());
         client.setTelephone(clientDTO.getTelephone());
         //si la region deja exist =>ok fait la modification de la region s'il exist ;sinon, creer une
-        Region region=regionService.verifyOrCreateRegion(clientDTO.getRegion());
-        client.setRegion(region);
+        client.setAdresse(clientDTO.getAdresse());
+        client.setVille(clientDTO.getVille());
         clientRepo.save(client);
     }
     //delete le client

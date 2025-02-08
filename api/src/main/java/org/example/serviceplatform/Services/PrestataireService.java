@@ -2,7 +2,6 @@ package org.example.serviceplatform.Services;
 
 import org.example.serviceplatform.DTO.PrestataireProfilDTO;
 import org.example.serviceplatform.Entities.Prestataire;
-import org.example.serviceplatform.Entities.Region;
 import org.example.serviceplatform.Mappers.PrestataireMapper;
 import org.example.serviceplatform.Repositories.PrestataireRepo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,8 +11,7 @@ import org.springframework.stereotype.Service;
 public class PrestataireService {
     @Autowired
     private PrestataireRepo prestataireRepo;
-    @Autowired
-    private RegionService regionService;
+
 
     ///////////////////////////         Profil         /////////////////////////////////
     public PrestataireProfilDTO getPrestataire(Integer id) {
@@ -30,9 +28,9 @@ public class PrestataireService {
         prestataire.setImageUrl(prestataireUpdated.getImageUrl());
         prestataire.setEmail(prestataireUpdated.getEmail());
         prestataire.setTelephone(prestataireUpdated.getTelephone());
-        //verification de la ceation de region
-        Region region=regionService.verifyOrCreateRegion(prestataireUpdated.getRegion());
-        prestataire.setRegion(region);
+        prestataire.setAdresse(prestataireUpdated.getAdresse());
+        prestataire.setVille(prestataireUpdated.getVille());
+
         prestataireRepo.save(prestataire);
     }
 }

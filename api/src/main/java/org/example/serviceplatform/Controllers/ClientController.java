@@ -23,8 +23,9 @@ public class ClientController {
     private final EvaluationService evaluationService;
     private final OffreService offreService;
     private final PostulationService postulationService;
+    private final UtilisateurService utilisateurService;
 
-    public ClientController(ClientRepo clientRepo, ClientService clientService, CategoryService categoryService, DemandeService demandeService, CommentaireService commentaireService, CommentaireRepo commentaireRepo, EvaluationService evaluationService, OffreService offreService, PostulationService postulationService) {
+    public ClientController(ClientRepo clientRepo, ClientService clientService, CategoryService categoryService, DemandeService demandeService, CommentaireService commentaireService, CommentaireRepo commentaireRepo, EvaluationService evaluationService, OffreService offreService, PostulationService postulationService, UtilisateurService utilisateurService) {
         this.clientRepo = clientRepo;
         this.clientService = clientService;
         this.categoryService = categoryService;
@@ -34,6 +35,7 @@ public class ClientController {
         this.evaluationService = evaluationService;
         this.offreService = offreService;
         this.postulationService = postulationService;
+        this.utilisateurService = utilisateurService;
     }
 
                         ////////////// GESTION DE PROFIL///////////
@@ -42,8 +44,10 @@ public class ClientController {
 
     @GetMapping("/profil")
     public ClientDTO getProfil(){
-        Integer idClient=2;
-        return clientService.getClient(idClient);
+          Integer idClient=utilisateurService.getAuthenticatedUserId();
+          return clientService.getClient(idClient);
+
+
     }
     @PutMapping("/profil/update")
     public ResponseEntity<String> updateProfil(@RequestBody ClientDTO clientDTO){
