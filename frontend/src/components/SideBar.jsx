@@ -3,7 +3,8 @@ import { Cog, MessageSquare, Briefcase, User, LogOut } from "lucide-react";
 import { useContext } from "react";
 import AuthContext from "../context/AuthContext";
 
-function Sidebar({ isOpen, onClose, activeTab, setActiveTab }) {
+
+function SideBar({ isOpen, onClose, activeTab, setActiveTab }) {
     const { logout } = useContext(AuthContext);
     const navigate = useNavigate();
 
@@ -44,6 +45,19 @@ function Sidebar({ isOpen, onClose, activeTab, setActiveTab }) {
                             <Briefcase className="mr-2 w-5 h-5"/>
                             Dashboard
                         </Link>
+
+                        {/*// added likns*/}
+                        <Link
+                            to="/users"
+                            className={`flex items-center px-4 py-2 text-white rounded ${
+                                activeTab === "dashboard" ? "bg-gray-700" : ""
+                            }`}
+
+                        >
+                            <Briefcase className="mr-2 w-5 h-5"/>
+                            Users
+                        </Link>
+                        <hr/>
                         <hr className="border-gray-700"/>
                         <Link
                             to="/services"
@@ -117,4 +131,4 @@ function Sidebar({ isOpen, onClose, activeTab, setActiveTab }) {
     );
 }
 
-export default Sidebar;
+export default SideBar;

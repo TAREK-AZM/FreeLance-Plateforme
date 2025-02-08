@@ -9,6 +9,8 @@ import Profile from "./pages/Profile";
 import LoginPage from "./pages/LoginPage";
 import SignUpPage from "./pages/SignUpPage";
 import UserDetails from "./pages/UserDetails";
+import Users from "./pages/Users"
+
 import ProtectedRoute from "./components/ProtectedRoute";
 import {AuthProvider} from "./context/AuthContext";
 
@@ -30,6 +32,7 @@ const router = createBrowserRouter(
                 <Route path="/requests" element={<Requests />} />
                 <Route path="/jobboard" element={<JobBoard />} />
                 <Route path="/profile" element={<Profile />} />
+                <Route path="/users" element={<Users />} />
             </Route>
             </Route>
         </>

@@ -80,7 +80,7 @@ import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { NotificationDropdown } from "./NotificationDropdown";
 import { Link } from "react-router-dom";
-import Sidebar from "./Sidebar";
+import SideBar from "./SideBar";
 import { useState } from "react";
 
 function Header({ name, email, activeTab, setActiveTab }) {
@@ -142,7 +142,7 @@ function Header({ name, email, activeTab, setActiveTab }) {
         </header>
 
         {/* Sidebar */}
-        <Sidebar
+        <SideBar
             isOpen={isSidebarOpen}
             onClose={() => setSidebarOpen(false)}
             activeTab={activeTab}
