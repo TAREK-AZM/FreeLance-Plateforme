@@ -10,6 +10,10 @@ import LoginPage from "./pages/LoginPage";
 import SignUpPage from "./pages/SignUpPage";
 import UserDetails from "./pages/UserDetails";
 import Users from "./pages/Users"
+
+import ProtectedRoute from "./components/ProtectedRoute";
+import {AuthProvider} from "./context/AuthContext";
+
 const router = createBrowserRouter(
     createRoutesFromElements(
         <>
@@ -17,6 +21,8 @@ const router = createBrowserRouter(
             <Route path="/login" element={<LoginPage />} />
             <Route path="/signup" element={<SignUpPage />} />
 
+
+            <Route element={<ProtectedRoute allowedRoles={['provider']} />}>
             {/* Routes with MainLayout */}
             <Route path="/" element={<MainLayout />}>
                 <Route index element={<Dashboard />} />
@@ -28,12 +34,17 @@ const router = createBrowserRouter(
                 <Route path="/profile" element={<Profile />} />
                 <Route path="/users" element={<Users />} />
             </Route>
+            </Route>
         </>
     )
 );
 
 const App = () => {
-    return <RouterProvider router={router} />;
+    return (
+        <AuthProvider>
+            <RouterProvider router={router} />
+        </AuthProvider>
+    );
 };
 
 export default App;
