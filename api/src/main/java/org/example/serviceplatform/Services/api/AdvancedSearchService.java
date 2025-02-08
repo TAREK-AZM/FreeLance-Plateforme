@@ -1,7 +1,6 @@
-package org.example.serviceplatform.Services;
+package org.example.serviceplatform.Services.api;
 
 import org.example.serviceplatform.DTO.ServiceClientDTO;
-import org.example.serviceplatform.DTO.ServiceDTO;
 import org.example.serviceplatform.Entities.Region;
 import org.example.serviceplatform.Entities.Service;
 import org.example.serviceplatform.Mappers.ServiceMapper;

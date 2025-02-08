@@ -1,7 +1,6 @@
-package org.example.serviceplatform.Services;
+package org.example.serviceplatform.Services.api;
 
 import org.example.serviceplatform.DTO.ServiceDTO;
-import org.example.serviceplatform.Entities.Service;
 import org.example.serviceplatform.Mappers.ServiceMapper;
 import org.example.serviceplatform.Repositories.ServiceRepo;
 import org.springframework.beans.factory.annotation.Autowired;

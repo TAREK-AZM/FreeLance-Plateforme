@@ -3,7 +3,9 @@ package org.example.serviceplatform.Entities;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Builder;
 
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
@@ -20,9 +22,11 @@ import java.util.List;
 @DiscriminatorColumn(name = "Type_utilisateur", discriminatorType = DiscriminatorType.STRING)
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 @SuperBuilder
 
-public abstract class Utilisateur implements UserDetails {
+
+public  class Utilisateur implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,7 +37,7 @@ public abstract class Utilisateur implements UserDetails {
     private String email;
     private String telephone;
     private String motDePasse;
-    private boolean isVerified = false;
+    private boolean actif = false;
     private Integer score;
     //role
     @ManyToOne(cascade = CascadeType.ALL)
@@ -56,9 +60,6 @@ public abstract class Utilisateur implements UserDetails {
 
 
 
-
-
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return Collections.singletonList(new SimpleGrantedAuthority( this.role.getRoleName().toString()));
@@ -73,22 +74,22 @@ public abstract class Utilisateur implements UserDetails {
     }
     @Override
     public boolean isAccountNonExpired() {
-        return this.isVerified; // Par exemple, un compte inactif est considéré comme expiré
+        return this.actif; // Par exemple, un compte inactif est considéré comme expiré
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return this.isVerified; // Vous pouvez personnaliser cette logique si nécessaire
+        return this.actif; // Vous pouvez personnaliser cette logique si nécessaire
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return this.isVerified;
+        return this.actif;
     }
 
     @Override
     public boolean isEnabled() {
-        return this.isVerified;
+        return this.actif;
     }
 
 }

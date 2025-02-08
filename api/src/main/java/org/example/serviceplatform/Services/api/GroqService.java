@@ -1,4 +1,4 @@
-package org.example.serviceplatform.Services;
+package org.example.serviceplatform.Services.api;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;

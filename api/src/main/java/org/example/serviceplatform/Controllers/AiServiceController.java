@@ -1,25 +1,19 @@
 package org.example.serviceplatform.Controllers;
 
 import org.example.serviceplatform.DTO.ServiceClientDTO;
-import org.example.serviceplatform.DTO.ServiceDTO;
-import org.example.serviceplatform.Entities.Service;
-import org.example.serviceplatform.Mappers.ServiceMapper;
 import org.example.serviceplatform.Repositories.ServiceRepo;
-import org.example.serviceplatform.Services.AdvancedSearchService;
-import org.example.serviceplatform.Services.DynamicKeywordService;
-import org.example.serviceplatform.Services.GroqService;
+import org.example.serviceplatform.Services.api.AdvancedSearchService;
+import org.example.serviceplatform.Services.api.DynamicKeywordService;
+import org.example.serviceplatform.Services.api.GroqService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/ai/search")
-
+@CrossOrigin(origins = "*")
 public class AiServiceController {
 
     @Autowired
