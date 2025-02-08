@@ -42,13 +42,14 @@ public class TokenService {
     public AuthenticationResponse generateAuthTokens(Utilisateur user) {
         String accessToken = jwtService.generateAccessToken(user);
         String refreshToken = jwtService.generateRefreshToken(user);
-
+        String role=user.getRole().toString();
         revokeAllUserTokens(user);
         saveUserTokens(user, accessToken, refreshToken);
 
         return AuthenticationResponse.builder()
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
+                .role(role)
                 .build();
     }
 

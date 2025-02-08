@@ -51,11 +51,13 @@ public class ClientController {
     }
     @PutMapping("/profil/update")
     public ResponseEntity<String> updateProfil(@RequestBody ClientDTO clientDTO){
-        clientService.updateClient(clientDTO);
+        Integer idClient=utilisateurService.getAuthenticatedUserId();
+        clientService.updateClient(idClient,clientDTO);
         return ResponseEntity.ok("Client updated");
     }
-    @DeleteMapping("/profil/{idClient}/delete")
-    public ResponseEntity<String> deleteProfil(@PathVariable Integer idClient){
+    @DeleteMapping("/profil/delete")
+    public ResponseEntity<String> deleteProfil(){
+        Integer idClient=utilisateurService.getAuthenticatedUserId();
         clientService.deleteClient(idClient);
         return ResponseEntity.ok("Client deleted");
     }
@@ -75,12 +77,15 @@ public class ClientController {
         return categoryService.getAllServicesByCategory(idCateg);
     }
 
+    //voir les service selon le budget
+
+
 
                           ///////////////////////////GERER MES DEMANDES //////////////////////////
     //demander une service
     @PostMapping("services/{id}/demandes")
     public ResponseEntity<String> demanderService(@PathVariable Integer id,@RequestBody DemandeClient demandeClient){
-        Integer idClient=2;
+        Integer idClient= utilisateurService.getAuthenticatedUserId();
         demandeService.envoyerDemande(idClient,id, demandeClient);
         return ResponseEntity.ok("votre demande est envoyée");
     }
@@ -98,7 +103,7 @@ public class ClientController {
     //ecrire un commentaire à propos d'une service
     @PostMapping("/commentaire")
     public ResponseEntity<CommentaireDTO> envoyerCommentaire(@RequestBody Commentaire commentaire) {
-        Integer idClient=2;
+        Integer idClient=utilisateurService.getAuthenticatedUserId();
        CommentaireDTO com= commentaireService.StoreCommentaire(idClient,commentaire);
         return ResponseEntity.status(HttpStatus.CREATED).body(com);
     }
@@ -114,7 +119,7 @@ public class ClientController {
     //evaluer une service
     @PostMapping("/services/evaluations")
     public ResponseEntity<String> evaluer(@RequestBody Evaluation evaluation){
-        Integer idClient=2;
+        Integer idClient=utilisateurService.getAuthenticatedUserId();
         try {
             evaluationService.storeEvaluation(idClient,evaluation);
             return ResponseEntity.status(HttpStatus.CREATED).body("Évaluation enregistrée avec succès.");
@@ -140,7 +145,7 @@ public class ClientController {
     //creer un post (offre) pour chercher une service
     @PostMapping("/offres")
     public ResponseEntity<String> storeOffre(@RequestBody Offre offre){
-         Integer idClient=2;      //authentifié
+        Integer idClient=utilisateurService.getAuthenticatedUserId();    //authentifié
          offreService.createOffre(idClient,offre);
          return ResponseEntity.ok("offre stored");
       }
