@@ -74,11 +74,11 @@ function Footer() {
             <div>
               <h3 className="text-lg font-semibold mb-4">Quick Links</h3>
               <ul className="space-y-2">
-                <li><Link to="/" className="hover:text-gray-300 transition-colors">Dashboard</Link></li>
-                <li><Link to="/services" className="hover:text-gray-300 transition-colors">Services</Link></li>
-                <li><Link to="/jobboard" className="hover:text-gray-300 transition-colors">Job Board</Link></li>
-                <li><Link to="/requests" className="hover:text-gray-300 transition-colors">Client Requests</Link></li>
-                <li><Link to="/profile" className="hover:text-gray-300 transition-colors">Profile</Link></li>
+                <li><Link to="/prestataires/" className="hover:text-gray-300 transition-colors">Dashboard</Link></li>
+                <li><Link to="/prestataires/services" className="hover:text-gray-300 transition-colors">Services</Link></li>
+                <li><Link to="/prestataires/jobboard" className="hover:text-gray-300 transition-colors">Job Board</Link></li>
+                <li><Link to="/prestataires/requests" className="hover:text-gray-300 transition-colors">Client Requests</Link></li>
+                <li><Link to="/prestataires/profile" className="hover:text-gray-300 transition-colors">Profile</Link></li>
               </ul>
             </div>
             <div>

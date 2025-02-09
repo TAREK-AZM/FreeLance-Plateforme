@@ -123,12 +123,9 @@ export default function Header() {
             </>
           ) : (
             <>
-              <button
-                className="hidden sm:inline-block text-sm font-medium text-gray-700 hover:text-gray-900"
-               
-              >
-                <Link to="/login">Login/Sign-up</Link>
-              </button>
+              <Link to={"/login"}>
+                Login/Sign-up
+            </Link>
               <Button
                 variant="outline"
                 className="hidden sm:inline-flex bg-[#E7F7EF] text-[#12AE65] border-[#12AE65] hover:bg-[#d5f0e3]"
@@ -197,10 +194,15 @@ export default function Header() {
                 </button>
               </>
             ) : (
-              <button className="text-sm font-medium text-gray-700" onClick={() => setShowLogin(true)}>
+
+
+                <Link to={"/login"}>
                 Login/Sign-up
-              </button>
+                </Link>
+
+
             )}
+
             <Button
               variant="outline"
               className="w-full justify-center bg-[#E7F7EF] text-[#12AE65] border-[#12AE65] hover:bg-[#d5f0e3]"
