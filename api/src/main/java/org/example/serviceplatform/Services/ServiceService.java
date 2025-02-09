@@ -2,7 +2,6 @@ package org.example.serviceplatform.Services;
 
 import org.example.serviceplatform.DTO.ServiceDTO;
 import org.example.serviceplatform.Entities.Category;
-import org.example.serviceplatform.Entities.Enums.TypeCategory;
 import org.example.serviceplatform.Entities.Prestataire;
 import org.example.serviceplatform.Entities.Service;
 import org.example.serviceplatform.Mappers.ServiceMapper;
