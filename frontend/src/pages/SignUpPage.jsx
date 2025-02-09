@@ -7,48 +7,53 @@ import { Link, useNavigate } from "react-router-dom";
 import VantaBackground from "@/components/VantaBackground";
 import axios from "axios";
 
+const API_BASE_URL = import.meta.env.VITE_API2; // Use environment variable for API base URL
+
 const SignUpPage = () => {
     const [activeForm, setActiveForm] = useState("client");
     const [formData, setFormData] = useState({
-        name: "",
+        prenom: "",
+        nom: "",
         email: "",
-        password: "",
-        businessName: "",
-        description: ""
+        telephone: "",
+        motDePasse: "",
+        ville: "",
+        adresse: "",
     });
     const [error, setError] = useState(null);
     const navigate = useNavigate();
 
+    // Handle input field changes
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.id]: e.target.value });
     };
 
+    // Handle form submission
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError(null); // Reset errors
 
-        const role = activeForm === "client" ? "client" : "provider";
+        const endpoint =
+            activeForm === "client"
+                ? `${API_BASE_URL}/api/client/register`
+                : `${API_BASE_URL}/api/prestataire/register`;
 
         try {
-            const response = await axios.post("/api/signup", {
-                ...formData,
-                role
-            });
+            const response = await axios.post(endpoint, formData);
 
-            if (response.status === 201) {
+            if (response.status === 200) {
                 navigate("/login"); // Redirect to login after successful sign-up
             }
         } catch (err) {
+            console.error("❌ Registration Error:", err);
             setError(err.response?.data?.message || "Something went wrong");
         }
     };
 
     return (
         <div className="relative min-h-screen flex items-center justify-center">
-            {/* Vanta Background with gradient */}
             <VantaBackground color={0x4a90e2} backgroundColor={0xffffff} gradient={true} />
 
-            {/* Glass Effect Card */}
             <div className="relative bg-white/20 backdrop-blur-md shadow-xl rounded-lg p-8 w-full max-w-4xl">
                 <h1 className="text-3xl font-extrabold text-center mb-6">
                     <span className="text-cyan-950">FreeLance</span>
@@ -67,9 +72,9 @@ const SignUpPage = () => {
                     </div>
                     <div
                         className={`flex items-center gap-2 text-lg font-medium cursor-pointer ${
-                            activeForm === "provider" ? "text-cyan-950 underline" : "text-gray-400"
+                            activeForm === "prestataire" ? "text-cyan-950 underline" : "text-gray-400"
                         }`}
-                        onClick={() => setActiveForm("provider")}
+                        onClick={() => setActiveForm("prestataire")}
                     >
                         Service Provider
                         <ChevronRight size={18} />
@@ -79,119 +84,43 @@ const SignUpPage = () => {
                 {/* Forms Container */}
                 <div className="flex space-x-6">
                     {/* Client Form */}
-                    <form
-                        onSubmit={handleSubmit}
-                        className={`flex-1 transition-opacity ${
-                            activeForm === "client" ? "opacity-100" : "opacity-50 blur-md pointer-events-none"
-                        }`}
-                    >
-                        <h2 className="text-lg font-semibold text-cyan-950 mb-4">Sign Up as Client</h2>
-                        <div className="mb-4">
-                            <Label htmlFor="name" className="text-cyan-950">Full Name</Label>
-                            <Input
-                                id="name"
-                                type="text"
-                                value={formData.name}
-                                onChange={handleChange}
-                                placeholder="Enter your name"
-                                className="mt-1 w-full placeholder-gray-500"
-                                required
-                            />
-                        </div>
-                        <div className="mb-4">
-                            <Label htmlFor="email" className="text-cyan-950">Email</Label>
-                            <Input
-                                id="email"
-                                type="email"
-                                value={formData.email}
-                                onChange={handleChange}
-                                placeholder="Enter your email"
-                                className="mt-1 w-full placeholder-gray-500"
-                                required
-                            />
-                        </div>
-                        <div className="mb-4">
-                            <Label htmlFor="password" className="text-cyan-950">Password</Label>
-                            <Input
-                                id="password"
-                                type="password"
-                                value={formData.password}
-                                onChange={handleChange}
-                                placeholder="Enter your password"
-                                className="mt-1 w-full placeholder-gray-500"
-                                required
-                            />
-                        </div>
-                        {error && <p className="text-red-500 text-sm text-center mb-2">{error}</p>}
-                        <Button type="submit" className="w-full bg-cyan-950 hover:bg-cyan-900 text-gray-100">
-                            Sign Up
-                        </Button>
-                    </form>
+                    {activeForm === "client" && (
+                        <form onSubmit={handleSubmit} className="flex-1">
+                            <h2 className="text-lg font-semibold text-cyan-950 mb-4">Sign Up as Client</h2>
+                            {["prenom", "nom", "email", "telephone", "ville", "adresse"].map((field) => (
+                                <div className="mb-4" key={field}>
+                                    <Label htmlFor={field} className="text-cyan-950">{field.charAt(0).toUpperCase() + field.slice(1)}</Label>
+                                    <Input id={field} type="text" value={formData[field]} onChange={handleChange} required />
+                                </div>
+                            ))}
+                            <div className="mb-4">
+                                <Label htmlFor="motDePasse" className="text-cyan-950">Password</Label>
+                                <Input id="motDePasse" type="password" value={formData.motDePasse} onChange={handleChange} required />
+                            </div>
+                            {error && <p className="text-red-500 text-sm text-center mb-2">{error}</p>}
+                            <Button type="submit">Sign Up</Button>
+                        </form>
+                    )}
 
                     {/* Service Provider Form */}
-                    <form
-                        onSubmit={handleSubmit}
-                        className={`flex-1 transition-opacity ${
-                            activeForm === "provider" ? "opacity-100" : "opacity-50 blur-md pointer-events-none"
-                        }`}
-                    >
-                        <h2 className="text-lg font-semibold text-cyan-950 mb-4">Sign Up as Service Provider</h2>
-                        <div className="mb-4">
-                            <Label htmlFor="businessName" className="text-cyan-950">Business Name</Label>
-                            <Input
-                                id="businessName"
-                                type="text"
-                                value={formData.businessName}
-                                onChange={handleChange}
-                                placeholder="Enter your business name"
-                                className="mt-1 w-full placeholder-gray-500"
-                                required
-                            />
-                        </div>
-                        <div className="mb-4">
-                            <Label htmlFor="email" className="text-cyan-950">Email</Label>
-                            <Input
-                                id="email"
-                                type="email"
-                                value={formData.email}
-                                onChange={handleChange}
-                                placeholder="Enter your email"
-                                className="mt-1 w-full placeholder-gray-500"
-                                required
-                            />
-                        </div>
-                        <div className="mb-4">
-                            <Label htmlFor="password" className="text-cyan-950">Password</Label>
-                            <Input
-                                id="password"
-                                type="password"
-                                value={formData.password}
-                                onChange={handleChange}
-                                placeholder="Enter your password"
-                                className="mt-1 w-full placeholder-gray-500"
-                                required
-                            />
-                        </div>
-                        <div className="mb-4">
-                            <Label htmlFor="description" className="text-cyan-950">Business Description</Label>
-                            <Input
-                                id="description"
-                                type="text"
-                                value={formData.description}
-                                onChange={handleChange}
-                                placeholder="Describe your business"
-                                className="mt-1 w-full placeholder-gray-500"
-                                required
-                            />
-                        </div>
-                        {error && <p className="text-red-500 text-sm text-center mb-2">{error}</p>}
-                        <Button type="submit" className="w-full bg-cyan-950 hover:bg-cyan-900 text-gray-100">
-                            Sign Up
-                        </Button>
-                    </form>
+                    {activeForm === "prestataire" && (
+                        <form onSubmit={handleSubmit} className="flex-1">
+                            <h2 className="text-lg font-semibold text-cyan-950 mb-4">Sign Up as Service Provider</h2>
+                            {["prenom", "nom", "email", "telephone", "ville", "adresse"].map((field) => (
+                                <div className="mb-4" key={field}>
+                                    <Label htmlFor={field} className="text-cyan-950">{field.charAt(0).toUpperCase() + field.slice(1)}</Label>
+                                    <Input id={field} type="text" value={formData[field]} onChange={handleChange} required />
+                                </div>
+                            ))}
+                            <div className="mb-4">
+                                <Label htmlFor="motDePasse" className="text-cyan-950">Password</Label>
+                                <Input id="motDePasse" type="password" value={formData.motDePasse} onChange={handleChange} required />
+                            </div>
+                            {error && <p className="text-red-500 text-sm text-center mb-2">{error}</p>}
+                            <Button type="submit">Sign Up</Button>
+                        </form>
+                    )}
                 </div>
-
-                {/* Already have an account? */}
                 <p className="text-sm text-center text-slate-700 mt-6">
                     Already have an account?{" "}
                     <Link to="/login" className="text-blue-500 hover:underline">

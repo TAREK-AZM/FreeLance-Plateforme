@@ -1,0 +1,166 @@
+package org.example.serviceplatform.Controllers;
+
+import org.example.serviceplatform.DTO.*;
+import org.example.serviceplatform.Entities.*;
+import org.example.serviceplatform.Repositories.ClientRepo;
+import org.example.serviceplatform.Repositories.CommentaireRepo;
+import org.example.serviceplatform.Services.*;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+@RequestMapping("/api/client")
+public class ClientController {
+    private final ClientRepo clientRepo;
+    private final ClientService clientService;
+    private final CategoryService categoryService;
+    private final DemandeService demandeService;
+    private final CommentaireService commentaireService;
+    private final CommentaireRepo commentaireRepo;
+    private final EvaluationService evaluationService;
+    private final OffreService offreService;
+    private final PostulationService postulationService;
+    private final UtilisateurService utilisateurService;
+
+    public ClientController(ClientRepo clientRepo, ClientService clientService, CategoryService categoryService, DemandeService demandeService, CommentaireService commentaireService, CommentaireRepo commentaireRepo, EvaluationService evaluationService, OffreService offreService, PostulationService postulationService, UtilisateurService utilisateurService) {
+        this.clientRepo = clientRepo;
+        this.clientService = clientService;
+        this.categoryService = categoryService;
+        this.demandeService = demandeService;
+        this.commentaireService = commentaireService;
+        this.commentaireRepo = commentaireRepo;
+        this.evaluationService = evaluationService;
+        this.offreService = offreService;
+        this.postulationService = postulationService;
+        this.utilisateurService = utilisateurService;
+    }
+
+                        ////////////// GESTION DE PROFIL///////////
+
+
+
+    @GetMapping("/profil")
+    public ClientDTO getProfil(){
+          Integer idClient=utilisateurService.getAuthenticatedUserId();
+          return clientService.getClient(idClient);
+
+
+    }
+    @PutMapping("/profil/update")
+    public ResponseEntity<String> updateProfil(@RequestBody ClientDTO clientDTO){
+        Integer idClient=utilisateurService.getAuthenticatedUserId();
+        clientService.updateClient(idClient,clientDTO);
+        return ResponseEntity.ok("Client updated");
+    }
+    @DeleteMapping("/profil/delete")
+    public ResponseEntity<String> deleteProfil(){
+        Integer idClient=utilisateurService.getAuthenticatedUserId();
+        clientService.deleteClient(idClient);
+        return ResponseEntity.ok("Client deleted");
+    }
+
+                         ///////////////////GESTION DES SERVICES PRESENTEES////////////////
+
+
+
+    //voir les categories avec les services
+    @GetMapping("/categories")
+    public List<Category> getAllCategories(){
+        return categoryService.getAllCategories();
+    }
+    //voir les services pour une categorie
+    @GetMapping("/categories/{idCateg}/services")
+    public List<ServiceClientDTO> getAllServicesOfCategory(@PathVariable Integer idCateg){
+        return categoryService.getAllServicesByCategory(idCateg);
+    }
+
+    //voir les service selon le budget
+
+
+
+                          ///////////////////////////GERER MES DEMANDES //////////////////////////
+    //demander une service
+    @PostMapping("services/{id}/demandes")
+    public ResponseEntity<String> demanderService(@PathVariable Integer id,@RequestBody DemandeClient demandeClient){
+        Integer idClient= utilisateurService.getAuthenticatedUserId();
+        demandeService.envoyerDemande(idClient,id, demandeClient);
+        return ResponseEntity.ok("votre demande est envoyée");
+    }
+    //voir mes demandes
+
+
+
+
+
+
+
+
+                          ////////////////     GERER MES COMMENTAIRES  ////////////
+
+    //ecrire un commentaire à propos d'une service
+    @PostMapping("/commentaire")
+    public ResponseEntity<CommentaireDTO> envoyerCommentaire(@RequestBody Commentaire commentaire) {
+        Integer idClient=utilisateurService.getAuthenticatedUserId();
+       CommentaireDTO com= commentaireService.StoreCommentaire(idClient,commentaire);
+        return ResponseEntity.status(HttpStatus.CREATED).body(com);
+    }
+    //aficher les commentaires d'une service
+    @GetMapping("/services/{idService}/commentaires")
+   public List<CommentaireDTO> getAllCommentairesofService(@PathVariable Integer idService){
+        return commentaireService.getCommentairesByIdService(idService);
+    }
+
+
+
+                      //////////////// MES EVALUATIONS à PROPOS DES SERIVICES ///////////////
+    //evaluer une service
+    @PostMapping("/services/evaluations")
+    public ResponseEntity<String> evaluer(@RequestBody Evaluation evaluation){
+        Integer idClient=utilisateurService.getAuthenticatedUserId();
+        try {
+            evaluationService.storeEvaluation(idClient,evaluation);
+            return ResponseEntity.status(HttpStatus.CREATED).body("Évaluation enregistrée avec succès.");
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
+    }
+    //changer mon evaluation pour une service
+    @PutMapping("/services/evaluations")
+    public ResponseEntity<String> updateEvaluation(@RequestBody Evaluation evaluation){
+         evaluationService.updateEvaluation(evaluation);
+         return ResponseEntity.ok("evaluation updated");
+    }
+    //voir les evaluations d'une service
+    @GetMapping("/services/{idService}/evaluations")
+    public ResponseEntity<List<EvaluationDTO>>getAllEvaluationsofService(@PathVariable Integer idService){
+        List<EvaluationDTO> evaluations=evaluationService.getEvaluationsByServiceId(idService);
+        return ResponseEntity.ok(evaluations);
+    }
+
+
+                      /////////////////////MES OFFRES///////////////
+    //creer un post (offre) pour chercher une service
+    @PostMapping("/offres")
+    public ResponseEntity<String> storeOffre(@RequestBody Offre offre){
+        Integer idClient=utilisateurService.getAuthenticatedUserId();    //authentifié
+         offreService.createOffre(idClient,offre);
+         return ResponseEntity.ok("offre stored");
+      }
+      //voir les postulas des prestataires  pour une offre
+    @GetMapping("/offres/{id}/postulas")
+    public List<PostulationDTO> getAllPostulasForOffre(@PathVariable Integer id){
+        return postulationService.getPostulationsForOffre(id);
+    }
+
+
+
+
+
+
+
+
+
+}

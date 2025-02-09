@@ -26,7 +26,7 @@ const router = createBrowserRouter(
             <Route path="/signup" element={<SignUpPage />} />
 
 
-            <Route element={<ProtectedRoute allowedRoles={['provider']} />}>
+            <Route element={<ProtectedRoute allowedRoles={['PRESTATAIRE']} />}>
             {/* Routes with MainLayout */}
             <Route path="/" element={<MainLayout />}>
                 <Route index element={<Dashboard />} />
