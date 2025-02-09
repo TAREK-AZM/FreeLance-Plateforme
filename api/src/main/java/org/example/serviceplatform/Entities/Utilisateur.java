@@ -37,7 +37,7 @@ public  class Utilisateur implements UserDetails {
     private String email;
     private String telephone;
     private String motDePasse;
-    private boolean actif = false;
+    private boolean actif = true;
     private Integer score;
     private String ville;
     private String adresse;

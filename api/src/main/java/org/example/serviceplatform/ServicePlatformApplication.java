@@ -30,7 +30,7 @@ public class ServicePlatformApplication {
 
 //	@Bean
 //	CommandLineRunner initData(UtilisateurRepo utilisateurRepository,
-//							   RegionRepo regionRepository,
+////							   RegionRepo regionRepository,
 //							   PrestataireRepo prestataireRepo,
 //							   ServiceRepo serviceRepo,
 //							   RoleRepo roleRepository,
@@ -41,9 +41,9 @@ public class ServicePlatformApplication {
 //							    DemandeRepo demandeRepo){
 //		return args -> {
 //			// **1. Créer ou récupérer les relations nécessaires**
-//			Region region=regionRepository.findById(1).orElse(null);
+////			Region region=regionRepository.findById(1).orElse(null);
 //			Role roleC = new Role();
-//				roleC.setRoleName(RoleType.CLIENT);
+//				roleC.setRoleName(RoleType.PRESTATAIRE);
 
 
 
@@ -155,14 +155,15 @@ public class ServicePlatformApplication {
 //			Prestataire prestataire = new Prestataire();
 //			prestataire.setPrenom("Ahmed");
 //			prestataire.setNom("El Mansouri");
-//			prestataire.setEmail("ahmed@example.com");
+//			prestataire.setEmail("abdelwahid@gmail.com");
 //			prestataire.setTelephone("0612345678");
-//			prestataire.setMotDePasse("password123");
+//			prestataire.setMotDePasse("password");
 //			prestataire.setScore(95);
 //			prestataire.setDescription("Spécialiste en plomberie et climatisation");
 //			prestataire.setImageUrl("http://example.com/images/ahmed.jpg");
-//			prestataire.setRegion(region);  // Association avec la région
-//			prestataire.setRole(role);      // Association avec le rôle
+//			prestataire.setVille("Tanger");  // Association avec la région
+//			prestataire.setAdresse("Tanger fvdvdvdvvdvdvdv");  // Association avec la région
+//			prestataire.setRole(roleC);      // Association avec le rôle
 //
 //			// **3. Ajouter les relations au Prestataire**
 //			prestataire.setCompetences(Arrays.asList(competence1, competence2));
@@ -170,9 +171,9 @@ public class ServicePlatformApplication {
 //			certification2.setPrestataire(prestataire);
 //			prestataire.setCertifications(Arrays.asList(certification1, certification2));
 //
-//			// **4. Enregistrer l’objet dans la base**
+			// **4. Enregistrer l’objet dans la base**
 //			utilisateurRepository.save(prestataire);
-
+//
 
 
 //
