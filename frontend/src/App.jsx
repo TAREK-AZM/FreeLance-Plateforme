@@ -13,7 +13,11 @@ import Users from "./pages/Users"
 
 import ProtectedRoute from "./components/ProtectedRoute";
 import {AuthProvider} from "./context/AuthContext";
-
+import Home from "./clientPages/Home";
+import FreelancersHome from "./clientPages/FreelancersHome";
+import FreelancerDetails from "./clientPages/FreelanderDetailsPage";
+import JobsHome from "./clientPages/JobsHome";
+import ServicesHome from "./clientPages/ServicesHome";
 const router = createBrowserRouter(
     createRoutesFromElements(
         <>
@@ -35,6 +39,18 @@ const router = createBrowserRouter(
                 <Route path="/users" element={<Users />} />
             </Route>
             </Route>
+
+
+            <Route path="/client/" >
+                <Route path="homepage" element={<Home />} />
+                <Route path="freelancers" element={<FreelancersHome />} />
+                <Route path="jobs" element={<JobsHome />} />
+                <Route path="services" element={<ServicesHome />} />
+                <Route path="freelancers/:id" element={<FreelancerDetails />} />
+
+            </Route>
+
+
         </>
     )
 );
