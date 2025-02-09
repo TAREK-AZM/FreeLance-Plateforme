@@ -8,6 +8,8 @@ import { Link } from "react-router-dom";
 import VantaBackground from "@/components/VantaBackground";
 import AuthContext from "../context/AuthContext"; // Import Auth Context
 
+const API_BASE_URL = import.meta.env.VITE_API; // Use environment variable for API base URL
+
 const LoginPage = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -19,26 +21,38 @@ const LoginPage = () => {
         e.preventDefault();
         setError(null); // Reset errors
 
+        console.log("🔵 Attempting login with:", { email, password });
+        console.log("🔵 API Endpoint:", `${API_BASE_URL}/api/auth/login`);
+
         try {
-            const response = await axios.post(`${import.meta.env.VITE_API}/api/auth/login`, {
+            const response = await axios.post(`${API_BASE_URL}/api/auth/login`, {
                 email,
-                password
+                password: password, // Ensure backend expects "motDePasse" instead of "password"
             });
 
-            if (response.data.token && response.data.role) {
+            console.log("✅ Response Status:", response.status);
+            console.log("✅ Response Data:", response.data);
+
+            if (response.status === 200 && response.data.accessToken && response.data.role) {
+                console.log("🔑 Token Received:", response.data.token);
+                console.log("👤 User Role:", response.data.role);
+
                 login(response.data.token, response.data.role); // Save to AuthContext
                 navigate("/"); // Redirect after login
             } else {
+                console.warn("⚠️ Unexpected Response Data:", response.data);
                 setError("Invalid credentials");
             }
         } catch (err) {
+            console.error("❌ Login Request Failed:", err);
+            console.error("❌ Error Response:", err.response);
+
             setError(err.response?.data?.message || "Something went wrong");
         }
     };
 
     return (
         <div className="relative min-h-screen flex items-center justify-center">
-            {/* Vanta Background with gradient */}
             <VantaBackground color={0x4a90e2} backgroundColor={0xffffff} gradient={true} />
 
             {/* Glass Effect Card */}

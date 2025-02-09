@@ -19,8 +19,8 @@ const SignUpPage = () => {
         motDePasse: "",
         ville: "",
         adresse: "",
-        description: "",
-        imageFile: null // Store the selected image file
+        // description: "",
+        // imageFile: null // Store the selected image file
     });
     const [error, setError] = useState(null);
     const navigate = useNavigate();
@@ -29,9 +29,9 @@ const SignUpPage = () => {
         setFormData({ ...formData, [e.target.id]: e.target.value });
     };
 
-    const handleFileChange = (e) => {
-        setFormData({ ...formData, imageFile: e.target.files[0] }); // Store the selected file
-    };
+    // const handleFileChange = (e) => {
+    //     setFormData({ ...formData, imageFile: e.target.files[0] }); // Store the selected file
+    // };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -54,10 +54,10 @@ const SignUpPage = () => {
                 formDataToSend.append("motDePasse", formData.motDePasse);
                 formDataToSend.append("ville", formData.ville);
                 formDataToSend.append("adresse", formData.adresse);
-                formDataToSend.append("description", formData.description);
-                if (formData.imageFile) {
-                    formDataToSend.append("imageUrl", formData.imageFile);
-                }
+                // formDataToSend.append("description", formData.description);
+                // if (formData.imageFile) {
+                //     formDataToSend.append("imageUrl", formData.imageFile);
+                // }
 
                 response = await axios.post(endpoint, formDataToSend, {
                     headers: { "Content-Type": "multipart/form-data" }
@@ -65,13 +65,13 @@ const SignUpPage = () => {
             } else {
                 // Send JSON request for clients
                 const requestData = { ...formData };
-                delete requestData.imageFile; // Remove file field for clients
+                // delete requestData.imageFile; // Remove file field for clients
 
                 response = await axios.post(endpoint, requestData);
             }
 
             if (response.status === 200) {
-                navigate("/login"); // Redirect to login after successful sign-up
+                navigate("/"); // Redirect to login after successful sign-up
             }
         } catch (err) {
             setError(err.response?.data?.message || "Something went wrong");
@@ -135,7 +135,7 @@ const SignUpPage = () => {
                     {activeForm === "provider" && (
                         <form onSubmit={handleSubmit} className="flex-1" encType="multipart/form-data">
                             <h2 className="text-lg font-semibold text-cyan-950 mb-4">Sign Up as Service Provider</h2>
-                            {["prenom", "nom", "email", "telephone", "ville", "adresse", "description"].map((field) => (
+                            {["prenom", "nom", "email", "telephone", "ville", "adresse"].map((field) => (
                                 <div className="mb-4" key={field}>
                                     <Label htmlFor={field} className="text-cyan-950">{field.charAt(0).toUpperCase() + field.slice(1)}</Label>
                                     <Input id={field} type="text" value={formData[field]} onChange={handleChange} required />
@@ -146,10 +146,10 @@ const SignUpPage = () => {
                                 <Label htmlFor="motDePasse" className="text-cyan-950">Password</Label>
                                 <Input id="motDePasse" type="password" value={formData.motDePasse} onChange={handleChange} required />
                             </div>
-                            <div className="mb-4">
-                                <Label htmlFor="imageFile" className="text-cyan-950">Upload Business Image</Label>
-                                <Input id="imageFile" type="file" onChange={handleFileChange} required />
-                            </div>
+                            {/*<div className="mb-4">*/}
+                            {/*    <Label htmlFor="imageFile" className="text-cyan-950">Upload Business Image</Label>*/}
+                            {/*    <Input id="imageFile" type="file" onChange={handleFileChange} required />*/}
+                            {/*</div>*/}
                             {error && <p className="text-red-500 text-sm text-center mb-2">{error}</p>}
                             <Button type="submit">Sign Up</Button>
                         </form>

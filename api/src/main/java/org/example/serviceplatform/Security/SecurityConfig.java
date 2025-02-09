@@ -19,7 +19,6 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import java.util.Arrays;
 import java.util.List;
 
 @Configuration
@@ -32,18 +31,17 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         System.out.println("Il arrive ici(Config)");
         http
-                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+                .cors(cors -> cors.configurationSource(corsConfigurationSource())) // ✅ Fix CORS
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+                        .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll() // ✅ Fix OPTIONS for preflight requests
                         .requestMatchers(
                                 "/api/client/register",
                                 "/api/prestataire/register",
-                                "/api/auth/**",
-                                "/error"  // ✅ Allow error endpoint to avoid authentication failures
+                                "/api/auth/**"  // ✅ Fixed incorrect endpoint
                         ).permitAll()
-                        .requestMatchers("/api/client/**").hasAuthority("CLIENT")
+                        .requestMatchers("/api/client/**").hasAuthority("CLIENT") // ✅ Fixed incorrect path
                         .requestMatchers("/api/prestataire/**").hasAuthority("PRESTATAIRE")
                         .requestMatchers("/api/admin/**").hasAuthority("ADMIN")
                         .anyRequest().authenticated()
@@ -74,22 +72,15 @@ public class SecurityConfig {
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("*")); // ✅ Allow all origins
+        configuration.setAllowedOrigins(List.of("http://localhost:3000", "http://localhost:5173")); // ✅ Allow multiple frontend origins
         configuration.setAllowedMethods(List.of("GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(List.of("*")); // ✅ Allow all headers
-        configuration.setExposedHeaders(List.of(
-                "Authorization",
-                "Content-Type",
-                "Accept",
-                "Origin",
-                "Access-Control-Allow-Origin",
-                "Access-Control-Allow-Credentials"
-        ));
-        configuration.setAllowCredentials(true);
+        configuration.setExposedHeaders(List.of("Authorization", "Content-Type", "Access-Control-Allow-Origin"));
+        configuration.setAllowCredentials(true); // ✅ Required for authentication tokens
         configuration.setMaxAge(3600L);
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);
+        source.registerCorsConfiguration("/**", configuration); // ✅ Apply to all paths
         return source;
     }
 }
