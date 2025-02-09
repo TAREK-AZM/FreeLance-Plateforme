@@ -87,6 +87,7 @@ public class AuthenticationService {
         Role role = roleRepo.findByRoleName(roleName)
                 .orElseThrow(() -> new RoleNotFoundException("Role non trouvé"));
         System.out.println(request);
+
         if (roleName == RoleType.CLIENT) {
             return Client.builder()
                     .prenom(request.getPrenom())
@@ -114,6 +115,17 @@ public class AuthenticationService {
         } else {
             throw new IllegalArgumentException("Type d'utilisateur non supporté");
         }
+
+
+        /*return Utilisateur.builder()
+                .prenom(request.getPrenom())
+                .nom(request.getNom())
+                .email(request.getEmail())
+                .motDePasse(passwordEncoder.encode(request.getMotDePasse()))
+                .telephone(request.getTelephone())
+                .role(role)
+                .actif(true)
+                .build();*/
 
     }
 
