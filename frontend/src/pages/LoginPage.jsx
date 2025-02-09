@@ -8,7 +8,7 @@ import { Link } from "react-router-dom";
 import VantaBackground from "@/components/VantaBackground";
 import AuthContext from "../context/AuthContext"; // Import Auth Context
 
-const API_BASE_URL = import.meta.env.VITE_API; // Use environment variable for API base URL
+const API_BASE_URL = import.meta.env.VITE_API2; // Use environment variable for API base URL
 
 const LoginPage = () => {
     const [email, setEmail] = useState("");
@@ -34,7 +34,7 @@ const LoginPage = () => {
             console.log("✅ Response Data:", response.data);
 
             if (response.status === 200 && response.data.accessToken && response.data.role) {
-                console.log("🔑 Token Received:", response.data.token);
+                console.log("🔑 Token Received:", response.data.accessToken);
                 console.log("👤 User Role:", response.data.role);
 
                 login(response.data.token, response.data.role); // Save to AuthContext

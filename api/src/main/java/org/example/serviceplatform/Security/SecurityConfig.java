@@ -39,6 +39,7 @@ public class SecurityConfig {
                         .requestMatchers(
                                 "/api/client/register",
                                 "/api/prestataire/register",
+                                "/api/**",
                                 "/api/auth/**"  // ✅ Fixed incorrect endpoint
                         ).permitAll()
                         .requestMatchers("/api/client/**").hasAuthority("CLIENT") // ✅ Fixed incorrect path
