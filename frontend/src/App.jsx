@@ -1,4 +1,4 @@
-import { createBrowserRouter, createRoutesFromElements, RouterProvider, Route } from "react-router-dom";
+import { createBrowserRouter, createRoutesFromElements, RouterProvider, Route, Navigate } from "react-router-dom";
 import MainLayout from "./layouts/MainLayout";
 import Dashboard from "./pages/Dashboard";
 import Services from "./pages/Services";
@@ -21,34 +21,36 @@ import ServicesHome from "./clientPages/ServicesHome";
 const router = createBrowserRouter(
     createRoutesFromElements(
         <>
-            {/* Public routes without MainLayout */}
-            <Route path="/login" element={<LoginPage />} />
-            <Route path="/signup" element={<SignUpPage />} />
+            {/* Public routes */}
+                <Route path="/login" element={<LoginPage />} />
+                <Route path="/signup" element={<SignUpPage />} />
 
+                {/* Redirect the first-time visit to the client homepage */}
+                <Route path="/" element={<Navigate to="/client/homepage" />} />
 
-            <Route element={<ProtectedRoute allowedRoles={['PRESTATAIRE']} />}>
-            {/* Routes with MainLayout */}
-            <Route path="/" element={<MainLayout />}>
-                <Route index element={<Dashboard />} />
-                <Route path="/services" element={<Services />} />
-                <Route path="/services/:id" element={<ServiceDetails />} />
-                <Route path="/user/:userId" element={<UserDetails />} />
-                <Route path="/requests" element={<Requests />} />
-                <Route path="/jobboard" element={<JobBoard />} />
-                <Route path="/profile" element={<Profile />} />
-                <Route path="/users" element={<Users />} />
-            </Route>
-            </Route>
+                {/* Protected Routes for "PRESTATAIRE" (Service Providers) */}
+                <Route element={<ProtectedRoute allowedRoles={['PRESTATAIRE']} />}>
+                    <Route path="/prestataires/" element={<MainLayout />}>
+                        <Route index element={<Dashboard />} />
+                        <Route path="services" element={<Services />} />
+                        <Route path="services/:id" element={<ServiceDetails />} />
+                        <Route path="user/:userId" element={<UserDetails />} />
+                        <Route path="requests" element={<Requests />} />
+                        <Route path="jobboard" element={<JobBoard />} />
+                        <Route path="profile" element={<Profile />} />
+                        <Route path="users" element={<Users />} />
+                    </Route>
+                </Route>
 
-
-            <Route path="/client/" >
-                <Route path="homepage" element={<Home />} />
-                <Route path="freelancers" element={<FreelancersHome />} />
-                <Route path="jobs" element={<JobsHome />} />
-                <Route path="services" element={<ServicesHome />} />
-                <Route path="freelancers/:id" element={<FreelancerDetails />} />
-
-            </Route>
+                {/* Client Pages (Home is the default under /client) */}
+                <Route path="/client">
+                    <Route index element={<Navigate to="homepage" />} /> {/* ✅ Redirects "/client" to "/client/homepage" */}
+                    <Route path="homepage" element={<Home />} />
+                    <Route path="freelancers" element={<FreelancersHome />} />
+                    <Route path="jobs" element={<JobsHome />} />
+                    <Route path="services" element={<ServicesHome />} />
+                    <Route path="freelancers/:id" element={<FreelancerDetails />} />
+                </Route>
 
 
         </>

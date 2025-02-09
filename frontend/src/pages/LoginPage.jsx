@@ -38,7 +38,11 @@ const LoginPage = () => {
                 console.log("👤 User Role:", response.data.role);
 
                 login(response.data.token, response.data.role); // Save to AuthContext
-                navigate("/"); // Redirect after login
+                if(response.data.role==='PRESTATAIRE'){
+                navigate("/prestataires/"); }
+                else {
+                    navigate("/")
+                }// Redirect after login
             } else {
                 console.warn("⚠️ Unexpected Response Data:", response.data);
                 setError("Invalid credentials");
