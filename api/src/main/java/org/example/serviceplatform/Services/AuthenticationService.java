@@ -44,6 +44,7 @@ public class AuthenticationService {
     public AuthenticationResponse registerClient(RegisterRequest request) throws RoleNotFoundException {
         validateRegistration(request.getEmail());
         Utilisateur user = buildUser(request, RoleType.CLIENT);
+        System.out.println("Il arrive ici (Service)");
         return completeRegistration(user);
     }
 
@@ -96,7 +97,7 @@ public class AuthenticationService {
                     .ville(request.getVille())
                     .adresse(request.getAdresse())
                     .role(role)
-                    .actif(false)
+                    .actif(true)
                     .build();
         } else if (roleName == RoleType.PRESTATAIRE) {
             return Prestataire.builder()
@@ -108,7 +109,7 @@ public class AuthenticationService {
                     .ville(request.getVille())
                     .adresse(request.getAdresse())
                     .role(role)
-                    .actif(false)
+                    .actif(true)
                     .build();
         } else {
             throw new IllegalArgumentException("Type d'utilisateur non supporté");
@@ -117,6 +118,7 @@ public class AuthenticationService {
     }
 
     private AuthenticationResponse completeRegistration(Utilisateur user) {
+        user = utilisateurRepo.save(user);
         validationService.enregistrer(user);
 
         return AuthenticationResponse.builder()
