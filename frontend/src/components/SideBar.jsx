@@ -1,17 +1,16 @@
 import { Link, useNavigate } from "react-router-dom";
 import { Cog, MessageSquare, Briefcase, User, LogOut } from "lucide-react";
-import { useContext } from "react";
+import { useContext, useCallback } from "react";
 import AuthContext from "../context/AuthContext";
-
 
 function SideBar({ isOpen, onClose, activeTab, setActiveTab }) {
     const { logout } = useContext(AuthContext);
     const navigate = useNavigate();
 
-    const handleLogout = () => {
+    const handleLogout = useCallback(() => {
         logout(); // Clears authentication state
         navigate("/login"); // Redirects to login page
-    };
+    }, [logout, navigate]);
 
     return (
         <>
@@ -32,8 +31,10 @@ function SideBar({ isOpen, onClose, activeTab, setActiveTab }) {
                 <div className="p-4 text-white">
                     <h2 className="text-lg font-bold mb-4">Menu</h2>
                     <nav className="space-y-2">
+
+                        {/* ✅ Dashboard (Correct Route) */}
                         <Link
-                            to="/"
+                            to="/prestataires"
                             className={`flex items-center px-4 py-3 text-white rounded ${
                                 activeTab === "dashboard" ? "bg-gray-700" : ""
                             }`}
@@ -46,21 +47,13 @@ function SideBar({ isOpen, onClose, activeTab, setActiveTab }) {
                             Dashboard
                         </Link>
 
-                        {/*// added likns*/}
-                        <Link
-                            to="/users"
-                            className={`flex items-center px-4 py-2 text-white rounded ${
-                                activeTab === "dashboard" ? "bg-gray-700" : ""
-                            }`}
 
-                        >
-                            <Briefcase className="mr-2 w-5 h-5"/>
-                            Users
-                        </Link>
-                        <hr/>
+
                         <hr className="border-gray-700"/>
+
+                        {/* ✅ Services */}
                         <Link
-                            to="/services"
+                            to="/prestataires/services"
                             className={`flex items-center px-4 py-3 text-white rounded ${
                                 activeTab === "services" ? "bg-gray-700" : ""
                             }`}
@@ -72,9 +65,12 @@ function SideBar({ isOpen, onClose, activeTab, setActiveTab }) {
                             <Cog className="mr-2 w-5 h-5"/>
                             Services
                         </Link>
+
                         <hr className="border-gray-700"/>
+
+                        {/* ✅ Client Requests */}
                         <Link
-                            to="/requests"
+                            to="/prestataires/requests"
                             className={`flex items-center px-4 py-3 text-white rounded ${
                                 activeTab === "requests" ? "bg-gray-700" : ""
                             }`}
@@ -86,9 +82,12 @@ function SideBar({ isOpen, onClose, activeTab, setActiveTab }) {
                             <MessageSquare className="mr-2 w-5 h-5"/>
                             Client Requests
                         </Link>
+
                         <hr className="border-gray-700"/>
+
+                        {/* ✅ Job Board */}
                         <Link
-                            to="/jobboard"
+                            to="/prestataires/jobboard"
                             className={`flex items-center px-4 py-3 text-white rounded ${
                                 activeTab === "jobboard" ? "bg-gray-700" : ""
                             }`}
@@ -100,9 +99,12 @@ function SideBar({ isOpen, onClose, activeTab, setActiveTab }) {
                             <Briefcase className="mr-2 w-5 h-5"/>
                             Job Board
                         </Link>
+
                         <hr className="border-gray-700"/>
+
+                        {/* ✅ Profile */}
                         <Link
-                            to="/profile"
+                            to="/prestataires/profile"
                             className={`flex items-center px-4 py-3 text-white rounded ${
                                 activeTab === "profile" ? "bg-gray-700" : ""
                             }`}
@@ -114,10 +116,11 @@ function SideBar({ isOpen, onClose, activeTab, setActiveTab }) {
                             <User className="mr-2 w-5 h-5"/>
                             Profile
                         </Link>
+
                         <hr className="border-gray-700"/>
                     </nav>
 
-                    {/* Logout Button - Styled as Text Only */}
+                    {/* ✅ Logout Button */}
                     <button
                         onClick={handleLogout}
                         className="flex items-center px-4 py-3 text-red-500 hover:text-red-400 transition-colors w-full"

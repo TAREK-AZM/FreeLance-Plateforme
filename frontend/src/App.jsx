@@ -30,7 +30,7 @@ const router = createBrowserRouter(
 
                 {/* Protected Routes for "PRESTATAIRE" (Service Providers) */}
                 <Route element={<ProtectedRoute allowedRoles={['PRESTATAIRE']} />}>
-                    <Route path="/prestataires/" element={<MainLayout />}>
+                    <Route path="/prestataires" element={<MainLayout />}>
                         <Route index element={<Dashboard />} />
                         <Route path="services" element={<Services />} />
                         <Route path="services/:id" element={<ServiceDetails />} />
@@ -41,6 +41,7 @@ const router = createBrowserRouter(
                         <Route path="users" element={<Users />} />
                     </Route>
                 </Route>
+
 
                 {/* Client Pages (Home is the default under /client) */}
                 <Route path="/client">

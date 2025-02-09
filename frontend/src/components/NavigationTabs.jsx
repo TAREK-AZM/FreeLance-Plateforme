@@ -22,23 +22,23 @@ function NavigationTabs({ activeTab, setActiveTab }) {
         <Tabs value={activeTab} onValueChange={handleTabChange} className="space-y-6 border-t border-b border-gray-300">
             <div className="hidden lg:block">
                 <TabsList className="grid w-full grid-cols-5">
-                    <TabsTrigger value="/prestataires/" className="flex items-center gap-2">
+                    <TabsTrigger value="prestataires" className="flex items-center gap-2">
                         <Briefcase className="h-4 w-4" />
                         <span>Dashboard</span>
                     </TabsTrigger>
-                    <TabsTrigger value="/prestataires/services" className="flex items-center gap-2">
+                    <TabsTrigger value="prestataires/services" className="flex items-center gap-2">
                         <Cog className="h-4 w-4" />
                         <span>Services</span>
                     </TabsTrigger>
-                    <TabsTrigger value="/prestataires/requests" className="flex items-center gap-2">
+                    <TabsTrigger value="prestataires/requests" className="flex items-center gap-2">
                         <MessageSquare className="h-4 w-4" />
                         <span>Client Requests</span>
                     </TabsTrigger>
-                    <TabsTrigger value="/prestataires/jobboard" className="flex items-center gap-2">
+                    <TabsTrigger value="prestataires/jobboard" className="flex items-center gap-2">
                         <Briefcase className="h-4 w-4" />
                         <span>Job Board</span>
                     </TabsTrigger>
-                    <TabsTrigger value="/prestataires/profile" className="flex items-center gap-2">
+                    <TabsTrigger value="prestataires/profile" className="flex items-center gap-2">
                         <User className="h-4 w-4" />
                         <span>Profile</span>
                     </TabsTrigger>

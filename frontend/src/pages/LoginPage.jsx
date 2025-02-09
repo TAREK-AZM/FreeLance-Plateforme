@@ -39,7 +39,7 @@ const LoginPage = () => {
 
                 login(response.data.token, response.data.role); // Save to AuthContext
                 if(response.data.role==='PRESTATAIRE'){
-                navigate("/prestataires/"); }
+                navigate("/prestataires"); }
                 else {
                     navigate("/")
                 }// Redirect after login

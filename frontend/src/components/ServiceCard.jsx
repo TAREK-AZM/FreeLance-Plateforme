@@ -23,7 +23,7 @@ function ServiceCard({ id, title, description, price, status, img, onEdit, onDel
             whileHover="hover"
             className="bg-gray-50 border border-gray-400  shadow-2xl border-solid relative rounded-lg"
         >
-            <Link to={`/services/${id}`} className="block">
+            <Link to={`/prestataires/services/${id}`} className="block">
                 <motion.img
                     src={img || DEFAULT_IMAGE}
                     alt={title}
@@ -40,7 +40,7 @@ function ServiceCard({ id, title, description, price, status, img, onEdit, onDel
             </Link>
             <CardContent>
                 <div className="space-y-2">
-                    <Link to={`/services/${id}`} className="block">
+                    <Link to={`/prestataires/services/${id}`} className="block">
                         <div className="flex items-center justify-between">
                             <span className="text-sm text-gray-500">Price:</span>
                             <span className="font-medium text-gray-900">${price}</span>
