@@ -125,9 +125,9 @@ export default function Header() {
             <>
               <button
                 className="hidden sm:inline-block text-sm font-medium text-gray-700 hover:text-gray-900"
-                onClick={() => setShowLogin(true)}
+               
               >
-                Login/Sign-up
+                <Link to="/login">Login/Sign-up</Link>
               </button>
               <Button
                 variant="outline"
