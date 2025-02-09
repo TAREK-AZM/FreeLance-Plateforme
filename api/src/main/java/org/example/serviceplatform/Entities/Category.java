@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
-import org.example.serviceplatform.Entities.Enums.TypeCategory;
+
 
 import java.util.List;
 
@@ -18,8 +18,8 @@ public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-      @Enumerated(EnumType.STRING)
-    private TypeCategory name;        // Nom de la catégorie
+
+    private String name;        // Nom de la catégorie
     private String description; // Description de la catégorie
 
     @OneToMany(mappedBy = "category")
