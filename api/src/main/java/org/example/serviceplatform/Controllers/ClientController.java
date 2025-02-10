@@ -24,8 +24,9 @@ public class ClientController {
     private final OffreService offreService;
     private final PostulationService postulationService;
     private final UtilisateurService utilisateurService;
+    private final ServiceService serviceService;
 
-    public ClientController(ClientRepo clientRepo, ClientService clientService, CategoryService categoryService, DemandeService demandeService, CommentaireService commentaireService, CommentaireRepo commentaireRepo, EvaluationService evaluationService, OffreService offreService, PostulationService postulationService, UtilisateurService utilisateurService) {
+    public ClientController(ClientRepo clientRepo, ClientService clientService, CategoryService categoryService, DemandeService demandeService, CommentaireService commentaireService, CommentaireRepo commentaireRepo, EvaluationService evaluationService, OffreService offreService, PostulationService postulationService, UtilisateurService utilisateurService, ServiceService serviceService) {
         this.clientRepo = clientRepo;
         this.clientService = clientService;
         this.categoryService = categoryService;
@@ -36,6 +37,7 @@ public class ClientController {
         this.offreService = offreService;
         this.postulationService = postulationService;
         this.utilisateurService = utilisateurService;
+        this.serviceService = serviceService;
     }
 
                         ////////////// GESTION DE PROFIL///////////
@@ -75,6 +77,11 @@ public class ClientController {
     @GetMapping("/categories/{idCateg}/services")
     public List<ServiceClientDTO> getAllServicesOfCategory(@PathVariable Integer idCateg){
         return categoryService.getAllServicesByCategory(idCateg);
+    }
+
+    @GetMapping("/all-services")
+    public List<ServiceDTO> getAllServices(){
+        return serviceService.getAllServices();
     }
 
     //voir les service selon le budget

@@ -84,7 +84,7 @@ const ServiceDetails = () => {
 
             {/* Back to Services Link */}
             <div className="flex items-center mb-6">
-                <Link to="/services" className="text-indigo-500 hover:text-indigo-600 flex items-center">
+                <Link to="/prestataires/services" className="text-indigo-500 hover:text-indigo-600 flex items-center">
                     <FaArrowLeft className="mr-2" /> Back to my services
                 </Link>
             </div>
@@ -162,7 +162,7 @@ const ServiceDetails = () => {
                                             />
                                             <div>
                                                 <Link
-                                                    to={`/user/${comment.user_id}`}
+                                                    to={`/prestataires/user/${comment.user_id}`}
                                                     state={{ serviceId: id }} // Pass the service ID as state
                                                     className="font-semibold text-indigo-500 hover:underline"
                                                 >

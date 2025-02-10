@@ -14,7 +14,7 @@ public class ServiceDTO {
     private Integer id;
     private String titre;
     private String description;
-    private Double prix; // Prix du service
+    private Double prix; // Prix du service;
     private Boolean status;
     //private CategoryDTO categoryDTO;// Disponibilité du serv
     private Category category;

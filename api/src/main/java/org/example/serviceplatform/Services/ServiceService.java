@@ -29,6 +29,12 @@ public class ServiceService {
         Prestataire prest=prestataireRepo.findById(id).orElse(null);
         return prest.getServices().stream().map(ServiceMapper::toServiceDTO).collect(Collectors.toList()) ;
     }
+    //////////// GETserices///////////
+    public List<ServiceDTO> getAllServices() {
+        List<Service> services=serviceRepo.findAll();
+        System.out.println("------>those are services<--------------"+services);
+        return services.stream().map(ServiceMapper::toServiceDTO).collect(Collectors.toList()) ;
+    }
     //////////////// Get Detials Service/////////
     public ServiceDTO getService(Integer id) {
         return ServiceMapper.toServiceDTO( serviceRepo.findById(id).orElseThrow(()->new RuntimeException("Service not found")));

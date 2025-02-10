@@ -53,7 +53,7 @@ const UserDetails = () => {
             <div className="flex items-center mb-6">
                 {serviceId ? (
                     <Link
-                        to={`/services/${serviceId}`}
+                        to={`/prestataires/services/${serviceId}`}
                         className="text-indigo-500 hover:text-indigo-600 flex items-center transition-all"
                     >
                         <FaArrowLeft className="mr-2" /> Back to Service Details
