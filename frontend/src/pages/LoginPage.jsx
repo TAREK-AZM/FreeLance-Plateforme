@@ -29,20 +29,27 @@ const LoginPage = () => {
                 email,
                 password: password, // Ensure backend expects "motDePasse" instead of "password"
             });
+            console.log("✅ this is the reponse:", response);
 
             console.log("✅ Response Status:", response.status);
             console.log("✅ Response Data:", response.data);
 
             if (response.status === 200 && response.data.accessToken && response.data.role) {
                 console.log("🔑 Token Received:", response.data.accessToken);
+            
+                // ✅ Store the access token correctly in localStorage
+                localStorage.setItem("token", response.data.accessToken);
+            
                 console.log("👤 User Role:", response.data.role);
-
-                login(response.data.token, response.data.role); // Save to AuthContext
-                if(response.data.role==='PRESTATAIRE'){
-                navigate("/prestataires"); }
-                else {
-                    navigate("/")
-                }// Redirect after login
+            
+                login(response.data.accessToken, response.data.role); // Save to AuthContext
+            
+                // ✅ Navigate based on user role
+                if (response.data.role === "PRESTATAIRE") {
+                    navigate("/prestataires");
+                } else {
+                    navigate("/");
+                }
             } else {
                 console.warn("⚠️ Unexpected Response Data:", response.data);
                 setError("Invalid credentials");

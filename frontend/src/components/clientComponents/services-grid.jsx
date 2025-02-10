@@ -3,6 +3,7 @@ import { useState } from "react";
 import { Grid, List, ArrowLeft, ArrowRight, ArrowUpDown } from "lucide-react";
 import cn from "classnames";
 import ServiceCard from "./ServiceCard";
+import { useServiceStore } from "../../store/store";
 
 // Define the Service Type
 
@@ -10,7 +11,8 @@ import ServiceCard from "./ServiceCard";
 // Fake Data
 
 
-export default function ServiceGrid({services}) {
+export default function ServiceGrid() {
+  const services = useServiceStore((state) => state.services);
   const [currentPage, setCurrentPage] = useState(1);
   const [isGridView, setIsGridView] = useState(true);
   const itemsPerPage = 3;

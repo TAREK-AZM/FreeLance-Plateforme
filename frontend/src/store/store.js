@@ -1,5 +1,8 @@
 import { create } from "zustand";
 
+const API_BASE_URL = import.meta.env.VITE_API2; // Use environment variable for API base URL
+
+
 export const useAuthStore = create((set) => ({
   isAuthenticated: false,
   user: {
@@ -73,32 +76,8 @@ export const useFreelancerStore = create((set) => ({
 }));
 
 export const useServiceStore = create((set) => ({
-  services:  [
-    {
-      title: "I will create a one product shopify dropshipping store",
-      description: "I am 28 years old, been doing Dropshipping/Shopify stores since 2017...",
-      price: 15.0,
-      image: "https://demo.yo-gigs.com/image/show/39/33/LARGE",
-    },
-    {
-      title: "I will be your social media marketing manager",
-      description: "Hello Fiverr Community! I am a Digital Marketer & worked with international businesses...",
-      price: 35.0,
-      image: "https://demo.yo-gigs.com/image/show/39/31/LARGE",
-    },
-    {
-      title: "I will be your impeccable SEO website content writer",
-      description: "Everyone loves content that brings value to your business, and I love to make that happen...",
-      price: 20.0,
-      image: "https://demo.yo-gigs.com/image/show/39/30/LARGE",
-    },
-    {
-      title: "I will develop a responsive WordPress website",
-      description: "Creating visually stunning, SEO-optimized, and fast-loading WordPress websites...",
-      price: 40.0,
-      image: "https://demo.yo-gigs.com/image/show/39/27/LARGE",
-    },
-  ],
+  services:  [],
+    setServices: (services) => set({ services }),
   addService: (service) =>
     set((state) => ({ services: [...state.services, service] })),
   removeService: (id) =>

@@ -4,7 +4,7 @@ export default function ServiceCard({ service }) {
     <div className="relative rounded-lg border bg-white shadow-sm transition-shadow hover:shadow-md">
       {/* Service Image */}
       <div className="relative w-full h-56 overflow-hidden rounded-t-lg">
-        <img src={service.image} alt={service.title} layout="fill" className="object-cover" />
+        <img src={service.imageUrl} alt={service.title} layout="fill" className="object-cover" />
       </div>
 
       {/* Service Details */}
@@ -13,7 +13,7 @@ export default function ServiceCard({ service }) {
         <p className="text-sm text-gray-600 line-clamp-2">{service.description}</p>
 
         {/* Price */}
-        <div className="text-green-600 font-bold text-lg">${service.price.toFixed(2)}</div>
+        <div className="text-green-600 font-bold text-lg">${service.price}</div>
 
         {/* View Details Button */}
         <button className="bg-green-600 text-white rounded-full px-4 py-2 w-full mt-2">
