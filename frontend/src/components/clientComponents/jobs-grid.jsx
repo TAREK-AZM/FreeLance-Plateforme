@@ -15,18 +15,7 @@ const jobs = [
     title: "NICU Nurse",
     description:
       "Neonatal Care: Give premature and severely ill neonates admitted to the NICU specialized nursing care, including monitoring, medication administration, and assessments...",
-    skills: [
-      "Collaborative Teamwork",
-      "Documentation",
-      "Family Centered Care",
-      "Intravenous Therapy",
-      "Medication Administration",
-      "Neonatal Assessment",
-      "Neonatal Resuscitation",
-      "Neurodevelopmental Care",
-      "Respiratory Care",
-      "Temperature Regulation",
-    ],
+
     client: {
       name: "Nicola",
       image: "/placeholder.svg",
@@ -250,11 +239,11 @@ const jobs = [
 
 export default function JobsPage() {
   const [currentPage, setCurrentPage] = useState(1);
-  const [filters, setFilters] = useState({
-    fixedPrice: false,
-    biddable: false,
-    privateJobs: false,
-  })
+  // const [filters, setFilters] = useState({
+  //   fixedPrice: false,
+  //   biddable: false,
+  //   privateJobs: false,
+  // })
 
   const itemsPerPage = 6;
   const totalPages = Math.ceil(jobs.length / itemsPerPage);
@@ -266,44 +255,11 @@ export default function JobsPage() {
 
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="container mx-auto px-4 ">
       {/* Filters Section */}
       <div className="flex flex-col gap-4 md:flex-row md:items-center justify-between mb-8">
-        <div className="flex flex-wrap gap-4">
-          <Select>
-            <SelectTrigger className="w-[200px] bg-white">
-              <SelectValue placeholder="Categories" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="hospital">Hospital Staff</SelectItem>
-              <SelectItem value="tech">Tech</SelectItem>
-              <SelectItem value="design">Design</SelectItem>
-            </SelectContent>
-          </Select>
-
-          <Select>
-            <SelectTrigger className="w-[200px] bg-white">
-              <SelectValue placeholder="Client Details" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="verified">Verified</SelectItem>
-              <SelectItem value="unverified">Unverified</SelectItem>
-            </SelectContent>
-          </Select>
-
-          <Select>
-            <SelectTrigger className="w-[200px] bg-white">
-              <SelectValue placeholder="Budget" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="low">$0 - $50</SelectItem>
-              <SelectItem value="medium">$51 - $100</SelectItem>
-              <SelectItem value="high">$100+</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-
-        <div className="flex flex-wrap items-center gap-6">
+      
+        {/* <div className="flex flex-wrap items-center gap-6">
           <div className="flex items-center gap-2">
             <Switch
               checked={filters.fixedPrice}
@@ -325,7 +281,7 @@ export default function JobsPage() {
             />
             <span className="text-sm">Private jobs</span>
           </div>
-        </div>
+        </div> */}
       </div>
 
       {/* Jobs Header */}
@@ -347,7 +303,7 @@ export default function JobsPage() {
       {/* Jobs List */}
       <div className="space-y-6">
         {currentJobs.map((job) => (
-          <div key={job.id} className="bg-white rounded-lg border p-6">
+          <div key={job.id} className="bg-white rounded-lg border border-[#12AE65] p-6">
             <div className="grid md:grid-cols-3 gap-6">
               <div className="md:col-span-2">
                 <div className="flex items-center gap-2 text-sm mb-4">
@@ -359,13 +315,14 @@ export default function JobsPage() {
                 <h2 className="text-xl font-semibold mb-3">{job.title}</h2>
                 <p className="text-gray-600 mb-4">{job.description}</p>
 
-                <div className="flex flex-wrap gap-2 mb-6">
+                {/* competences */}
+                {/* <div className="flex flex-wrap gap-2 mb-6">
                   {job.skills.map((skill) => (
                     <span key={skill} className="bg-[#E7F7EF] text-[#12AE65] px-3 py-1 rounded-full text-sm">
                       {skill}
                     </span>
                   ))}
-                </div>
+                </div> */}
 
                 <div className="flex items-center gap-4">
                   <div className="flex items-center gap-3">
@@ -393,15 +350,16 @@ export default function JobsPage() {
               </div>
 
               <div className="space-y-2 border-l pl-6">
-                <div className="flex items-center gap-2">
+              
+              {/* <div className="flex items-center gap-2">
                   <Clock className="w-5 h-5 text-gray-400" />
                   <div>
                     <div className="text-sm text-gray-500">Send before</div>
                     <div>{job.details.sendBefore}</div>
                   </div>
-                </div>
+              </div> */}
 
-                <div className="flex items-center gap-3">
+                {/* <div className="flex items-center gap-3">
                   <Briefcase className="w-5 h-5 text-gray-400" />
                   <div>
                     <div className="text-sm text-gray-500">Job type</div>
@@ -423,7 +381,7 @@ export default function JobsPage() {
                     <div className="text-sm text-gray-500">Estimated date/time</div>
                     <div>{job.details.estimatedDate}</div>
                   </div>
-                </div>
+                </div> */}
 
                 <div className="flex items-center gap-3">
                   <FileText className="w-5 h-5 text-gray-400" />
@@ -432,7 +390,6 @@ export default function JobsPage() {
                     <div>{job.details.proposals}</div>
                   </div>
                 </div>
-
                 <div className="flex items-center gap-3">
                   <DollarSign className="w-5 h-5 text-gray-400" />
                   <div>

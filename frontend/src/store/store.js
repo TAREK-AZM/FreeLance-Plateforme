@@ -1,15 +1,17 @@
+import { se } from "date-fns/locale";
 import { create } from "zustand";
 
 const API_BASE_URL = import.meta.env.VITE_API2; // Use environment variable for API base URL
 
 
 export const useAuthStore = create((set) => ({
-  isAuthenticated: false,
+  isAuthenticated: true,
   user: {
     name: "Tarek",
     email: "alex@yogigs.com",
     image: "https://demo.yo-gigs.com/image/show/4/7/LARGE",
   },
+  setUser: (user) => set({ user }),
   login: (userData) => set({ isAuthenticated: true, user: userData }),
   logout: () => set({ isAuthenticated: false, user: null }),
 }));
@@ -67,6 +69,7 @@ export const useFreelancerStore = create((set) => ({
       image: "https://demo.yo-gigs.com/image/show/4/19/MEDIUM",
     },
   ],
+  setFreelancers: (freelancers) => set({ freelancers }),
   addFreelancer: (freelancer) =>
     set((state) => ({ freelancers: [...state.freelancers, freelancer] })),
   removeFreelancer: (id) =>

@@ -10,14 +10,21 @@ import LoginPage from "./pages/LoginPage";
 import SignUpPage from "./pages/SignUpPage";
 import UserDetails from "./pages/UserDetails";
 import Users from "./pages/Users"
-
 import ProtectedRoute from "./components/ProtectedRoute";
 import {AuthProvider} from "./context/AuthContext";
 import Home from "./clientPages/Home";
 import FreelancersHome from "./clientPages/FreelancersHome";
-import FreelancerDetails from "./clientPages/FreelanderDetailsPage";
 import JobsHome from "./clientPages/JobsHome";
 import ServicesHome from "./clientPages/ServicesHome";
+import FreelancerDetails from "./clientPages/FreelanderDetailsPage";
+import ServiceClientDetails from "./clientPages/ServiceDetailsPage";
+import JobDetails from "./components/clientComponents/Job-Details";
+import DashboearClient from "./clientPages/ClientDashboard";
+import JobBoardClient from "./components/clientComponents/filtter-jobs-header";
+import Notification from "./components/clientComponents/Notification-Modal";
+import Conversation from "./components/clientComponents/Conversation-Modal";
+
+// i mean by jobs the offres that the client post 
 const router = createBrowserRouter(
     createRoutesFromElements(
         <>
@@ -46,10 +53,26 @@ const router = createBrowserRouter(
             <Route path="/client">
                 <Route index element={<Navigate to="homepage" />} /> {/* ✅ Redirects "/client" to "/client/homepage" */}
                 <Route path="homepage" element={<Home />} />
+                {/* freelancers */}
                 <Route path="freelancers" element={<FreelancersHome />} />
-                <Route path="jobs" element={<JobsHome />} />
-                <Route path="services" element={<ServicesHome />} />
                 <Route path="freelancers/:id" element={<FreelancerDetails />} />
+
+                {/* jobs */}
+                <Route path="jobs" element={<JobsHome />} />
+                <Route path="jobs/:id" element={<JobDetails />} />
+
+                {/* services */}
+                <Route path="services" element={<ServicesHome />} />
+                <Route path="services/:id" element={<ServiceClientDetails />} />
+
+
+                {/* Client Dashboard - Nested routes inside `DashboearClient` */}
+                <Route path="dashboard" element={<DashboearClient />}>
+                    <Route index element={<JobBoardClient />} />
+                    {/* <Route path="PostJob" element={<Profile />} /> */}
+                    <Route path="notifications/:id" element={<Notification />} />
+                    <Route path="conversations/:id" element={<Conversation />} />
+                </Route>
             </Route>
 
 

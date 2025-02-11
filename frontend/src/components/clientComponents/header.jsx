@@ -39,18 +39,16 @@ export default function Header() {
           </Link>
           <nav className="hidden md:flex items-center gap-6">
             <button className="flex items-center gap-2 text-gray-700 hover:text-gray-900">Categories</button>
-            <Link to="/freelancers" className="text-gray-700 hover:text-gray-900">
+            <Link to="/client/freelancers" className="text-gray-700 hover:text-gray-900">
               Find a freelancer
             </Link>
-            <Link to="/jobs" className="text-gray-700 hover:text-gray-900">
+            <Link to="/client/jobs" className="text-gray-700 hover:text-gray-900">
               Find jobs
             </Link>
-            <Link to="/services" className="text-gray-700 hover:text-gray-900">
+            <Link to="/client/services" className="text-gray-700 hover:text-gray-900">
               Find service package
             </Link>
-            <Link to="/about" className="text-gray-700 hover:text-gray-900">
-              About us
-            </Link>
+            
           </nav>
         </div>
 
@@ -152,18 +150,16 @@ export default function Header() {
         <div className="border-t bg-white px-4 py-3 md:hidden">
           <nav className="flex flex-col gap-3">
             <button className="flex items-center gap-2 text-gray-700">Categories</button>
-            <Link to="/freelancers" className="text-gray-700">
+            <Link to="client/freelancers" className="text-gray-700">
               Find a freelancer
             </Link>
-            <Link to="/jobs" className="text-gray-700">
+            <Link to="/client/jobs" className="text-gray-700">
               Find jobs
             </Link>
-            <Link to="/services" className="text-gray-700">
+            <Link to="/client/services" className="text-gray-700">
               Find service package
             </Link>
-            <Link to="/about" className="text-gray-700">
-              About us
-            </Link>
+            
             <hr className="my-2" />
             {isAuthenticated ? (
               <>

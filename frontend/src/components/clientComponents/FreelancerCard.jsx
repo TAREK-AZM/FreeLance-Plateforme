@@ -50,7 +50,7 @@ export default function FreelancerCard({ freelancer, isListView }) {
         {/* Buttons */}
         <div className="mt-4 flex gap-2">
           {/* <Link  href={`/freelancers/${freelancer.name}`}> */}
-          <Link  to={`/freelancers/1`}>
+          <Link  to={`/client/freelancers/1`}>
             <button className="border rounded-full px-4 py-2 text-green-600 hover:bg-green-100">
               View profile
             </button>
