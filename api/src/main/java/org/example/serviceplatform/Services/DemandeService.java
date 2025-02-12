@@ -27,6 +27,8 @@ public class DemandeService {
     private DemandeRepo demandeRepo;
     @Autowired
     private ClientRepo clientRepo;
+    @Autowired
+    private NotificationService notificationService;
 
     public List<DemandeDTO> getDemandes(Integer idPrestataire) {
         Prestataire prest=prestataireRepo.findById(idPrestataire).get();
@@ -61,10 +63,19 @@ public class DemandeService {
         DemandeClient demande=demandeRepo.findById(idDemande).get();
         demande.setStatus(StatusDemande.EN_COURS);
         demandeRepo.save(demande);
+        // 🔔 Notification pour le client
+        String sujet = "Demande Acceptée";
+        String message = " Votre demande pour la service '" + demande.getService().getTitre() + "' a été acceptée.";
+        notificationService.createNotification(demande.getClient(), sujet, message);
+
     }
     public void annulerDemande(Integer idDemande) {
         DemandeClient demande=demandeRepo.findById(idDemande).get();
         demande.setStatus(StatusDemande.ANNULEE);
         demandeRepo.save(demande);
+        // 🔔 Notification pour le client
+        String sujet = "Demande Refusée";
+        String message = " Votre demande pour la service '" + demande.getService().getTitre() + "' a été refusée.";
+        notificationService.createNotification(demande.getClient(), sujet, message);
     }
 }

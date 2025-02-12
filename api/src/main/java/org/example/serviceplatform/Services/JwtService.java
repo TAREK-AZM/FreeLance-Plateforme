@@ -21,7 +21,7 @@ public class JwtService {
     private String secretKey;
 
     public String generateAccessToken(Utilisateur user) {
-        return buildToken(user, 150000000L, TimeUnit.MINUTES);
+        return buildToken(user, 15L, TimeUnit.MINUTES);
     }
 
     public String generateRefreshToken(Utilisateur user) {

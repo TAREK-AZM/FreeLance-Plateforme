@@ -10,6 +10,8 @@ public class PostulationMapper {
                 .id(postulation.getId())
                 .description(postulation.getDescription())
                 .datePostulation(postulation.getDatePostulation())
+                .status(postulation.getStatus())
+                .prix(postulation.getPrix())
                 .prestataire(PrestataireMapper.toPrestataireDTO(postulation.getPrestataire()))
                 .build();
     }

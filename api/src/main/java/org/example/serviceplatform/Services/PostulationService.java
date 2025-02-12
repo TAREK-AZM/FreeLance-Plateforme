@@ -1,6 +1,7 @@
 package org.example.serviceplatform.Services;
 
 import org.example.serviceplatform.DTO.PostulationDTO;
+import org.example.serviceplatform.Entities.Enums.StatutPost;
 import org.example.serviceplatform.Entities.Offre;
 import org.example.serviceplatform.Entities.Postulation;
 import org.example.serviceplatform.Entities.Prestataire;
@@ -22,6 +23,8 @@ public class PostulationService {
     private OffreRepo offreRepo;
     @Autowired
     private PrestataireRepo prestataireRepo;
+    @Autowired
+    private NotificationService notificationService;
 
     //get postulatios for an offre
     public List<PostulationDTO> getPostulationsForOffre(Integer offreId) {
@@ -53,6 +56,31 @@ public class PostulationService {
          postulation.setDescription(postulationStored.getDescription());
         // Persister la postulation
         postulationRepo.save(postulation);
+
+    }
+
+    //accepter une psotulation
+    public void accepterPostulation( Integer postulationId) {
+        Postulation postulation=postulationRepo.findById(postulationId).orElseThrow(() -> new RuntimeException("Postulation not found with ID: " + postulationId));
+        postulation.setStatus(StatutPost.ACCEPTED);
+        postulationRepo.save(postulation);
+
+        // 🔔 Notification pour le prestataire
+        String sujet = "Postulation Acceptée";
+        String message = " Votre postulation pour l'offre '" + postulation.getOffre().getTitle() + "' a été acceptée.";
+        notificationService.createNotification(postulation.getPrestataire(), sujet, message);
+
+    }
+    //refuser une postulation
+    public void refuserPostulation( Integer postulationId) {
+        Postulation postulation=postulationRepo.findById(postulationId).orElseThrow(() -> new RuntimeException("Postulation not found with ID: " + postulationId));
+        postulation.setStatus(StatutPost.REFUSED);
+        postulationRepo.save(postulation);
+
+        // 🔔 Notification pour le prestataire
+        String sujet = "Postulation Refusée";
+        String message = " Votre postulation pour l'offre '" + postulation.getOffre().getTitle() + "'a été refusée.";
+        notificationService.createNotification(postulation.getPrestataire(), sujet, message);
 
     }
 

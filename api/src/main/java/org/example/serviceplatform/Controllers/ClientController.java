@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/client")
@@ -24,8 +25,9 @@ public class ClientController {
     private final OffreService offreService;
     private final PostulationService postulationService;
     private final UtilisateurService utilisateurService;
+    private final FavorisService favorisService;
 
-    public ClientController(ClientRepo clientRepo, ClientService clientService, CategoryService categoryService, DemandeService demandeService, CommentaireService commentaireService, CommentaireRepo commentaireRepo, EvaluationService evaluationService, OffreService offreService, PostulationService postulationService, UtilisateurService utilisateurService) {
+    public ClientController(ClientRepo clientRepo, ClientService clientService, CategoryService categoryService, DemandeService demandeService, CommentaireService commentaireService, CommentaireRepo commentaireRepo, EvaluationService evaluationService, OffreService offreService, PostulationService postulationService, UtilisateurService utilisateurService, FavorisService favorisService) {
         this.clientRepo = clientRepo;
         this.clientService = clientService;
         this.categoryService = categoryService;
@@ -36,6 +38,7 @@ public class ClientController {
         this.offreService = offreService;
         this.postulationService = postulationService;
         this.utilisateurService = utilisateurService;
+        this.favorisService = favorisService;
     }
 
                         ////////////// GESTION DE PROFIL///////////
@@ -77,7 +80,7 @@ public class ClientController {
         return categoryService.getAllServicesByCategory(idCateg);
     }
 
-    //voir les service selon le budget
+
 
 
 
@@ -142,22 +145,73 @@ public class ClientController {
 
 
                       /////////////////////MES OFFRES///////////////
+    //voir mes offres que j'ai créé
+   @GetMapping("/offres")
+   public List<OffreDTO> getAllOffreofClient(){
+        return offreService.getOffresOfClient(utilisateurService.getAuthenticatedUserId());
+   }
+
     //creer un post (offre) pour chercher une service
-    @PostMapping("/offres")
+    @PostMapping("/offre/create")
     public ResponseEntity<String> storeOffre(@RequestBody Offre offre){
         Integer idClient=utilisateurService.getAuthenticatedUserId();    //authentifié
          offreService.createOffre(idClient,offre);
          return ResponseEntity.ok("offre stored");
       }
       //voir les postulas des prestataires  pour une offre
-    @GetMapping("/offres/{id}/postulas")
+    @GetMapping("/offre/{id}/postulas")
     public List<PostulationDTO> getAllPostulasForOffre(@PathVariable Integer id){
         return postulationService.getPostulationsForOffre(id);
+    }
+    // accepter une postulation
+    @PutMapping("/postulation/{id}/accepter")
+    public ResponseEntity<String> accepterPostulation(@PathVariable Integer id){
+        postulationService.accepterPostulation(id);
+        return  ResponseEntity.ok("La postulation est bien acceptée  !");
+    }
+    //refuer une postulation
+    @PutMapping("/postulation/{id}/refuser")
+    public ResponseEntity<String> refuserPostulation(@PathVariable Integer id){
+        postulationService.refuserPostulation(id);
+        return  ResponseEntity.ok("la postulation est bien refusée !");
+    }
+
+    ///////////////////////////gestion des favoris ///////////////////////
+
+    //ajouter une service au table  favoris
+    @PostMapping("/favoris/create")
+    public ResponseEntity<String> createFavoris(@RequestBody Map<String,Integer> favoris){
+        Integer idClient=utilisateurService.getAuthenticatedUserId();
+        favorisService.createFavoris(idClient,favoris);
+        return ResponseEntity.ok("favoris stored");
+
+    }
+    //afficher tous les favoris pour le client authentifié
+     @GetMapping("/Mesfavoris")
+    public List<FavorisDTO> getAllFavorisOfClient(){
+        Integer idClient=utilisateurService.getAuthenticatedUserId();
+        return favorisService.getAllFavoris(idClient);
+     }
+
+    //supprimer de table favoris
+    @DeleteMapping("/{idFavoris}/disfavoris")
+     public ResponseEntity<String> deleteFavoris(@PathVariable Integer idFavoris){
+        favorisService.deleteFavoris(idFavoris);
+        return ResponseEntity.ok("vous avez retiré cette service de la liste des favoris") ;
     }
 
 
 
+    //////////////////////////// Notifications /////////////////
+    // lorsque le client accepte une postulation
 
+
+    //lorsque le prest acceptre ou refuse une demande pour une service de la part du client
+
+
+    //lorsque le prest postuler pour une offre
+
+    //get la liste des notification pour un client + un prestataire
 
 
 

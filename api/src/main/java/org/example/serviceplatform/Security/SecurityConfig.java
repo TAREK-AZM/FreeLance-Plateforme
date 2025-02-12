@@ -39,7 +39,8 @@ public class SecurityConfig {
                         .requestMatchers(
                                 "/api/client/register",
                                 "/api/prestataire/register",
-                                "/api/auth/**"
+                                "/api/auth/**",
+                                "/api/ai/**"
                         ).permitAll()
                         .requestMatchers("/api/client/**").hasAuthority("CLIENT")
                         .requestMatchers("/api/prestataire/**").hasAuthority("PRESTATAIRE")

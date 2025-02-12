@@ -3,6 +3,7 @@ package org.example.serviceplatform.Entities;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.example.serviceplatform.Entities.Enums.StatutOffre;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -17,8 +18,14 @@ public class Offre {
     private Integer id;
 
     private String title; // Titre de l'offre
-    private String description; // Description de l'offre
-    private LocalDateTime dateCreation; // Date de création de l'offre
+    private String description;// Description de l'offre
+    private float prix;
+    private LocalDateTime dateCreation;
+    private LocalDateTime dateExpiration;// Date de création de l'offre
+    private String ville;
+    @Enumerated(EnumType.STRING)
+    private StatutOffre status;
+    private String image;
 
     @ManyToOne
     @JoinColumn(name = "client_id", nullable = false)

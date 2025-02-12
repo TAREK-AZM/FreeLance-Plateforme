@@ -1,9 +1,6 @@
 package org.example.serviceplatform.Controllers;
 
-import org.example.serviceplatform.DTO.CertificationDTO;
-import org.example.serviceplatform.DTO.DemandeDTO;
-import org.example.serviceplatform.DTO.PrestataireProfilDTO;
-import org.example.serviceplatform.DTO.ServiceDTO;
+import org.example.serviceplatform.DTO.*;
 import org.example.serviceplatform.Entities.*;
 import org.example.serviceplatform.Repositories.CertificationRepo;
 import org.example.serviceplatform.Repositories.DemandeRepo;
@@ -31,6 +28,8 @@ public class PrestataireController {
     private PostulationService postulationService;
     @Autowired
     private UtilisateurService utilisateurService;
+    @Autowired
+    private NotificationService notificationService;
 
     //////////////////////////////GESTION DE PROFIL /////////////////////
 
@@ -84,13 +83,13 @@ public class PrestataireController {
     }
 
     /////// accepter une demande/////////
-    @PatchMapping("/demandes/{idDemande}/accepter")
+    @PatchMapping("/demande/{idDemande}/accepter")
     public ResponseEntity<String> accepterDemande(@PathVariable Integer idDemande) {
         demandeService.accepterDemande(idDemande);
         return ResponseEntity.ok("le demande est acceptée!");
     }
     ///////////annuler une demande////////////
-    @PatchMapping("/demandes/{idDemande}/annuler")
+    @PatchMapping("/demande/{idDemande}/annuler")
     public ResponseEntity<String> annulerDemande(@PathVariable Integer idDemande) {
         demandeService.accepterDemande(idDemande);
         return ResponseEntity.ok("la demande est annulée");
@@ -142,6 +141,27 @@ public class PrestataireController {
     }
     //voir la liste des offres
 
+
+
+
+
+
+
+    //////////////////////////////////  Gestion des notifications ///////////////////////////
+
+ // voir mes notifications
+    @GetMapping("/MesNotifications")
+    public List<NotificationDTO> getNotifications() {
+        Integer idPrest=utilisateurService.getAuthenticatedUserId();
+        //Integer idPrest=2;
+        return notificationService.getAllNotificationsofUser(idPrest);
+    }
+
+    //marquer la notification comme lue
+    @PutMapping("/{idNotification}/read")
+    public void markAsRead(@PathVariable Integer idNotification){
+        notificationService.markAsRead(idNotification);
+    }
 
 
 
