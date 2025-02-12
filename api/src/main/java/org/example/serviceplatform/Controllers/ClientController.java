@@ -26,8 +26,9 @@ public class ClientController {
     private final PostulationService postulationService;
     private final UtilisateurService utilisateurService;
     private final FavorisService favorisService;
+    private final ServiceService serviceService;
 
-    public ClientController(ClientRepo clientRepo, ClientService clientService, CategoryService categoryService, DemandeService demandeService, CommentaireService commentaireService, CommentaireRepo commentaireRepo, EvaluationService evaluationService, OffreService offreService, PostulationService postulationService, UtilisateurService utilisateurService, FavorisService favorisService) {
+    public ClientController(ClientRepo clientRepo, ClientService clientService, CategoryService categoryService, DemandeService demandeService, CommentaireService commentaireService, CommentaireRepo commentaireRepo, EvaluationService evaluationService, OffreService offreService, PostulationService postulationService, UtilisateurService utilisateurService, FavorisService favorisService, ServiceService serviceService) {
         this.clientRepo = clientRepo;
         this.clientService = clientService;
         this.categoryService = categoryService;
@@ -39,6 +40,7 @@ public class ClientController {
         this.postulationService = postulationService;
         this.utilisateurService = utilisateurService;
         this.favorisService = favorisService;
+        this.serviceService = serviceService;
     }
 
                         ////////////// GESTION DE PROFIL///////////
@@ -84,7 +86,15 @@ public class ClientController {
 
 
 
-                          ///////////////////////////GERER MES DEMANDES //////////////////////////
+                          ///////////////////////////GERER MES DEMANDES et SERVICES //////////////////////////
+   //get all services
+    @GetMapping("services/all")
+    public List<ServiceClientDTO> getAllServices(){
+        return serviceService.getAllServices();
+    }
+
+
+
     //demander une service
     @PostMapping("services/{id}/demandes")
     public ResponseEntity<String> demanderService(@PathVariable Integer id,@RequestBody DemandeClient demandeClient){
@@ -203,15 +213,6 @@ public class ClientController {
 
 
     //////////////////////////// Notifications /////////////////
-    // lorsque le client accepte une postulation
-
-
-    //lorsque le prest acceptre ou refuse une demande pour une service de la part du client
-
-
-    //lorsque le prest postuler pour une offre
-
-    //get la liste des notification pour un client + un prestataire
 
 
 

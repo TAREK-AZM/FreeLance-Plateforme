@@ -1,5 +1,7 @@
 package org.example.serviceplatform.Controllers;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.example.serviceplatform.DTO.*;
 import org.example.serviceplatform.Entities.*;
 import org.example.serviceplatform.Repositories.CertificationRepo;
@@ -8,9 +10,15 @@ import org.example.serviceplatform.Repositories.PrestataireRepo;
 import org.example.serviceplatform.Repositories.ServiceRepo;
 import org.example.serviceplatform.Services.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
 @RestController
@@ -31,8 +39,38 @@ public class PrestataireController {
     @Autowired
     private NotificationService notificationService;
 
+
+    private static final String UPLOAD_DIR = "src/main/resources/static/images/";
     //////////////////////////////GESTION DE PROFIL /////////////////////
 
+    @PostMapping("/image")
+    public ResponseEntity<String> storeImage(@RequestPart("file") MultipartFile file) {
+        if (file.isEmpty()) {
+            return ResponseEntity.badRequest().body("Erreur : Aucun fichier n'a été sélectionné.");
+        }
+
+        try {
+            // 📌 Vérifier et créer le dossier s'il n'existe pas
+            Path uploadPath = Paths.get(UPLOAD_DIR);
+            if (!Files.exists(uploadPath)) {
+                Files.createDirectories(uploadPath);
+            }
+
+            // 📌 Générer un nom unique pour le fichier
+            String fileName = "image_" + System.currentTimeMillis() + "_" + file.getOriginalFilename();
+            Path filePath = uploadPath.resolve(fileName);
+
+            // 📌 Sauvegarder l'image
+            Files.write(filePath, file.getBytes());
+
+            // 📌 Retourner l'URL d'accès
+            String fileUrl = "/images/" + fileName;
+            return ResponseEntity.ok("✅ Image enregistrée avec succès : " + fileUrl);
+
+        } catch (IOException e) {
+            return ResponseEntity.internalServerError().body("❌ Erreur lors de l'enregistrement de l'image : " + e.getMessage());
+        }
+    }
 
 
     ///////get  les infos personnels de prestataire
@@ -41,15 +79,32 @@ public class PrestataireController {
         Integer idPrest=utilisateurService.getAuthenticatedUserId(); //le id de user authentifié
        return prestataireService.getPrestataire(idPrest);
     }
+
     /////// UPDATE  les infos personnels de prestataire
-    @PutMapping("/profil")
-    public ResponseEntity<String> updateProfil(@RequestBody Prestataire prestataire) {
-        Integer idPrest=utilisateurService.getAuthenticatedUserId();
-         prestataireService.updatePrestataire(idPrest,prestataire);
-          return ResponseEntity.ok("Profil updated");
+    @PutMapping(value = "/profil/update", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<String> updateProfil(
+            @RequestPart("prestataire") String prestataireJson,  // JSON en String
+            @RequestPart(value = "file", required = false) MultipartFile file) {
+
+         //Convertir le JSON String en Objet Prestataire
+        ObjectMapper objectMapper = new ObjectMapper();
+        Prestataire prestataire;
+        try {
+            prestataire = objectMapper.readValue(prestataireJson, Prestataire.class);
+        } catch (JsonProcessingException e) {
+            return ResponseEntity.badRequest().body("Erreur lors de la conversion JSON : " + e.getMessage());
+        }
+
+        Integer idPrest = utilisateurService.getAuthenticatedUserId();
+
+        // 📌 Mettre à jour les infos du prestataire
+        prestataireService.updatePrestataire(idPrest, prestataire, file);
+
+        return ResponseEntity.ok("✅ Profil mis à jour avec succès.");
     }
 
-                    ////////////////////////////// Gestion de certification//////////////////////////////
+
+    ////////////////////////////// Gestion de certification//////////////////////////////
 
     @PostMapping("/certification/add")
     public ResponseEntity<String>  ajouterCertification(@RequestBody Certification certification) {
