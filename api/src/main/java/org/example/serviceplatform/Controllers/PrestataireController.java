@@ -104,6 +104,11 @@ public class PrestataireController {
         Integer idPrest=utilisateurService.getAuthenticatedUserId();
         return serviceService.getServices(idPrest);
  }
+
+    @GetMapping("/allservices")
+    public List<ServiceDTO> getAllServices() {
+        return serviceService.getAllServices();
+    }
     /////////ajouter une service//////////
     @PostMapping("/mesServices/add")
     public ResponseEntity<String>  addService(@RequestBody Service service) {

@@ -79,6 +79,7 @@ public class ClientController {
     public List<ServiceClientDTO> getAllServicesOfCategory(@PathVariable Integer idCateg){
         return categoryService.getAllServicesByCategory(idCateg);
     }
+    
 
 
 

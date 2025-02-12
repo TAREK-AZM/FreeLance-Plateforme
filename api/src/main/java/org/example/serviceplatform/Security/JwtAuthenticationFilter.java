@@ -34,6 +34,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         // Liste des chemins publics
         return path.equals("/api/client/register") ||
                 path.equals("/api/prestataire/register") ||
+                path.equals("/api/prestataire/allservices") ||
                 path.startsWith("/api/auth/");
     }
 

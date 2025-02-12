@@ -29,10 +29,9 @@ public class ServiceService {
         Prestataire prest=prestataireRepo.findById(id).orElse(null);
         return prest.getServices().stream().map(ServiceMapper::toServiceDTO).collect(Collectors.toList()) ;
     }
-    //////////// GETserices///////////
+    //////////// get all services ////////////////
     public List<ServiceDTO> getAllServices() {
         List<Service> services=serviceRepo.findAll();
-        System.out.println("------>those are services<--------------"+services);
         return services.stream().map(ServiceMapper::toServiceDTO).collect(Collectors.toList()) ;
     }
     //////////////// Get Detials Service/////////
