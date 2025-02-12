@@ -79,10 +79,6 @@ public class ClientController {
         return categoryService.getAllServicesByCategory(idCateg);
     }
 
-    @GetMapping("/all-services")
-    public List<ServiceDTO> getAllServices(){
-        return serviceService.getAllServices();
-    }
 
     //voir les service selon le budget
 
