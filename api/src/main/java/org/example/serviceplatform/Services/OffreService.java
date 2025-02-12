@@ -1,11 +1,16 @@
 package org.example.serviceplatform.Services;
 
+import org.example.serviceplatform.DTO.OffreDTO;
 import org.example.serviceplatform.Entities.Client;
 import org.example.serviceplatform.Entities.Offre;
+import org.example.serviceplatform.Mappers.OffreMapper;
 import org.example.serviceplatform.Repositories.ClientRepo;
 import org.example.serviceplatform.Repositories.OffreRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class OffreService {
@@ -29,6 +34,10 @@ public class OffreService {
 
         // Sauvegarder l'offre
          offreRepo.save(offre);
+    }
+    public List<OffreDTO> getOffresOfClient(Integer idClient) {
+        Client client=clientRepo.findById(idClient).orElseThrow(() -> new RuntimeException("Client not found"));
+        return client.getOffres().stream().map(OffreMapper::toOffreDTO).collect(Collectors.toList());
     }
 
 
