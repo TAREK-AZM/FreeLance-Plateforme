@@ -4,6 +4,7 @@ import { Button } from "../ui/button"
 import { Card } from "../ui/card"
 import CommentForm from "./comment-form"
 import { useParams } from "react-router-dom"
+import axios from "axios"
 const freelancers = [
     {
         id: "1",
@@ -62,6 +63,7 @@ const freelancers = [
     },
 ]
 
+const BASE_URL = import.meta.env.VITE_API2; // Environment variable for API base URL
 export default function FreelancerDetails() {
     const { id } = useParams()
     const [freelancer, setFreelancer] = useState(null)
@@ -69,6 +71,29 @@ export default function FreelancerDetails() {
     useEffect(() => {
         const foundFreelancer = freelancers.find((f) => f.id === id)
         setFreelancer(foundFreelancer)
+        const fetchFreelancer = async (id) => {
+
+            try {
+                const token = localStorage.getItem("token"); // Retrieve token
+                const response = await axios.get(`${BASE_URL}/freelancers/${id}`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`, // Attach token for authentication
+                    },
+                });
+        
+                if (response.status === 200) {
+                    console.log("✅ Fetched Freelancer:", response.data);
+                    setFreelancer(response.data); // Update state with real API data
+                } else {
+                    console.warn("⚠️ API returned unexpected response:", response);
+                }
+            } catch (error) {
+                console.error("❌ Error fetching freelancer:", error);
+            }
+        }
+
+        fetchFreelancer(id);
+
     }, [id])
 
     const onSubmit = ({ name, rating, comment, time }) => {

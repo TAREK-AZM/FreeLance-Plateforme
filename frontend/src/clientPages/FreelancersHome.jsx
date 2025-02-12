@@ -20,7 +20,9 @@ export default function FreelancersHome() {
   useEffect(() => {
     const fetchFreelancers = async () => {
       try {
-        const freelancersFake = [ {
+        // this is fake data untill get it from API
+        const freelancersFake = [ 
+          {
           name: "Francesco",
           role: "Mobile App Maintenance and Optimization Specialist with Expertise in Cross-Platform Development, Bug Fixing, and Performance Enhancement for E-commerce Applications",
           rating: 5.0,
@@ -29,7 +31,28 @@ export default function FreelancersHome() {
           rate: 26.0,
           skills: ["E-commerce", "Shopify", "UX/UI"],
           image: "https://demo.yo-gigs.com/image/show/4/7/MEDIUM",
-        }]
+        },
+          {
+          name: "Francesco",
+          role: "Mobile App Maintenance and Optimization Specialist with Expertise in Cross-Platform Development, Bug Fixing, and Performance Enhancement for E-commerce Applications",
+          rating: 5.0,
+          reviews: 1,
+          projects: 3,
+          rate: 26.0,
+          skills: ["E-commerce", "Shopify", "UX/UI"],
+          image: "https://demo.yo-gigs.com/image/show/4/7/MEDIUM",
+        },
+          {
+          name: "Francesco",
+          role: "Mobile App Maintenance and Optimization Specialist with Expertise in Cross-Platform Development, Bug Fixing, and Performance Enhancement for E-commerce Applications",
+          rating: 5.0,
+          reviews: 1,
+          projects: 3,
+          rate: 26.0,
+          skills: ["E-commerce", "Shopify", "UX/UI"],
+          image: "https://demo.yo-gigs.com/image/show/4/7/MEDIUM",
+        },
+      ]
         setFreelancers(freelancersFake); // Update Zustand store
 
         const token = localStorage.getItem("token"); // Retrieve token
