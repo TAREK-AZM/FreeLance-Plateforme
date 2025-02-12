@@ -1,63 +1,13 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Star } from "lucide-react";
 import { Card, CardContent } from "../ui/card";
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from "../ui/carousel";
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious, } from "../ui/carousel";
+import axios from "axios";
+import { useFreelancerStore } from "../../store/store";
 
-const freelancers = [
-  {
-    name: "Francesco",
-    role: "Mobile App Maintenance",
-    rating: 5.0,
-    reviews: 1,
-    projects: 3,
-    rate: 26.0,
-    image: "https://demo.yo-gigs.com/image/show/4/7/MEDIUM",
-  },
-  {
-    name: "Jessica",
-    role: "Video SEO Expert",
-    rating: 4.0,
-    reviews: 2,
-    projects: 2,
-    rate: 32.0,
-    image: "https://demo.yo-gigs.com/image/show/4/8/MEDIUM",
-  },
-  {
-    name: "Mamie",
-    role: "Shopify Designer",
-    rating: 4.0,
-    reviews: 1,
-    projects: 1,
-    rate: 37.0,
-    image: "https://demo.yo-gigs.com/image/show/4/42/MEDIUM",
-  },
-  {
-    name: "Alison",
-    role: "WordPress Developer",
-    rating: 3.0,
-    reviews: 2,
-    projects: 2,
-    rate: 35.0,
-    image: "https://demo.yo-gigs.com/image/show/4/1/MEDIUM",
-  },
-  {
-    name: "Cameron",
-    role: "Cloud Security Engineer",
-    rating: 3.5,
-    reviews: 2,
-    projects: 2,
-    rate: 34.0,
-    image: "https://demo.yo-gigs.com/image/show/4/19/MEDIUM",
-  },
-]
 
+const Base_URL = import.meta.env.VITE_API2; // API Base URL from environment variables
 
 
 
@@ -66,6 +16,105 @@ const freelancers = [
 
 export default function Freelancers() {
   const [currentSlide, setCurrentSlide] = useState(0);
+  const setFreelancers = useFreelancerStore((state) => state.setFreelancers);
+  const freelancers = useFreelancerStore((state) => state.freelancers);
+
+  useEffect(() => {
+    const fetchFreelancers = async () => {
+      try {
+        const freelancers = [
+          {
+            name: "Francesco",
+            role: "Mobile App Maintenance",
+            rating: 5.0,
+            reviews: 1,
+            projects: 3,
+            rate: 26.0,
+            image: "https://demo.yo-gigs.com/image/show/4/7/MEDIUM",
+          },
+          {
+            name: "Jessica",
+            role: "Video SEO Expert",
+            rating: 4.0,
+            reviews: 2,
+            projects: 2,
+            rate: 32.0,
+            image: "https://demo.yo-gigs.com/image/show/4/8/MEDIUM",
+          },
+          {
+            name: "Mamie",
+            role: "Shopify Designer",
+            rating: 4.0,
+            reviews: 1,
+            projects: 1,
+            rate: 37.0,
+            image: "https://demo.yo-gigs.com/image/show/4/42/MEDIUM",
+          },
+          {
+            name: "Alison",
+            role: "WordPress Developer",
+            rating: 3.0,
+            reviews: 2,
+            projects: 2,
+            rate: 35.0,
+            image: "https://demo.yo-gigs.com/image/show/4/1/MEDIUM",
+          },
+          {
+            name: "Cameron",
+            role: "Cloud Security Engineer",
+            rating: 3.5,
+            reviews: 2,
+            projects: 2,
+            rate: 34.0,
+            image: "https://demo.yo-gigs.com/image/show/4/19/MEDIUM",
+          },
+          {
+            name: "Cameron",
+            role: "Cloud Security Engineer",
+            rating: 3.5,
+            reviews: 2,
+            projects: 2,
+            rate: 34.0,
+            image: "https://demo.yo-gigs.com/image/show/4/19/MEDIUM",
+          },
+          {
+            name: "Cameron",
+            role: "Cloud Security Engineer",
+            rating: 3.5,
+            reviews: 2,
+            projects: 2,
+            rate: 34.0,
+            image: "https://demo.yo-gigs.com/image/show/4/19/MEDIUM",
+          },
+          {
+            name: "Cameron",
+            role: "Cloud Security Engineer",
+            rating: 3.5,
+            reviews: 2,
+            projects: 2,
+            rate: 34.0,
+            image: "https://demo.yo-gigs.com/image/show/4/19/MEDIUM",
+          },
+        ];
+        setFreelancers(freelancers); // Update Zustand store
+        const token = localStorage.getItem("token"); // Get the token
+        console.log("🔑🔑🔑🔑 Using Token:🔑🔑", token);
+
+        const response = await axios.get(`${Base_URL}/api/client/freelancers`, {
+          headers: {
+            Authorization: `${token}`, // Attach token in Authorization header
+          },
+        });
+
+        console.log("✅ Freelancers fetched:", response.data);
+        setFreelancers(response.data); // Store freelancers in Zustand
+      } catch (error) {
+        console.error("❌ Error fetching freelancers:", error);
+      }
+    };
+
+    fetchFreelancers(); // Call the fetch function when component mounts
+  }, [currentSlide]);
 
   return (
     <section className="py-16 bg-[#FF4338] text-white">
@@ -89,7 +138,7 @@ export default function Freelancers() {
         >
           <CarouselContent>
             {freelancers.map((freelancer, index) => (
-              
+
               <CarouselItem key={index} className="md:basis-1/6 lg:basis-1/6">
                 <div className="p-1">
                   <Card className="bg-white text-gray-900">
@@ -161,8 +210,8 @@ export default function Freelancers() {
               key={index}
               onClick={() => setCurrentSlide(index)}
               className={`w-2 h-2 rounded-full transition-all ${currentSlide === index
-                  ? "bg-green-500 w-4"
-                  : "bg-white/50 hover:bg-white"
+                ? "bg-green-500 w-4"
+                : "bg-white/50 hover:bg-white"
                 }`}
             />
           ))}

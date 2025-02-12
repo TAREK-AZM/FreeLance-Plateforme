@@ -13,8 +13,7 @@ export default function FreelancersHome() {
   const API_BASE_URL = import.meta.env.VITE_API2; // API Base URL from environment variables
 
   // Zustand data
-//   const freelancers = useFreelancerStore((state) => state.freelancers);
-//   const jobs = useJobPostStore((state) => state.jobPosts);
+
 const setServices = useServiceStore((state) => state.setServices);
   const services = useServiceStore((state) => state.services);
   useEffect(() => {

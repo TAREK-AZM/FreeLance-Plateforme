@@ -17,58 +17,7 @@ export const useAuthStore = create((set) => ({
 }));
 
 export const useFreelancerStore = create((set) => ({
-  freelancers: [
-    {
-      name: "Francesco",
-      role: "Mobile App Maintenance and Optimization Specialist with Expertise in Cross-Platform Development, Bug Fixing, and Performance Enhancement for E-commerce Applications",
-      rating: 5.0,
-      reviews: 1,
-      projects: 3,
-      rate: 26.0,
-      skills: ["E-commerce", "Shopify", "UX/UI"],
-      image: "https://demo.yo-gigs.com/image/show/4/7/MEDIUM",
-    },
-    {
-      name: "Jessica",
-      role: "Video SEO Expert and Content Strategy Consultant Specializing in YouTube Optimization, Keyword Research, and Analytics-Driven Campaigns for E-commerce Brands",
-      rating: 4.0,
-      reviews: 2,
-      projects: 2,
-      rate: 32.0,
-      skills: ["E-commerce", "Shopify", "UX/UI"],
-      image: "https://demo.yo-gigs.com/image/show/4/8/MEDIUM",
-    },
-    {
-      name: "Mamie",
-      role: "Shopify Designer and E-commerce Solutions Architect with Extensive Experience in Custom Theme Development, Store Setup, and Conversion Rate Optimization",
-      rating: 4.0,
-      reviews: 1,
-      projects: 1,
-      rate: 37.0,
-      skills: ["E-commerce", "Shopify", "UX/UI"],
-      image: "https://demo.yo-gigs.com/image/show/4/42/MEDIUM",
-    },
-    {
-      name: "Alison",
-      role: "WordPress Developer and Custom Plugin Specialist with a Focus on Responsive Design, API Integrations, and Scalable Solutions for E-commerce Websites",
-      rating: 3.0,
-      reviews: 2,
-      projects: 2,
-      rate: 35.0,
-      skills: ["E-commerce", "Shopify", "UX/UI"],
-      image: "https://demo.yo-gigs.com/image/show/4/1/MEDIUM",
-    },
-    {
-      name: "Cameron",
-      role: "Cloud Security Engineer and Infrastructure Consultant Specializing in AWS, Azure, and Google Cloud Platform with a Focus on Data Protection and Compliance",
-      rating: 3.5,
-      reviews: 2,
-      projects: 2,
-      rate: 34.0,
-      skills: ["E-commerce", "Shopify", "UX/UI"],
-      image: "https://demo.yo-gigs.com/image/show/4/19/MEDIUM",
-    },
-  ],
+  freelancers: [],
   setFreelancers: (freelancers) => set({ freelancers }),
   addFreelancer: (freelancer) =>
     set((state) => ({ freelancers: [...state.freelancers, freelancer] })),
@@ -98,3 +47,16 @@ export const useJobPostStore = create((set) => ({
       jobPosts: state.jobPosts.filter((j) => j.id !== id),
     })),
 }));
+
+export const useCategoriesStore = create((set) => ({
+  Categories: [],
+  setCategories: (Categories) => set({ Categories }),
+  addCategory: (category) =>
+    set((state) => ({ Categories: [...state.Categories, category] })),
+  removeCategory: (id) =>
+    set((state) => ({
+      Categories: state.Categories.filter((c) => c.id !== id),
+    })),
+}));
+ 
+

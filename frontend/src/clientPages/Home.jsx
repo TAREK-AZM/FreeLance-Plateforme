@@ -4,7 +4,7 @@ import JobCategories from '../components/clientComponents/job-categories';
 import Features from '../components/clientComponents/features';
 import BusinessSection from '../components/clientComponents/business-section';
 import Footer from '../components/clientComponents/footer';
-import Freelancers from "../components/clientComponents/freelancers"
+import Freelancers from "../components/clientComponents/freelancers-section"
 export default function Home() {
   return (
     <div className="min-h-screen bg-white">

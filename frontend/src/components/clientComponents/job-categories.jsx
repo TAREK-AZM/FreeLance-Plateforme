@@ -1,4 +1,5 @@
 
+import { useState, useEffect } from "react"
 import { Swiper, SwiperSlide } from 'swiper/react'
 import { Navigation, Pagination } from 'swiper/modules'
 import 'swiper/css';
@@ -7,30 +8,67 @@ import 'swiper/css';
 import 'swiper/css'
 import 'swiper/css/navigation'
 import 'swiper/css/pagination'
-const categories = [
-  {
-    title: "Graphics, Design & Architecture",
-    image: "https://demo.yo-gigs.com/image/show/31/3/LARGE?t=-62169984000",
-  },
-  {
-    title: "Marketing & Sales",
-    image: "https://demo.yo-gigs.com/image/show/31/5/LARGE?t=-62169984000",
-  },
-  {
-    title: "Water supply plumber",
-    image: "https://demo.yo-gigs.com/image/show/31/174/LARGE?t=1711523596",
-  },
-  {
-    title: "Development & IT Services",
-    image: "https://demo.yo-gigs.com/image/show/31/1/LARGE?t=1717744916",
-  },
-  {
-    title: "Plumber",
-    image: "https://demo.yo-gigs.com/image/show/31/167/LARGE?t=1711523315",
-  },
-]
+import { useCategoriesStore } from "../../store/store"
+import axios from "axios";
+
+
+const Base_URL = import.meta.env.VITE_API2; // API Base URL from environment variables
 
 export default function JobCategories() {
+  const categories = useCategoriesStore((state) => state.Categories);
+
+  const setCategories = useCategoriesStore((state) => state.setCategories);
+
+useEffect(() => {
+
+  const fetchCategories = async () => {
+    try {
+
+      const categories = [
+        {
+          title: "Graphics, Design & Architecture",
+          image: "https://demo.yo-gigs.com/image/show/31/3/LARGE?t=-62169984000",
+        },
+        {
+          title: "Marketing & Sales",
+          image: "https://demo.yo-gigs.com/image/show/31/5/LARGE?t=-62169984000",
+        },
+        {
+          title: "Water supply plumber",
+          image: "https://demo.yo-gigs.com/image/show/31/174/LARGE?t=1711523596",
+        },
+        {
+          title: "Development & IT Services",
+          image: "https://demo.yo-gigs.com/image/show/31/1/LARGE?t=1717744916",
+        },
+        {
+          title: "Plumber",
+          image: "https://demo.yo-gigs.com/image/show/31/167/LARGE?t=1711523315",
+        },
+      ]
+      setCategories(categories); // Update Zustand store
+      const token = localStorage.getItem("token"); // Get the token
+      console.log("🔑🔑🔑🔑 Using Token:🔑🔑", token);
+
+      const response = await axios.get(`${Base_URL}/api/client/categories`, {
+        headers: {
+          Authorization: `${token}`, // Attach token in Authorization header
+        },
+      });
+      if (response.status == 200) {
+        setCategories(response.data); // Store categories in Zustand
+      }
+
+      console.log("✅ Categories fetched:", response.data);
+      setCategories(response.data); // Store categories in Zustand
+    } catch (error) {
+      console.error("❌ Error fetching categories:", error);
+    }
+  };
+
+  fetchCategories(); // Call the fetch function when component mounts
+}, [])
+
   return (
 
     <section className="py-16 bg-gray-50">

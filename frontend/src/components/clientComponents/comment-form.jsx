@@ -5,6 +5,10 @@ import { Button } from "../ui/button";
 import { Textarea } from "../ui/textarea";
 import { Card } from "../ui/card";
 import { Star } from "lucide-react";
+import axios from "axios";
+
+const BASE_URL = import.meta.env.VITE_API2; // API Base URL from environment variables
+
 
 export default function CommentForm({ onSubmit }) {
   const { user } = useAuthStore();
@@ -12,20 +16,40 @@ export default function CommentForm({ onSubmit }) {
   const [hoveredRating, setHoveredRating] = useState(0);
   const [comment, setComment] = useState("");
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
     e.preventDefault();
     if (!comment.trim()) return;
 
-    onSubmit({
-      name: user?.name || "Anonymous",
-      rating,
-      comment,
-      time: "Just now",
-    });
+    try {
 
-    setRating(5);
-    setComment("");
+      const token = localStorage.getItem("token"); // Get the token
+      console.log("🔑🔑🔑🔑 Using Token:🔑🔑", token);
+      const response = await axios.post(`${BASE_URL}/api/client/comment`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          authorization: `${token}`, // Attach token in Authorization header
+        },
+        body: JSON.stringify({
+          rating,
+          comment,
+          userId: user?.id,
+        }),
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        onSubmit(data);
+      } else {
+        const errorData = await response.json();
+        console.error("Comment failed:", errorData.message);
+      }
+    } catch (error) {
+      console.error("Error during comment:", error);
+    }
   };
+
+
 
   return (
     <Card className="mt-8">
