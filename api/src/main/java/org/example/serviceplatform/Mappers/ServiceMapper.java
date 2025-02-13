@@ -12,6 +12,7 @@ public class ServiceMapper {
                 .titre(service.getTitre())
                 .prix(service.getPrix())
                 .status(service.getStatus())
+                .image(service.getImage())
                 //.categoryDTO(CategoryMapper.toCategoryDTO(service.getCategory()))
                 .category(service.getCategory())
                 .build();
@@ -24,6 +25,7 @@ public class ServiceMapper {
                 .titre(service.getTitre())
                 .prix(service.getPrix())
                 .status(service.getStatus())
+                .image(service.getImage())
                 .prestataire(PrestataireMapper.toPrestataireDTO(service.getPrestataire()))
                 .category(service.getCategory())
                 .build();
