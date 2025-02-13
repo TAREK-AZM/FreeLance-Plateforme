@@ -22,7 +22,7 @@ const setServices = useServiceStore((state) => state.setServices);
         const token = localStorage.getItem("token"); // Get the token
         console.log("🔑🔑🔑🔑 Using Token:🔑🔑", token);
 
-        const response = await axios.get(`${API_BASE_URL}/api/client/all-services`, {
+        const response = await axios.get(`${API_BASE_URL}/api/client/services/all`, {
           headers: {
             Authorization: `${token}`, // Attach token in Authorization header
           },
