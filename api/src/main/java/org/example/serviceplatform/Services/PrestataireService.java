@@ -43,7 +43,7 @@ public class PrestataireService {
 
         // 📂 Gérer l'upload d'image
         if (imageFile != null && !imageFile.isEmpty()) {
-            String UPLOAD_DIR = "src/main/resources/static/images/prestataires/";
+            String UPLOAD_DIR = "src/main/resources/images/prestataires/";
 
             try {
                 // 📁 Vérifier si le dossier existe, sinon le créer
@@ -51,7 +51,13 @@ public class PrestataireService {
                 if (!Files.exists(uploadPath)) {
                     Files.createDirectories(uploadPath);
                 }
-
+                // 🚀 **SUPPRESSION DE L'ANCIENNE IMAGE**
+                if (prestataire.getImageUrl() != null) {
+                    Path oldImagePath = Paths.get(UPLOAD_DIR + prestataire.getImageUrl().replace("/api/prestataires/images/", ""));
+                    if (Files.exists(oldImagePath)) {
+                        Files.delete(oldImagePath); // 🚨 Supprimer l'ancienne image
+                    }
+                }
                 // 🏷️ Définir un nom de fichier unique
                 String fileName = "prestataire_" + idPrest + "_" + System.currentTimeMillis() + "_" + imageFile.getOriginalFilename();
                 Path filePath = uploadPath.resolve(fileName);

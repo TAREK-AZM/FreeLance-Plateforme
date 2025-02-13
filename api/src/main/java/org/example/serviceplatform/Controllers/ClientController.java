@@ -1,5 +1,7 @@
 package org.example.serviceplatform.Controllers;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.example.serviceplatform.DTO.*;
 import org.example.serviceplatform.Entities.*;
 import org.example.serviceplatform.Repositories.ClientRepo;
@@ -8,6 +10,7 @@ import org.example.serviceplatform.Services.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Map;
@@ -55,9 +58,20 @@ public class ClientController {
 
     }
     @PutMapping("/profil/update")
-    public ResponseEntity<String> updateProfil(@RequestBody ClientDTO clientDTO){
+    public ResponseEntity<String> updateProfil(
+            @RequestPart String clientDTOjson ,
+            @RequestPart(value = "file", required = false) MultipartFile file){
+
+        //Convertir le JSON String en Objet ClientDTO
+        ObjectMapper objectMapper = new ObjectMapper();
+        ClientDTO clientDTO;
+        try {
+            clientDTO = objectMapper.readValue(clientDTOjson , ClientDTO.class);
+        } catch (JsonProcessingException e) {
+            return ResponseEntity.badRequest().body("Erreur lors de la conversion JSON : " + e.getMessage());
+        }
         Integer idClient=utilisateurService.getAuthenticatedUserId();
-        clientService.updateClient(idClient,clientDTO);
+        clientService.updateClient(idClient,clientDTO,file);
         return ResponseEntity.ok("Client updated");
     }
     @DeleteMapping("/profil/delete")
@@ -161,11 +175,22 @@ public class ClientController {
         return offreService.getOffresOfClient(utilisateurService.getAuthenticatedUserId());
    }
 
+
     //creer un post (offre) pour chercher une service
     @PostMapping("/offre/create")
-    public ResponseEntity<String> storeOffre(@RequestBody Offre offre){
+    public ResponseEntity<String> storeOffre(
+                @RequestPart String offrejson ,
+                @RequestPart(value = "file", required = false) MultipartFile file){
+        //Convertir le JSON String en Objet Offre
+        ObjectMapper objectMapper = new ObjectMapper();
+        Offre offre;
+        try {
+            offre = objectMapper.readValue(offrejson , Offre.class);
+        } catch (JsonProcessingException e) {
+            return ResponseEntity.badRequest().body("Erreur lors de la conversion JSON : " + e.getMessage());
+        }
         Integer idClient=utilisateurService.getAuthenticatedUserId();    //authentifié
-         offreService.createOffre(idClient,offre);
+         offreService.createOffre(idClient,offre,file);
          return ResponseEntity.ok("offre stored");
       }
       //voir les postulas des prestataires  pour une offre
