@@ -87,7 +87,7 @@ export default function CommentForm({ onSubmit }) {
               value={comment}
               onChange={(e) => setComment(e.target.value)}
               placeholder="Share your experience working with this freelancer..."
-              className="min-h-[120px] resize-none"
+              className="min-h-[120px] resize-none border border-[#12AE65] focus:border-[#12AE65] rounded-lg p-2"
             />
           </div>
 
