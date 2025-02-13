@@ -17,7 +17,7 @@ import java.util.List;
 public class Prestataire extends Utilisateur {
 
     private String description; // Description du prestataire
-    private String imageUrl;    // URL de l'image de profil du prestataire
+
 
     @OneToMany(mappedBy = "prestataire", cascade = CascadeType.ALL)
     @JsonIgnore

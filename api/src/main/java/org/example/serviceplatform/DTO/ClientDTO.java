@@ -13,5 +13,6 @@ public class ClientDTO {
     private String telephone;
     private Integer score;
     private String adresse;
+    private String imageUrl;
     private String ville;
 }

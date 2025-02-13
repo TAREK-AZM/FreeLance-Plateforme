@@ -41,6 +41,7 @@ public  class Utilisateur implements UserDetails {
     private Integer score;
     private String ville;
     private String adresse;
+    private String imageUrl;    // URL de l'image de profil de user
     //role
     @ManyToOne(cascade = CascadeType.ALL)
     @JsonIgnore

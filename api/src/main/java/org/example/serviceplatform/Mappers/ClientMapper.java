@@ -14,6 +14,7 @@ public class ClientMapper {
                 .score(client.getScore())
                 .ville(client.getVille())
                 .adresse(client.getAdresse())
+                .imageUrl(client.getImageUrl())
                 .build();
 
     }
