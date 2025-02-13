@@ -23,6 +23,7 @@ public class Service {
     private String description; // Description du service
     private Double prix; // Prix du service
     private Boolean status; // Disponibilité du service
+    private String image;
 
     // Relation avec la table `Favoris`
     @OneToMany(mappedBy = "service", cascade = CascadeType.ALL)

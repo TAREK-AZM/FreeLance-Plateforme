@@ -159,18 +159,44 @@ public class PrestataireController {
         Integer idPrest=utilisateurService.getAuthenticatedUserId();
         return serviceService.getServices(idPrest);
  }
+
+
+
+
+
     /////////ajouter une service//////////
-    @PostMapping("/mesServices/add")
-    public ResponseEntity<String>  addService(@RequestBody Service service) {
+    @PostMapping("/service/add")
+    public ResponseEntity<String>  addService(
+            @RequestPart String servicejson,
+            @RequestPart(value = "file", required = false) MultipartFile file) {
         Integer idPrest=utilisateurService.getAuthenticatedUserId();
-         serviceService.storeService(idPrest,service);
+        //Convertir le JSON String en Objet Service
+        ObjectMapper objectMapper = new ObjectMapper();
+        Service service;
+        try {
+            service = objectMapper.readValue(servicejson, Service.class);
+        } catch (JsonProcessingException e) {
+            return ResponseEntity.badRequest().body("Erreur lors de la conversion JSON : " + e.getMessage());
+        }
+         serviceService.storeService(idPrest,service,file);
         return ResponseEntity.ok("votre service est bien ajoutée");
     }
 
     //////////////modifier une service///////
-    @PutMapping("/mesServices/update")
-    public ResponseEntity<String> updateService(@RequestBody Service service )  {
-        serviceService.updateService(service);
+    @PutMapping("/service/update")
+    public ResponseEntity<String> updateService(
+            @RequestPart String servicejson,
+            @RequestPart(value = "file", required = false) MultipartFile file)   {
+        //Convertir le JSON String en Objet Service
+        ObjectMapper objectMapper = new ObjectMapper();
+        Service service;
+        try {
+            service = objectMapper.readValue(servicejson, Service.class);
+        } catch (JsonProcessingException e) {
+            return ResponseEntity.badRequest().body("Erreur lors de la conversion JSON : " + e.getMessage());
+        }
+
+        serviceService.updateService(service,file);
         return ResponseEntity.ok("la service est updated");
     }
     //////// le details d'une service/////////
