@@ -1,5 +1,6 @@
 package org.example.serviceplatform.Services;
 
+import org.example.serviceplatform.DTO.ServiceClientDTO;
 import org.example.serviceplatform.DTO.ServiceDTO;
 import org.example.serviceplatform.Entities.Category;
 import org.example.serviceplatform.Entities.Prestataire;
@@ -24,16 +25,16 @@ public class ServiceService {
     @Autowired
     private CategoryRepo categoryRepo;
 
+    ///////get all services ////////////
+    public List<ServiceDTO> getAllServices() {
+      return   serviceRepo.findAll().stream().map(ServiceMapper::toServiceDTO).collect(Collectors.toList());
+    }
     //////////// GETserices///////////
     public List<ServiceDTO> getServices(Integer id) {
         Prestataire prest=prestataireRepo.findById(id).orElse(null);
         return prest.getServices().stream().map(ServiceMapper::toServiceDTO).collect(Collectors.toList()) ;
     }
-    //////////// get all services ////////////////
-    public List<ServiceDTO> getAllServices() {
-        List<Service> services=serviceRepo.findAll();
-        return services.stream().map(ServiceMapper::toServiceDTO).collect(Collectors.toList()) ;
-    }
+
     //////////////// Get Detials Service/////////
     public ServiceDTO getService(Integer id) {
         return ServiceMapper.toServiceDTO( serviceRepo.findById(id).orElseThrow(()->new RuntimeException("Service not found")));
