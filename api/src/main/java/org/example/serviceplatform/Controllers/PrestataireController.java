@@ -10,6 +10,10 @@ import org.example.serviceplatform.Services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.example.serviceplatform.DTO.ConversationDTO;
+import org.example.serviceplatform.DTO.MessageDTO;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -30,6 +34,8 @@ public class PrestataireController {
     private UtilisateurService utilisateurService;
     @Autowired
     private NotificationService notificationService;
+    @Autowired
+    private ConversationService conversationService;
 
     //////////////////////////////GESTION DE PROFIL /////////////////////
 
@@ -164,8 +170,53 @@ public class PrestataireController {
     }
 
 
+    //////////////////////////////GESTION des conversations /////////////////////
 
+    @GetMapping("/conversations")
+    public List<ConversationDTO> getConversations() {
+        Integer prestataireId = utilisateurService.getAuthenticatedUserId();
+        Utilisateur prestataire = utilisateurService.getUtilisateur(prestataireId);
+        return conversationService.getUserConversations(prestataire);
+    }
 
+    @GetMapping("/conversations/{conversationId}/messages")
+    public Page<MessageDTO> getConversationMessages(
+            @PathVariable Integer conversationId,
+            Pageable pageable) {
+        return conversationService.getConversationMessages(conversationId, pageable);
+    }
+
+    @PostMapping("/conversations/{conversationId}/messages")
+    public MessageDTO sendMessage(
+            @PathVariable Integer conversationId,
+            @RequestBody String content) {
+        Integer prestataireId = utilisateurService.getAuthenticatedUserId();
+        Utilisateur prestataire = utilisateurService.getUtilisateur(prestataireId);
+        return conversationService.sendMessage(conversationId, prestataire, content);
+    }
+
+    @PutMapping("/conversations/{conversationId}/mark-read")
+    public ResponseEntity<String> markMessagesAsRead(@PathVariable Integer conversationId) {
+        Integer prestataireId = utilisateurService.getAuthenticatedUserId();
+        Utilisateur prestataire = utilisateurService.getUtilisateur(prestataireId);
+        conversationService.markMessagesAsRead(conversationId, prestataire);
+        return ResponseEntity.ok("Messages marked as read");
+    }
+
+    @GetMapping("/conversations/{conversationId}/unread-count")
+    public Long getUnreadMessageCount(@PathVariable Integer conversationId) {
+        Integer prestataireId = utilisateurService.getAuthenticatedUserId();
+        Utilisateur prestataire = utilisateurService.getUtilisateur(prestataireId);
+        return conversationService.getUnreadMessageCount(conversationId, prestataire);
+    }
+
+    @DeleteMapping("/conversations/{conversationId}")
+    public ResponseEntity<String> deleteConversation(@PathVariable Integer conversationId) {
+        Integer prestataireId = utilisateurService.getAuthenticatedUserId();
+        Utilisateur prestataire = utilisateurService.getUtilisateur(prestataireId);
+        conversationService.deleteConversation(conversationId, prestataire);
+        return ResponseEntity.ok("Conversation deleted");
+    }
 
 
 

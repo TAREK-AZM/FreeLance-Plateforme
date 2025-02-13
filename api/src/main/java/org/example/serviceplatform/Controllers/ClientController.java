@@ -1,5 +1,6 @@
 package org.example.serviceplatform.Controllers;
 
+import lombok.AllArgsConstructor;
 import org.example.serviceplatform.DTO.*;
 import org.example.serviceplatform.Entities.*;
 import org.example.serviceplatform.Repositories.ClientRepo;
@@ -8,10 +9,15 @@ import org.example.serviceplatform.Services.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.example.serviceplatform.DTO.ConversationDTO;
+import org.example.serviceplatform.DTO.MessageDTO;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.Map;
 
+@AllArgsConstructor
 @RestController
 @RequestMapping("/api/client")
 public class ClientController {
@@ -26,20 +32,10 @@ public class ClientController {
     private final PostulationService postulationService;
     private final UtilisateurService utilisateurService;
     private final FavorisService favorisService;
+    private final ConversationService conversationService;
 
-    public ClientController(ClientRepo clientRepo, ClientService clientService, CategoryService categoryService, DemandeService demandeService, CommentaireService commentaireService, CommentaireRepo commentaireRepo, EvaluationService evaluationService, OffreService offreService, PostulationService postulationService, UtilisateurService utilisateurService, FavorisService favorisService) {
-        this.clientRepo = clientRepo;
-        this.clientService = clientService;
-        this.categoryService = categoryService;
-        this.demandeService = demandeService;
-        this.commentaireService = commentaireService;
-        this.commentaireRepo = commentaireRepo;
-        this.evaluationService = evaluationService;
-        this.offreService = offreService;
-        this.postulationService = postulationService;
-        this.utilisateurService = utilisateurService;
-        this.favorisService = favorisService;
-    }
+
+
 
                         ////////////// GESTION DE PROFIL///////////
 
@@ -214,7 +210,62 @@ public class ClientController {
     //get la liste des notification pour un client + un prestataire
 
 
+    //////////////////////////////GESTION des conversations /////////////////////
 
+    @GetMapping("/conversations")
+    public List<ConversationDTO> getConversations() {
+        Integer clientId = utilisateurService.getAuthenticatedUserId();
+        Utilisateur client = utilisateurService.getUtilisateur(clientId);
+        return conversationService.getUserConversations(client);
+    }
+
+    @PostMapping("/conversations/prestataire/{prestataireId}")
+    public ConversationDTO createConversation(@PathVariable Integer prestataireId) {
+        Integer clientId = utilisateurService.getAuthenticatedUserId();
+        Utilisateur client = utilisateurService.getUtilisateur(clientId);
+        Utilisateur prestataire = utilisateurService.getUtilisateur(prestataireId);
+        return conversationService.getOrCreateConversation(client, prestataire);
+    }
+
+    @GetMapping("/conversations/{conversationId}/messages")
+    public Page<MessageDTO> getConversationMessages(
+            @PathVariable Integer conversationId,
+            Pageable pageable) {
+        return conversationService.getConversationMessages(conversationId, pageable);
+    }
+
+    @PostMapping("/conversations/{conversationId}/messages")
+    public MessageDTO sendMessage(
+            @PathVariable Integer conversationId,
+            @RequestBody String content) {
+        Integer clientId = utilisateurService.getAuthenticatedUserId();
+        Utilisateur client = utilisateurService.getUtilisateur(clientId);
+        System.out.println("Contenu: "+content);
+        return conversationService.sendMessage(conversationId, client, content);
+    }
+
+    @PutMapping("/conversations/{conversationId}/mark-read")
+    public ResponseEntity<String> markMessagesAsRead(@PathVariable Integer conversationId) {
+        Integer clientId = utilisateurService.getAuthenticatedUserId();
+        Utilisateur client = utilisateurService.getUtilisateur(clientId);
+        conversationService.markMessagesAsRead(conversationId, client);
+        return ResponseEntity.ok("Messages marked as read");
+    }
+
+    @GetMapping("/conversations/{conversationId}/unread-count")
+    public Long getUnreadMessageCount(@PathVariable Integer conversationId) {
+        Integer clientId = utilisateurService.getAuthenticatedUserId();
+        Utilisateur client = utilisateurService.getUtilisateur(clientId);
+        return conversationService.getUnreadMessageCount(conversationId, client);
+    }
+
+    @DeleteMapping("/conversations/{conversationId}")
+    public ResponseEntity<String> deleteConversation(@PathVariable Integer conversationId) {
+        Integer clientId = utilisateurService.getAuthenticatedUserId();
+        Utilisateur client = utilisateurService.getUtilisateur(clientId);
+        conversationService.deleteConversation(conversationId, client);
+        return ResponseEntity.ok("Conversation deleted");
+    }
 
 
 }

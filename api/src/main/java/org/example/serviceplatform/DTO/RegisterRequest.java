@@ -16,17 +16,17 @@ import org.antlr.v4.runtime.misc.NotNull;
 
 public class RegisterRequest {
 
-    @jakarta.validation.constraints.NotNull(message = "Le prénom est obligatoire")
+    @jakarta.validation.constraints.NotBlank(message = "Le prénom est obligatoire")
     private String prenom;
 
-    @jakarta.validation.constraints.NotNull(message = "Le nom est obligatoire")
+    @jakarta.validation.constraints.NotBlank(message = "Le nom est obligatoire")
     private String nom;
 
-    @jakarta.validation.constraints.NotNull(message = "L'email est obligatoire")
+    @jakarta.validation.constraints.NotBlank(message = "L'email est obligatoire")
     @Email(message = "Format d'email invalide")
     private String email;
 
-    @jakarta.validation.constraints.NotNull(message = "Le mot de passe est obligatoire")
+    @jakarta.validation.constraints.NotBlank(message = "Le mot de passe est obligatoire")
     @Size(min = 8, message = "Le mot de passe doit contenir au moins 8 caractères")
     private String motDePasse;
 
