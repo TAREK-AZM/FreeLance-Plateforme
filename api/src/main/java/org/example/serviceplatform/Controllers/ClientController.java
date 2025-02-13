@@ -103,7 +103,7 @@ public class ClientController {
                           ///////////////////////////GERER MES DEMANDES et SERVICES //////////////////////////
    //get all services
     @GetMapping("services/all")
-    public List<ServiceDTO> getAllServices(){
+    public List<ServiceClientDTO> getAllServices(){
         return serviceService.getAllServices();
     }
 

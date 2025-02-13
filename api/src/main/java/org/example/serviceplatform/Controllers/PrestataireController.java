@@ -43,35 +43,6 @@ public class PrestataireController {
     private static final String UPLOAD_DIR = "src/main/resources/static/images/";
     //////////////////////////////GESTION DE PROFIL /////////////////////
 
-    @PostMapping("/image")
-    public ResponseEntity<String> storeImage(@RequestPart("file") MultipartFile file) {
-        if (file.isEmpty()) {
-            return ResponseEntity.badRequest().body("Erreur : Aucun fichier n'a été sélectionné.");
-        }
-
-        try {
-            // 📌 Vérifier et créer le dossier s'il n'existe pas
-            Path uploadPath = Paths.get(UPLOAD_DIR);
-            if (!Files.exists(uploadPath)) {
-                Files.createDirectories(uploadPath);
-            }
-
-            // 📌 Générer un nom unique pour le fichier
-            String fileName = "image_" + System.currentTimeMillis() + "_" + file.getOriginalFilename();
-            Path filePath = uploadPath.resolve(fileName);
-
-            // 📌 Sauvegarder l'image
-            Files.write(filePath, file.getBytes());
-
-            // 📌 Retourner l'URL d'accès
-            String fileUrl = "/images/" + fileName;
-            return ResponseEntity.ok("✅ Image enregistrée avec succès : " + fileUrl);
-
-        } catch (IOException e) {
-            return ResponseEntity.internalServerError().body("❌ Erreur lors de l'enregistrement de l'image : " + e.getMessage());
-        }
-    }
-
 
     ///////get  les infos personnels de prestataire
     @GetMapping("/profil")
@@ -167,7 +138,7 @@ public class PrestataireController {
     /////////ajouter une service//////////
     @PostMapping("/service/add")
     public ResponseEntity<String>  addService(
-            @RequestPart String servicejson,
+            @RequestPart("service") String servicejson,
             @RequestPart(value = "file", required = false) MultipartFile file) {
         Integer idPrest=utilisateurService.getAuthenticatedUserId();
         //Convertir le JSON String en Objet Service

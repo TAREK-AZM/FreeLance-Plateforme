@@ -30,8 +30,8 @@ public class ServiceService {
     private CategoryRepo categoryRepo;
 
     ///////get all services ////////////
-    public List<ServiceDTO> getAllServices() {
-      return   serviceRepo.findAll().stream().map(ServiceMapper::toServiceDTO).collect(Collectors.toList());
+    public List<ServiceClientDTO> getAllServices() {
+      return   serviceRepo.findAll().stream().map(ServiceMapper::toServiceClientDTO).collect(Collectors.toList());
     }
     //////////// GETserices///////////
     public List<ServiceDTO> getServices(Integer id) {
