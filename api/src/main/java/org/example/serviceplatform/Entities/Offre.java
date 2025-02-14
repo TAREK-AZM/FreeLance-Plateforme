@@ -19,6 +19,7 @@ public class Offre {
     private Integer id;
 
     private String title; // Titre de l'offre
+    @Column(length = 4000)
     private String description;// Description de l'offre
     private float prix;
     private LocalDateTime dateCreation;

@@ -20,6 +20,7 @@ public class Category {
     private Integer id;
 
     private String name;        // Nom de la catégorie
+    @Column(length = 1000)
     private String description;// Description de la catégorie
     private  String image;
 
