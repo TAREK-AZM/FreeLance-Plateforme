@@ -20,7 +20,8 @@ public class Category {
     private Integer id;
 
     private String name;        // Nom de la catégorie
-    private String description; // Description de la catégorie
+    private String description;// Description de la catégorie
+    private  String image;
 
     @OneToMany(mappedBy = "category")
     @JsonIgnore

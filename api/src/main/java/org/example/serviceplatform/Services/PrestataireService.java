@@ -43,22 +43,30 @@ public class PrestataireService {
 
         // 📂 Gérer l'upload d'image
         if (imageFile != null && !imageFile.isEmpty()) {
-            String UPLOAD_DIR = "src/main/resources/images/prestataires/";
+            String UPLOAD_DIR = "uploads/images/prestataires/";
 
             try {
+                System.out.println("Avant suppression de l'ancienne image !");
+
                 // 📁 Vérifier si le dossier existe, sinon le créer
                 Path uploadPath = Paths.get(UPLOAD_DIR);
                 if (!Files.exists(uploadPath)) {
                     Files.createDirectories(uploadPath);
                 }
+
                 // 🚀 **SUPPRESSION DE L'ANCIENNE IMAGE**
                 if (prestataire.getImageUrl() != null) {
-                    Path oldImagePath = Paths.get(UPLOAD_DIR + prestataire.getImageUrl().replace("/api/prestataires/images/", ""));
+                    String oldImagePathStr = prestataire.getImageUrl().replace("/images/prestataires/", "");
+                    Path oldImagePath = Paths.get(UPLOAD_DIR + oldImagePathStr);
+                    System.out.println("Ancienne image : " + oldImagePath);
+                    // Si l'ancienne image existe, la supprimer
                     if (Files.exists(oldImagePath)) {
+                        System.out.println("Suppression de l'ancienne image...");
                         Files.delete(oldImagePath); // 🚨 Supprimer l'ancienne image
                     }
                 }
-                // 🏷️ Définir un nom de fichier unique
+
+                // 🏷️ Définir un nom de fichier unique pour la nouvelle image
                 String fileName = "prestataire_" + idPrest + "_" + System.currentTimeMillis() + "_" + imageFile.getOriginalFilename();
                 Path filePath = uploadPath.resolve(fileName);
 
@@ -66,7 +74,7 @@ public class PrestataireService {
                 Files.write(filePath, imageFile.getBytes());
 
                 // 🔗 Mettre à jour l'URL de l'image
-                prestataire.setImageUrl("/api/prestataires/images/" + fileName);
+                prestataire.setImageUrl("/images/prestataires/" + fileName);
             } catch (IOException e) {
                 throw new RuntimeException("Erreur lors de l'enregistrement de l'image : " + e.getMessage());
             }
@@ -75,5 +83,9 @@ public class PrestataireService {
         // 💾 Sauvegarder le prestataire mis à jour
         prestataireRepo.save(prestataire);
     }
+
+
+
+
 
 }

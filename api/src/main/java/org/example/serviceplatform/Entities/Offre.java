@@ -1,5 +1,6 @@
 package org.example.serviceplatform.Entities;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -21,7 +22,8 @@ public class Offre {
     private String description;// Description de l'offre
     private float prix;
     private LocalDateTime dateCreation;
-    private LocalDateTime dateExpiration;// Date de création de l'offre
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+    private LocalDateTime dateExpiration;//
     private String ville;
     @Enumerated(EnumType.STRING)
     private StatutOffre status;
