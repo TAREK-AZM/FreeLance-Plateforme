@@ -11,13 +11,13 @@ import org.slf4j.LoggerFactory;
 public class JacksonConfig {
 
     private static final Logger logger = LoggerFactory.getLogger(JacksonConfig.class);
-
-    @Bean
-    public ObjectMapper objectMapper() {
-        ObjectMapper objectMapper = new ObjectMapper();
-        objectMapper.registerModule(new JavaTimeModule()); // Ajouter le support pour Java 8 date/time
-       // logger.info("JavaTimeModule registered successfully.");
-        System.out.println("-------------JavaTimeModule registered successfully.----------------");
-        return objectMapper;
-    }
+//
+//    @Bean
+//    public ObjectMapper objectMapper() {
+//        ObjectMapper objectMapper = new ObjectMapper();
+//        objectMapper.registerModule(new JavaTimeModule()); // Ajouter le support pour Java 8 date/time
+//       // logger.info("JavaTimeModule registered successfully.");
+//        System.out.println("-------------JavaTimeModule registered successfully.----------------");
+//        return objectMapper;
+//    }
 }
