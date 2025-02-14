@@ -18,6 +18,7 @@ public class Reclamation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String subject; // Sujet de la réclamation
+    @Column(length = 4000)
     private String content; // Contenu ou description de la réclamation
     private LocalDateTime date; // Date de création de la réclamation
 

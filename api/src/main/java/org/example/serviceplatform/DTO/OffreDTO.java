@@ -1,5 +1,6 @@
 package org.example.serviceplatform.DTO;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import lombok.Builder;
@@ -16,6 +17,7 @@ public class OffreDTO {
     private String description;
     private float prix;
     private LocalDateTime dateCreation;
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime dateExpiration;
     private String ville;
     private StatutOffre status;

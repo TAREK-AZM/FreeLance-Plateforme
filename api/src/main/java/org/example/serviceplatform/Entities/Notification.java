@@ -15,6 +15,7 @@ public class Notification {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String subject; // Titre de la notification
+    @Column(length = 4000)
     private String message; // Contenu de la notification
     private LocalDateTime date; // Date de la notification
 

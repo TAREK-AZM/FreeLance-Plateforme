@@ -18,6 +18,7 @@ public class Commentaire {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+    @Column(length = 1000)
     private String content; // Contenu du commentaire
     private LocalDateTime datePosted; // Date de publication
 

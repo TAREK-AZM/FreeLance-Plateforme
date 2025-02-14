@@ -16,6 +16,7 @@ public class  Postulation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private LocalDateTime datePostulation; // Date de postulation
+    @Column(length = 4000)
     private String description; // Description de la postulation
     private Double prix; // Prix proposé par le prestataire
     @Enumerated(EnumType.STRING)

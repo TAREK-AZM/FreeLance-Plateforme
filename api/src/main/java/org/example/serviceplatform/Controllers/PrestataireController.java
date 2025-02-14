@@ -44,6 +44,9 @@ public class PrestataireController {
     //////////////////////////////GESTION DE PROFIL /////////////////////
 
 
+
+
+
     ///////get  les infos personnels de prestataire
     @GetMapping("/profil")
     public PrestataireProfilDTO profil() {
@@ -78,9 +81,21 @@ public class PrestataireController {
     ////////////////////////////// Gestion de certification//////////////////////////////
 
     @PostMapping("/certification/add")
-    public ResponseEntity<String>  ajouterCertification(@RequestBody Certification certification) {
-        Integer idPrest=utilisateurService.getAuthenticatedUserId();
-        certificationService.StoreCertification(idPrest,certification);
+    public ResponseEntity<String>  ajouterCertification(
+            @RequestPart("certification") String certificationJson,
+            @RequestPart(value = "file", required = false) MultipartFile file) {
+
+
+        //Convertir le JSON String en Objet Prestataire
+        ObjectMapper objectMapper = new ObjectMapper();
+        Certification certification;
+        try {
+            certification= objectMapper.readValue(certificationJson, Certification.class);
+        } catch (JsonProcessingException e) {
+            return ResponseEntity.badRequest().body("Erreur lors de la conversion JSON : " + e.getMessage());
+        }
+            Integer idPrest=utilisateurService.getAuthenticatedUserId();
+        certificationService.StoreCertification(idPrest,certification,file);
          return ResponseEntity.ok("Certification stored");
 
     }
@@ -90,8 +105,18 @@ public class PrestataireController {
         return ResponseEntity.ok("Certification deleted");
     }
     @PutMapping("/certification/update")
-    public ResponseEntity<String>  updateCertification(@RequestBody Certification certification) {
-         certificationService.UpdateCertification(certification);
+    public ResponseEntity<String>  updateCertification(
+            @RequestPart String certificationJson,
+            @RequestPart(value = "file", required = false) MultipartFile file) {
+        //Convertir le JSON String en Objet Prestataire
+        ObjectMapper objectMapper = new ObjectMapper();
+        Certification certification;
+        try {
+            certification= objectMapper.readValue(certificationJson, Certification.class);
+        } catch (JsonProcessingException e) {
+            return ResponseEntity.badRequest().body("Erreur lors de la conversion JSON : " + e.getMessage());
+        }
+         certificationService.UpdateCertification(certification,file);
         return ResponseEntity.ok("Certification updated");
     }
 
@@ -156,7 +181,7 @@ public class PrestataireController {
     //////////////modifier une service///////
     @PutMapping("/service/update")
     public ResponseEntity<String> updateService(
-            @RequestPart String servicejson,
+            @RequestPart("service") String servicejson,
             @RequestPart(value = "file", required = false) MultipartFile file)   {
         //Convertir le JSON String en Objet Service
         ObjectMapper objectMapper = new ObjectMapper();
