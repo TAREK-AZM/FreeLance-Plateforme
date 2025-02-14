@@ -2,6 +2,7 @@ package org.example.serviceplatform.Controllers;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.annotation.JsonAppend;
 import org.example.serviceplatform.DTO.*;
 import org.example.serviceplatform.Entities.*;
 import org.example.serviceplatform.Repositories.CertificationRepo;
@@ -38,6 +39,8 @@ public class PrestataireController {
     private UtilisateurService utilisateurService;
     @Autowired
     private NotificationService notificationService;
+    @Autowired
+    private ObjectMapper objectMapper;
 
 
     private static final String UPLOAD_DIR = "src/main/resources/static/images/";
@@ -61,7 +64,7 @@ public class PrestataireController {
             @RequestPart(value = "file", required = false) MultipartFile file) {
 
          //Convertir le JSON String en Objet Prestataire
-        ObjectMapper objectMapper = new ObjectMapper();
+     //   ObjectMapper objectMapper = new ObjectMapper();
         Prestataire prestataire;
         try {
             prestataire = objectMapper.readValue(prestataireJson, Prestataire.class);
@@ -87,7 +90,7 @@ public class PrestataireController {
 
 
         //Convertir le JSON String en Objet Prestataire
-        ObjectMapper objectMapper = new ObjectMapper();
+       // ObjectMapper objectMapper = new ObjectMapper();
         Certification certification;
         try {
             certification= objectMapper.readValue(certificationJson, Certification.class);
@@ -109,7 +112,7 @@ public class PrestataireController {
             @RequestPart String certificationJson,
             @RequestPart(value = "file", required = false) MultipartFile file) {
         //Convertir le JSON String en Objet Prestataire
-        ObjectMapper objectMapper = new ObjectMapper();
+       // ObjectMapper objectMapper = new ObjectMapper();
         Certification certification;
         try {
             certification= objectMapper.readValue(certificationJson, Certification.class);
@@ -167,7 +170,7 @@ public class PrestataireController {
             @RequestPart(value = "file", required = false) MultipartFile file) {
         Integer idPrest=utilisateurService.getAuthenticatedUserId();
         //Convertir le JSON String en Objet Service
-        ObjectMapper objectMapper = new ObjectMapper();
+        //ObjectMapper objectMapper = new ObjectMapper();
         Service service;
         try {
             service = objectMapper.readValue(servicejson, Service.class);
