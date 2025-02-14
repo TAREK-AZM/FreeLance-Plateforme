@@ -1,5 +1,6 @@
 package org.example.serviceplatform.Services;
 
+import org.example.serviceplatform.DTO.ServiceClient2DTO;
 import org.example.serviceplatform.DTO.ServiceClientDTO;
 import org.example.serviceplatform.DTO.ServiceDTO;
 import org.example.serviceplatform.Entities.Category;
@@ -38,6 +39,10 @@ public class ServiceService {
         Prestataire prest=prestataireRepo.findById(id).orElse(null);
         return prest.getServices().stream().map(ServiceMapper::toServiceDTO).collect(Collectors.toList()) ;
     }
+    public ServiceClient2DTO getDetailstoClient(Integer id) {
+
+        return ServiceMapper.toServiceClient2DTO( serviceRepo.findById(id).orElseThrow(()->new RuntimeException("Service not found")));
+    }
 
     //////////////// Get Detials Service/////////
     public ServiceDTO getService(Integer id) {
@@ -48,13 +53,21 @@ public class ServiceService {
         if (id == null || service == null) {
             throw new IllegalArgumentException("L'id du prestataire et le service ne peuvent pas être null.");
         }
+
+        // Récupérer le prestataire
         Prestataire prest = prestataireRepo.findById(id)
                 .orElseThrow(() -> new RuntimeException("Prestataire non trouvé avec l'id : " + id));
+
+        // Vérifier la catégorie
         if (service.getCategory() == null || service.getCategory().getName() == null) {
             throw new IllegalArgumentException("La catégorie du service doit être spécifiée.");
         }
+
+        // Récupérer la catégorie
         Category cat = categoryRepo.findByName(service.getCategory().getName())
                 .orElseThrow(() -> new RuntimeException("Catégorie non trouvée : " + service.getCategory().getName()));
+
+        // Créer et sauvegarder le service
         Service serv = Service.builder()
                 .titre(service.getTitre())
                 .description(service.getDescription())
@@ -63,9 +76,13 @@ public class ServiceService {
                 .category(cat)
                 .prestataire(prest)
                 .build();
+
+        // Sauvegarder le service pour obtenir un ID
+        Service savedService = serviceRepo.save(serv); // 👈 Sauvegarder d'abord
+
         // 📂 Gérer l'upload d'image
         if (imageFile != null && !imageFile.isEmpty()) {
-            String UPLOAD_DIR = "src/main/resources/images/services/";
+            String UPLOAD_DIR = "uploads/images/services/";
 
             try {
                 // 📁 Vérifier si le dossier existe, sinon le créer
@@ -74,28 +91,32 @@ public class ServiceService {
                     Files.createDirectories(uploadPath);
                 }
 
-                // 🏷️ Définir un nom de fichier unique
-                String fileName = "service_" + service.getId() + "_" + System.currentTimeMillis() + "_" + imageFile.getOriginalFilename();
+                // 🏷️ Définir un nom de fichier unique avec l'ID du service
+                String fileName = "service_" + savedService.getId() + "_" + System.currentTimeMillis() + "_" + imageFile.getOriginalFilename();
                 Path filePath = uploadPath.resolve(fileName);
 
                 // 📥 Écrire le fichier sur le disque
                 Files.write(filePath, imageFile.getBytes());
 
                 // 🔗 Mettre à jour l'URL de l'image
-                serv.setImage("/api/services/images/" + fileName);
-               // prest.getServices().add(serv);
+                savedService.setImage("/images/services/" + fileName); // Ajouter un '/' au début
+                prest.getServices().add(savedService);
             } catch (IOException e) {
                 throw new RuntimeException("Erreur lors de l'enregistrement de l'image : " + e.getMessage());
             }
         }
+
+        // Sauvegarder le prestataire avec le nouveau service
         prestataireRepo.save(prest);
     }
 
+  //update service
+    public void updateService(Service service, MultipartFile imageFile) {
+        // 🔍 Vérifier si le service existe
+        Service serviceToUpdate = serviceRepo.findById(service.getId())
+                .orElseThrow(() -> new RuntimeException("Aucun service trouvé avec l'ID : " + service.getId()));
 
-
-        ////////UpdateService/////////
-    public void updateService(Service service,MultipartFile imageFile) {
-        Service serviceToUpdate=serviceRepo.findById(service.getId()).orElseThrow(()->new RuntimeException("aucun service trouvé "));
+        // 🛠️ Mettre à jour les champs du service
         serviceToUpdate.setDescription(service.getDescription());
         serviceToUpdate.setPrix(service.getPrix());
         serviceToUpdate.setTitre(service.getTitre());
@@ -103,7 +124,7 @@ public class ServiceService {
 
         // 📂 Gérer l'upload d'image
         if (imageFile != null && !imageFile.isEmpty()) {
-            String UPLOAD_DIR = "src/main/resources/images/services/";
+            String UPLOAD_DIR = "uploads/images/services/";
 
             try {
                 // 📁 Vérifier si le dossier existe, sinon le créer
@@ -111,15 +132,19 @@ public class ServiceService {
                 if (!Files.exists(uploadPath)) {
                     Files.createDirectories(uploadPath);
                 }
+
                 // 🚀 **SUPPRESSION DE L'ANCIENNE IMAGE**
                 if (serviceToUpdate.getImage() != null) {
-                    Path oldImagePath = Paths.get(UPLOAD_DIR + serviceToUpdate.getImage().replace("/api/services/images/", ""));
+                    String oldImagePathStr = serviceToUpdate.getImage().replace("/images/services/", "");
+                    Path oldImagePath = Paths.get(UPLOAD_DIR + oldImagePathStr);
+                    System.out.println("Suppression de l'ancienne image : " + oldImagePath);
+                    // Si l'ancienne image existe, la supprimer
                     if (Files.exists(oldImagePath)) {
                         Files.delete(oldImagePath); // 🚨 Supprimer l'ancienne image
                     }
                 }
 
-                // 🏷️ Définir un nom de fichier unique
+                // 🏷️ Définir un nom de fichier unique pour la nouvelle image
                 String fileName = "service_" + service.getId() + "_" + System.currentTimeMillis() + "_" + imageFile.getOriginalFilename();
                 Path filePath = uploadPath.resolve(fileName);
 
@@ -127,13 +152,16 @@ public class ServiceService {
                 Files.write(filePath, imageFile.getBytes());
 
                 // 🔗 Mettre à jour l'URL de l'image
-                serviceToUpdate.setImage("/api/services/images/" + fileName);
+                serviceToUpdate.setImage("/images/services/" + fileName);
             } catch (IOException e) {
                 throw new RuntimeException("Erreur lors de l'enregistrement de l'image : " + e.getMessage());
             }
         }
+
+        // 💾 Sauvegarder le service mis à jour
         serviceRepo.save(serviceToUpdate);
     }
+
     ///////////delete service///////////
     public void deleteService(Integer id) {
         serviceRepo.deleteById(id);

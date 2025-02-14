@@ -30,8 +30,9 @@ public class ClientController {
     private final UtilisateurService utilisateurService;
     private final FavorisService favorisService;
     private final ServiceService serviceService;
+    private final ObjectMapper objectMapper;
 
-    public ClientController(ClientRepo clientRepo, ClientService clientService, CategoryService categoryService, DemandeService demandeService, CommentaireService commentaireService, CommentaireRepo commentaireRepo, EvaluationService evaluationService, OffreService offreService, PostulationService postulationService, UtilisateurService utilisateurService, FavorisService favorisService, ServiceService serviceService) {
+    public ClientController(ClientRepo clientRepo, ClientService clientService, CategoryService categoryService, DemandeService demandeService, CommentaireService commentaireService, CommentaireRepo commentaireRepo, EvaluationService evaluationService, OffreService offreService, PostulationService postulationService, UtilisateurService utilisateurService, FavorisService favorisService, ServiceService serviceService,ObjectMapper objectMapper) {
         this.clientRepo = clientRepo;
         this.clientService = clientService;
         this.categoryService = categoryService;
@@ -44,6 +45,7 @@ public class ClientController {
         this.utilisateurService = utilisateurService;
         this.favorisService = favorisService;
         this.serviceService = serviceService;
+        this.objectMapper = objectMapper;
     }
 
                         ////////////// GESTION DE PROFIL///////////
@@ -105,6 +107,13 @@ public class ClientController {
     @GetMapping("services/all")
     public List<ServiceClientDTO> getAllServices(){
         return serviceService.getAllServices();
+    }
+
+    //Details d'une service
+    //////// le details d'une service/////////
+    @GetMapping("/service/{idService}/serviceDetails")
+    public ServiceClient2DTO afficherService(@PathVariable Integer idService) {
+        return serviceService.getDetailstoClient(idService);
     }
 
 
@@ -179,10 +188,10 @@ public class ClientController {
     //creer un post (offre) pour chercher une service
     @PostMapping("/offre/create")
     public ResponseEntity<String> storeOffre(
-                @RequestPart String offrejson ,
+                @RequestPart("offre") String offrejson ,
                 @RequestPart(value = "file", required = false) MultipartFile file){
         //Convertir le JSON String en Objet Offre
-        ObjectMapper objectMapper = new ObjectMapper();
+       // ObjectMapper objectMapper = new ObjectMapper();
         Offre offre;
         try {
             offre = objectMapper.readValue(offrejson , Offre.class);
@@ -192,6 +201,23 @@ public class ClientController {
         Integer idClient=utilisateurService.getAuthenticatedUserId();    //authentifié
          offreService.createOffre(idClient,offre,file);
          return ResponseEntity.ok("offre stored");
+      }
+      //update offre
+      @PutMapping("/offre/update")
+      public ResponseEntity<String> updateOffre(
+              @RequestPart String offrejson ,
+              @RequestPart(value = "file", required = false) MultipartFile file){
+          //Convertir le JSON String en Objet Offre
+          ObjectMapper objectMapper = new ObjectMapper();
+          Offre offre;
+          try {
+              offre = objectMapper.readValue(offrejson , Offre.class);
+          } catch (JsonProcessingException e) {
+              return ResponseEntity.badRequest().body("Erreur lors de la conversion JSON : " + e.getMessage());
+          }
+
+          offreService.updateOffre(offre,file);
+          return ResponseEntity.ok("offre updated");
       }
       //voir les postulas des prestataires  pour une offre
     @GetMapping("/offre/{id}/postulas")

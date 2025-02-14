@@ -19,6 +19,7 @@ public class Competence {
     private Integer id;
 
     private String name; // Nom de la compétence (ex : "Java", "Gestion de projet")
+    @Column(length = 1000)
     private String description;
 
 

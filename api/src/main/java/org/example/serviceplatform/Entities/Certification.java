@@ -17,6 +17,7 @@ public class Certification {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     private String name; // Nom de la certification
+    @Column(length = 1000)
     private String description; // Description ou détails de la certification
     private String imageUrl; // URL de l'image de la certification
 

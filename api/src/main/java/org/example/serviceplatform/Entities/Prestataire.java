@@ -15,7 +15,7 @@ import java.util.List;
 @NoArgsConstructor
 @SuperBuilder
 public class Prestataire extends Utilisateur {
-
+    @Column(length = 4000)
     private String description; // Description du prestataire
 
 
