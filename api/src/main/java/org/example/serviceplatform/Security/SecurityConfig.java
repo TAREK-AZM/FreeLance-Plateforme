@@ -41,7 +41,9 @@ public class SecurityConfig {
                                 "/api/prestataire/register",
                                 "/api/auth/**",
                                 "/api/ai/**",
-                                "/api/client/services/all"
+                                "/api/client/services/all",
+                                "/api/images/**"  // Add this line to allow public access to images
+
 
                         ).permitAll()
                         .requestMatchers("/api/client/**").hasAuthority("CLIENT")

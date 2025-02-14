@@ -1,10 +1,12 @@
 
+const BASE_URL = import.meta.env.VITE_API2; // API Base URL from environment variables
+
 export default function ServiceCard({ service }) {
   return (
     <div className="relative rounded-lg border bg-white shadow-sm transition-shadow hover:shadow-md">
       {/* Service Image */}
       <div className="relative w-full h-56 overflow-hidden rounded-t-lg">
-        <img src={service.imageUrl} alt={service.title} layout="fill" className="object-cover" />
+        <img src={BASE_URL + service.image} alt={service.title} layout="fill" className="object-cover" />
       </div>
 
       {/* Service Details */}

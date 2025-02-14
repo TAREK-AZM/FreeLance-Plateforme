@@ -82,8 +82,8 @@ public class ServiceService {
                 Files.write(filePath, imageFile.getBytes());
 
                 // 🔗 Mettre à jour l'URL de l'image
-                serv.setImage("/api/services/images/" + fileName);
-               // prest.getServices().add(serv);
+                serv.setImage("/api/images/" + fileName);
+                prest.getServices().add(serv);
             } catch (IOException e) {
                 throw new RuntimeException("Erreur lors de l'enregistrement de l'image : " + e.getMessage());
             }
