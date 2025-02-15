@@ -102,10 +102,8 @@ public class ConversationService {
     public void markMessagesAsRead(Integer conversationId, Utilisateur reader) {
         Conversation conversation = conversationRepository.findById(conversationId)
                 .orElseThrow(() -> new RuntimeException("Conversation non trouvée"));
-
         List<Message> unreadMessages = messageRepository
                 .findByConversationAndStatusAndSenderNot(conversation, MessageStatus.SENT, reader);
-        System.out.println(unreadMessages);
         unreadMessages.forEach(message -> {
             message.setStatus(MessageStatus.READ);
             message.setReadAt(LocalDateTime.now());
@@ -134,6 +132,20 @@ public class ConversationService {
             throw new RuntimeException("Accès non autorisé à cette conversation");
         }
 
+        messageRepository.deleteByConversation(conversation);
+
         conversationRepository.delete(conversation);
+    }
+
+    public void deleteMessage(Integer messageId, Utilisateur user) {
+        Message message = messageRepository.findById(messageId)
+                .orElseThrow(() -> new RuntimeException("Message non trouvé"));
+
+        // Vérifier que l'utilisateur est l'expéditeur du message
+        if (!message.getSender().equals(user)) {
+            throw new RuntimeException("Vous n'êtes pas autorisé à supprimer ce message");
+        }
+
+        messageRepository.delete(message);
     }
 }

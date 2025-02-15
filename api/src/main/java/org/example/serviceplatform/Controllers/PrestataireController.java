@@ -218,6 +218,17 @@ public class PrestataireController {
         return ResponseEntity.ok("Conversation deleted");
     }
 
+    @DeleteMapping("/messages/{messageId}")
+    public ResponseEntity<Void> deleteMessage(@PathVariable Integer messageId) {
+        Integer prestataireId = utilisateurService.getAuthenticatedUserId();
+        Utilisateur prestatatire = utilisateurService.getUtilisateur(prestataireId);
+        try {
+            conversationService.deleteMessage(messageId, prestatatire);
+            return ResponseEntity.ok().build();
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
 
 
 

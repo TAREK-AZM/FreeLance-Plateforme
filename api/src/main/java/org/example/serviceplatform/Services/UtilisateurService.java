@@ -41,6 +41,8 @@ public class UtilisateurService implements UserDetailsService {
     }
 
     public Utilisateur getUtilisateur(Integer id){
-        return  utilisateurRepo.findById(id).orElseThrow(()->new UsernameNotFoundException("no user found"));
+        Utilisateur utilisateur = utilisateurRepo.findById(id).orElseThrow(()->new UsernameNotFoundException("no user found"));
+        return utilisateur;
+
     }
 }

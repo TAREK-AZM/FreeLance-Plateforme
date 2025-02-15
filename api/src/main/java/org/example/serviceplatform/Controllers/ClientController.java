@@ -263,8 +263,21 @@ public class ClientController {
     public ResponseEntity<String> deleteConversation(@PathVariable Integer conversationId) {
         Integer clientId = utilisateurService.getAuthenticatedUserId();
         Utilisateur client = utilisateurService.getUtilisateur(clientId);
+
         conversationService.deleteConversation(conversationId, client);
         return ResponseEntity.ok("Conversation deleted");
+    }
+
+    @DeleteMapping("/messages/{messageId}")
+    public ResponseEntity<Void> deleteMessage(@PathVariable Integer messageId) {
+        Integer clientId = utilisateurService.getAuthenticatedUserId();
+        Utilisateur client = utilisateurService.getUtilisateur(clientId);
+        try {
+            conversationService.deleteMessage(messageId, client);
+            return ResponseEntity.ok().build();
+        } catch (RuntimeException e) {
+            return ResponseEntity.badRequest().build();
+        }
     }
 
 

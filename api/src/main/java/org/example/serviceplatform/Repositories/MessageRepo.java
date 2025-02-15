@@ -13,6 +13,8 @@ import org.springframework.data.repository.query.Param;
 import java.util.List;
 
 public interface MessageRepo extends JpaRepository<Message, Integer> {
+    List<Message> findByConversation(Conversation conversation);
+    void deleteByConversation(Conversation conversation);
     Page<Message> findByConversationOrderBySentAtDesc(Conversation conversation, Pageable pageable);
 
     List<Message> findByConversationAndStatusAndSenderNot(
