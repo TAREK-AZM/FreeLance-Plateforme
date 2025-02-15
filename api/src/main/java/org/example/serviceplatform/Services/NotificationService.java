@@ -71,5 +71,10 @@ public class NotificationService {
         notificationRepo.save(notification);
     }
 
+    //marquer tous les notifications comme lue
+    public void markAllAsRead(){
+        List<Notification> notifications = notificationRepo.findAll();
+        notifications.forEach(notification -> notification.setRead(true));
+        notificationRepo.saveAll(notifications);}
 
 }

@@ -249,7 +249,11 @@ public class PrestataireController {
         notificationService.markAsRead(idNotification);
     }
 
-
+    //mark all as read
+    @PutMapping("/readAll")
+    public void markAllAssRead(){
+        notificationService.markAllAsRead();
+}
 
 
 
