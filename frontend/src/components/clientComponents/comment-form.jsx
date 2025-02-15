@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useAuthStore } from "../../store/store";
 import { Button } from "../ui/button";
@@ -9,47 +8,85 @@ import axios from "axios";
 
 const BASE_URL = import.meta.env.VITE_API2; // API Base URL from environment variables
 
-
-export default function CommentForm({ onSubmit }) {
+export default function CommentForm({ onSubmit, serviceId }) {
   const { user } = useAuthStore();
   const [rating, setRating] = useState(5);
   const [hoveredRating, setHoveredRating] = useState(0);
   const [comment, setComment] = useState("");
 
-  const handleSubmit = async(e) => {
-    e.preventDefault();
-    if (!comment.trim()) return;
-
+  const SendStarsRequest = async (stars) => {
     try {
-
       const token = localStorage.getItem("token"); // Get the token
       console.log("🔑🔑🔑🔑 Using Token:🔑🔑", token);
-      const response = await axios.post(`${BASE_URL}/api/client/comment`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          authorization: `${token}`, // Attach token in Authorization header
-        },
-        body: JSON.stringify({
-          rating,
-          comment,
-          userId: user?.id,
-        }),
-      });
 
-      if (response.ok) {
-        const data = await response.json();
-        onSubmit(data);
+      const response = await axios.post(
+        `${BASE_URL}/api/client/services/${serviceId}/evaluation`,
+        { etoiles: stars }, // Axios automatically stringifies the body
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`, // Attach token in Authorization header
+          },
+        }
+      );
+
+      if (response.status === 201) {
+        console.log("✅ Stars sent:", stars);
+        // Call onSubmit with the correct data structure
+        onSubmit({ name: user?.name || "Anonymous", rating: stars, comment: "" });
       } else {
-        const errorData = await response.json();
-        console.error("Comment failed:", errorData.message);
+        console.error("Stars request failed:", response.data.message);
       }
     } catch (error) {
-      console.error("Error during comment:", error);
+      console.error("Error during stars request:", error);
     }
   };
 
+  const SendCommentRequest = async (comment) => {
+    if (!comment.trim()) return;
 
+    try {
+      const token = localStorage.getItem("token"); // Get the token
+      console.log("🔑🔑🔑🔑 Using Token:🔑🔑", token);
+
+      const response = await axios.post(
+        `${BASE_URL}/api/client/${serviceId}/commentaire`,
+        { comment }, // Axios automatically stringifies the body
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`, // Attach token in Authorization header
+          },
+        }
+      );
+
+      if (response.status === 200) {
+        console.log("✅ Comment sent:", comment);
+        // Call onSubmit with the correct data structure
+        onSubmit({ name: user?.name || "Anonymous", rating: 0, comment });
+      } else {
+        console.error("Comment request failed:", response.data.message);
+      }
+    } catch (error) {
+      console.error("Error during comment request:", error);
+    }
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (comment.trim()) {
+      await SendCommentRequest(comment); // Wait for the comment request to complete
+    }
+
+    if (rating > 0) {
+      await SendStarsRequest(rating); // Wait for the stars request to complete
+    }
+
+    // Reset form fields
+    setComment("");
+    setRating(5);
+  };
 
   return (
     <Card className="mt-8">

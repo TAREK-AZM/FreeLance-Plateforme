@@ -13,6 +13,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class PrestataireService {
@@ -84,7 +86,9 @@ public class PrestataireService {
         prestataireRepo.save(prestataire);
     }
 
-
+    public List<PrestataireProfilDTO> getAllPrestataires(){
+        return prestataireRepo.findAll().stream().map(PrestataireMapper::toPrestProfilDTO).collect(Collectors.toList());
+    }
 
 
 

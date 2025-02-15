@@ -23,7 +23,7 @@ public class CommentaireService {
     private ServiceRepo serviceRepo;
 
 //STORE
-    public CommentaireDTO  StoreCommentaire(Integer idClient, Commentaire commentaireStored){
+    public CommentaireDTO  StoreCommentaire(Integer idClient, Commentaire commentaireStored,Integer serviceId){
 
         Client client = clientRepo.findById(idClient)
                 .orElseThrow(() -> new RuntimeException("Client not found"));
@@ -31,7 +31,7 @@ public class CommentaireService {
         if (commentaireStored.getService() == null || commentaireStored.getService().getId() == null) {
             throw new RuntimeException("Service is required for a Commentaire");
         }
-        Service service = serviceRepo.findById(commentaireStored.getService().getId())
+        Service service = serviceRepo.findById(serviceId)
                 .orElseThrow(() -> new RuntimeException("Service not found"));
         // Associez le client et le service au commentaire
         Commentaire commentaire=new Commentaire();

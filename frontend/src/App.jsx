@@ -69,7 +69,7 @@ const router = createBrowserRouter(
                 {/* Client Dashboard - Nested routes inside `DashboearClient` */}
                 <Route path="dashboard" element={<DashboearClient />}>
                     <Route index element={<JobBoardClient />} />
-                    {/* <Route path="Post" element={<Profile />} /> */}
+                    {/* <Route path="service/:id/serviceDetails" element={<Profile />} /> */}
                     <Route path="notifications/:id" element={<Notification />} />
                     <Route path="conversations/:id" element={<Conversation />} />
                 </Route>

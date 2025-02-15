@@ -99,7 +99,7 @@ public class ServiceService {
                 Files.write(filePath, imageFile.getBytes());
 
                 // 🔗 Mettre à jour l'URL de l'image
-                savedService.setImage("/images/services/" + fileName); // Ajouter un '/' au début
+                savedService.setImage("/images/" + fileName); // Ajouter un '/' au début
                 prest.getServices().add(savedService);
             } catch (IOException e) {
                 throw new RuntimeException("Erreur lors de l'enregistrement de l'image : " + e.getMessage());

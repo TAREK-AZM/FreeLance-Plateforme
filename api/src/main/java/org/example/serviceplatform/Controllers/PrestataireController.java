@@ -78,6 +78,14 @@ public class PrestataireController {
     }
 
 
+   //////////GET ALL prestataires for clients ////////
+   @GetMapping("/all")
+   public List<PrestataireProfilDTO> getAllPrestataires()
+   {
+        return prestataireService.getAllPrestataires();
+   }
+
+
     ////////////////////////////// Gestion de certification//////////////////////////////
 
     @PostMapping("/certification/add")

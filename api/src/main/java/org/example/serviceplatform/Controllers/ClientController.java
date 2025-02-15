@@ -137,10 +137,10 @@ public class ClientController {
                           ////////////////     GERER MES COMMENTAIRES  ////////////
 
     //ecrire un commentaire à propos d'une service
-    @PostMapping("/commentaire")
-    public ResponseEntity<CommentaireDTO> envoyerCommentaire(@RequestBody Commentaire commentaire) {
+    @PostMapping("/{serviceId}/commentaire")
+    public ResponseEntity<CommentaireDTO> envoyerCommentaire(@RequestBody Commentaire commentaire,@PathVariable Integer serviceId) {
         Integer idClient=utilisateurService.getAuthenticatedUserId();
-       CommentaireDTO com= commentaireService.StoreCommentaire(idClient,commentaire);
+       CommentaireDTO com= commentaireService.StoreCommentaire(idClient,commentaire,serviceId);
         return ResponseEntity.status(HttpStatus.CREATED).body(com);
     }
     //aficher les commentaires d'une service
@@ -153,11 +153,11 @@ public class ClientController {
 
                       //////////////// MES EVALUATIONS à PROPOS DES SERIVICES ///////////////
     //evaluer une service
-    @PostMapping("/services/evaluations")
-    public ResponseEntity<String> evaluer(@RequestBody Evaluation evaluation){
+    @PostMapping("/services/{idService}/evaluation")
+    public ResponseEntity<String> evaluer(@RequestBody Evaluation evaluation,@PathVariable Integer idService){
         Integer idClient=utilisateurService.getAuthenticatedUserId();
         try {
-            evaluationService.storeEvaluation(idClient,evaluation);
+            evaluationService.storeEvaluation(idClient,evaluation,idService);
             return ResponseEntity.status(HttpStatus.CREATED).body("Évaluation enregistrée avec succès.");
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());

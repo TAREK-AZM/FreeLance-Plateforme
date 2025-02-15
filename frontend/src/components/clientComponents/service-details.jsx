@@ -1,4 +1,4 @@
-"use client"
+import { useEffect, useState } from "react";
 
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar"
 import { Badge } from "../ui/badge"
@@ -6,6 +6,9 @@ import { Button } from "../ui/button"
 import { Card } from "../ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs"
 import { MapPin, Star, Check } from "lucide-react"
+import axios from "axios";
+import { useParams } from "react-router-dom";
+import CommentForm from "./comment-form"
 
 const serviceData = {
     id: "shopify-dropshipping-1",
@@ -101,24 +104,57 @@ const serviceData = {
     },
 }
 
+const API_BASE_URL = import.meta.env.VITE_API2; // API Base URL from environment variables
 
-export default function ShopifyService() {
-    const data = serviceData
+export default function ServiceDetails() {
+    const { id } = useParams()
+    const [service, setService] = useState(null)
+    const [comments, setComments] = useState([])
+
+    const fetchService = async (serviceId) => {
+        try {
+            const token = localStorage.getItem("token"); // Retrieve token
+            const response = await axios.get(`${API_BASE_URL}/api/client/service/${serviceId}/serviceDetails`, {
+                headers: {
+                    Authorization: `Bearer ${token}`, // Attach token for authentication
+                },
+            });
+
+            if (response.status === 200) {
+                console.log("✅ Fetched Service:", response.data);
+                setService(response.data); // Update state with real API data
+            } else {
+                console.warn("⚠️ API returned unexpected response:", response);
+            }
+        } catch (error) {
+            console.error("❌ Error fetching service:", error);
+        }
+    };
+
+    const onSubmit = async ({ name, rating, comment }) => {
+        // Update comments as an array
+        setComments((prev) => [...prev, { name, rating, comment }]);
+      };
+
+    useEffect(() => {
+        fetchService(id);
+    }, [id]);
+
     return (
         <div className="min-h-screen bg-gray-50 p-4 md:p-8">
             <div className="mx-auto max-w-6xl">
                 {/* Header */}
-                <div className="mb-8 text-center">
-                    <h1 className="mb-4 text-4xl font-bold">{data.title}</h1>
+                <div className="mb-8 ">
+                    <h1 className="mb-4 text-4xl font-bold">{service?.titre}</h1>
                     <div className="flex items-center justify-center gap-4 text-sm text-muted-foreground">
                         <div className="flex items-center gap-2">
                             <Avatar className="h-6 w-6">
-                                <AvatarImage src={data.postedBy.avatar} alt={data.postedBy.name} />
-                                <AvatarFallback>{data.postedBy.name[0]}</AvatarFallback>
+                                <AvatarImage src={API_BASE_URL + "/api" + service?.prestataire?.imageUrl} alt={service?.prestataire?.prenom} width={50} height={50} />
+                                <AvatarFallback>{service?.prestataire?.prenom[0]}</AvatarFallback>
                             </Avatar>
-                            <span>Posted by: {data.postedBy.name}</span>
+                            <span>Posted by: {service?.prestataire.prenom}</span>
                         </div>
-                        <div>Posted: {data.postedDate}</div>
+                        {/* <div>Posted: {data.postedDate}</div> */}
                     </div>
                 </div>
 
@@ -126,9 +162,9 @@ export default function ShopifyService() {
                     {/* Main content */}
                     <div className="space-y-4 ">
 
-                        <section className="w-full h-[400px] overflow-hidden"> 
+                        <section className="w-full h-[400px] overflow-hidden">
                             <img
-                                src={data.heroImage || "/placeholder.svg"}
+                                src={API_BASE_URL + "/api" + service?.image || "/placeholder.svg"}
                                 alt="Development"
                                 width={800}
                                 height={300}
@@ -139,39 +175,38 @@ export default function ShopifyService() {
 
                         <section>
                             <h2 className="mb-4 text-2xl font-semibold">About The Service</h2>
-                            <p className="text-muted-foreground">{data.description}</p>
+                            <p className="text-muted-foreground">{service?.description}</p>
                         </section>
 
                         <section>
                             <h2 className="mb-4 text-2xl font-semibold">Categories</h2>
                             <div className="flex flex-wrap gap-2">
-                                {data.categories.map((category) => (
-                                    <Badge key={category} variant="secondary" className="bg-green-50 text-green-700">
-                                        {category}
-                                    </Badge>
-                                ))}
+                                <Badge variant="secondary" className="bg-green-50 text-green-700">
+                                    {service?.category?.name}
+                                </Badge>
+
                             </div>
                         </section>
 
                         <section>
                             <h2 className="mb-4 text-2xl font-semibold">Expertise</h2>
                             <div className="flex flex-wrap gap-2">
-                                {data.expertise.map((skill) => (
-                                    <Badge key={skill} variant="secondary" className="bg-green-50 text-green-700">
-                                        {skill}
+                                {service?.prestataire?.competences?.map((competence) => (
+                                    <Badge key={competence.id} variant="secondary" className="bg-green-50 text-green-700">
+                                        {competence.nom}
                                     </Badge>
                                 ))}
                             </div>
                         </section>
 
-                        <section>
+                        {/* <section>
                             <h2 className="mb-4 text-2xl font-semibold">Location</h2>
                             <p className="text-muted-foreground">
                                 {`${data.location.street}, ${data.location.city}, ${data.location.region}, ${data.location.country}`}
                             </p>
-                        </section>
+                        </section> */}
 
-                        <section>
+                        {/* <section>
                             <h2 className="mb-4 text-2xl font-semibold">Other Information</h2>
                             <div className="space-y-4">
                                 <div>
@@ -198,11 +233,11 @@ export default function ShopifyService() {
                                     </ul>
                                 </div>
                             </div>
-                        </section>
+                        </section> */}
                     </div>
 
                     {/* Sidebar */}
-                    <div className="space-y-6">
+                    {/* <div className="space-y-6">
                         <Card className="p-6">
                             <Tabs defaultValue={data.pricing.defaultTier} className="mb-6">
                                 <TabsList className="grid w-full grid-cols-3">
@@ -270,10 +305,44 @@ export default function ShopifyService() {
                                 </div>
                             </div>
                         </Card>
-                    </div>
+                    </div> */}
                 </div>
             </div>
-        </div>
-    )
+
+            <div className="mt-8 space-y-4">
+                {/* Feedback Section */}
+                <Card className="mt-8 p-6">
+                    <h2 className="text-2xl font-bold mb-6">Feedback received (by clients)</h2>
+
+                    {/* Recent Reviews */}
+                    <div className="mt-8 space-y-4">
+                        {comments?.map((feedback, index) => (
+                            <div key={index} className="p-4 bg-gray-50 rounded-lg">
+                                <div className="flex items-center gap-2 mb-2">
+                                    <div className="font-medium">{feedback?.name}</div>
+                                    <div className="flex items-center text-[#FFA500]">
+                                        {Array.from({ length: 5 }).map((_, i) => (
+                                            <Star
+                                                key={i}
+                                                className={`w-4 h-4 ${i < feedback.rating ? "fill-current" : "fill-gray-200"}`}
+                                            />
+                                        ))}
+                                    </div>
+                                </div>
+                                <p className="text-gray-700">{feedback.comment}</p>
+                            </div>
+                        ))}
+                    </div>
+                </Card>
+
+
+                {/* Comment Form */}
+                <CommentForm onSubmit={onSubmit} serviceId={id} />
+                {/*  Add your CommentForm component here */}
+            </div>
+            </div>
+            );
+
 }
+
 

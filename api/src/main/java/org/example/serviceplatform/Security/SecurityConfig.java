@@ -43,7 +43,9 @@ public class SecurityConfig {
                                 "/api/auth/**",
                                 "/api/ai/**",
                                 "api/images/**",
-                                "/api/client/services/all"
+                                "/api/client/services/all",
+                                "/api/prestataire/all",  // get all prestataires
+                                "/api/client/service/{idService}/serviceDetails"
 
                         ).permitAll()
                         .requestMatchers("/api/client/**").hasAuthority("CLIENT")
