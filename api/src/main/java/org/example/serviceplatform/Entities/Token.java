@@ -32,4 +32,8 @@ public class Token {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private Utilisateur user;
+
+    public boolean isValid() {
+        return !expired && !revoked && expiryDate.isAfter(LocalDateTime.now());
+    }
 }

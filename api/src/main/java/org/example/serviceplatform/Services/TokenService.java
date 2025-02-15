@@ -10,6 +10,7 @@ import org.example.serviceplatform.Repositories.TokenRepo;
 import org.example.serviceplatform.Repositories.UtilisateurRepo;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,20 +22,17 @@ public class TokenService {
     private final UtilisateurRepo utilisateurRepo;
 
     public AuthenticationResponse refreshAuthTokens(String refreshToken) {
-        // Vérification du jeton dans le dépôt
         var storedToken = tokenRepo.findByToken(refreshToken)
-                .orElseThrow(() -> new RuntimeException("Jeton d'actualisation invalide"));
+                .orElseThrow(() -> new TokenException("Jeton d'actualisation invalide"));
 
-        if (storedToken.isExpired() || storedToken.isRevoked()) {
-            throw new RuntimeException("Jeton d'actualisation expiré ou révoqué");
+        if (!storedToken.isValid() || storedToken.getTokenType() != TokenType.REFRESH) {
+            throw new TokenException("Jeton d'actualisation invalide ou expiré");
         }
 
-        // Extraction de l'utilisateur
         String userEmail = jwtService.extractUsername(refreshToken);
         Utilisateur user = utilisateurRepo.findByEmail(userEmail)
-                .orElseThrow(() -> new RuntimeException("Utilisateur non trouvé"));
+                .orElseThrow(() -> new TokenException("Utilisateur non trouvé"));
 
-        // Génération de nouveaux jetons
         return generateAuthTokens(user);
     }
 
@@ -74,19 +72,23 @@ public class TokenService {
     }
 
     private void saveUserTokens(Utilisateur user, String accessToken, String refreshToken) {
-        Token accessTokenEntity = new Token();
-        accessTokenEntity.setUser(user);
-        accessTokenEntity.setToken(accessToken);
-        accessTokenEntity.setExpired(false);
-        accessTokenEntity.setRevoked(false);
-        accessTokenEntity.setTokenType(TokenType.ACCESS); // Assurez-vous que `TokenType` existe
+        Token accessTokenEntity = Token.builder()
+                .user(user)
+                .token(accessToken)
+                .tokenType(TokenType.ACCESS)
+                .expired(false)
+                .revoked(false)
+                .expiryDate(LocalDateTime.now().plusMinutes(15))
+                .build();
 
-        Token refreshTokenEntity = new Token();
-        refreshTokenEntity.setUser(user);
-        refreshTokenEntity.setToken(refreshToken);
-        refreshTokenEntity.setExpired(false);
-        refreshTokenEntity.setRevoked(false);
-        refreshTokenEntity.setTokenType(TokenType.REFRESH);
+        Token refreshTokenEntity = Token.builder()
+                .user(user)
+                .token(refreshToken)
+                .tokenType(TokenType.REFRESH)
+                .expired(false)
+                .revoked(false)
+                .expiryDate(LocalDateTime.now().plusDays(7))
+                .build();
 
         tokenRepo.saveAll(List.of(accessTokenEntity, refreshTokenEntity));
     }
