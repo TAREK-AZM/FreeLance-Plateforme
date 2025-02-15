@@ -42,6 +42,7 @@ public class SecurityConfig {
                                 "/api/auth/**",
                                 "/api/ai/**"
                         ).permitAll()
+                        .requestMatchers("/api/conversations/**").hasAnyAuthority("CLIENT", "PRESTATAIRE")
                         .requestMatchers("/api/client/**").hasAuthority("CLIENT")
                         .requestMatchers("/api/prestataire/**").hasAuthority("PRESTATAIRE")
                         .requestMatchers("/api/admin/**").hasAuthority("ADMIN")
