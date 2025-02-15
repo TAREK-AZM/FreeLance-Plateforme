@@ -1,7 +1,7 @@
 import { Outlet } from "react-router-dom"
 import { SidebarProvider } from "../components/ui/sidebar"
 import  Header  from "../components/clientComponents/header-Dashboard"
-import FillterJobsHeader from "../components/clientComponents/filtter-jobs-header"
+import FillterJobsHeader from "../components/clientComponents/offres-client"
 import { AppSidebar } from "../components/clientComponents/sidebar-Dashboard"
 import { MobileNav } from "../components/clientComponents/mobile-nav"
 

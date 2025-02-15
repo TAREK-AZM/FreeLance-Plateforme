@@ -20,7 +20,7 @@ import FreelancerDetails from "./clientPages/FreelanderDetailsPage";
 import ServiceClientDetails from "./clientPages/ServiceDetailsPage";
 import JobDetails from "./components/clientComponents/Job-Details";
 import DashboearClient from "./clientPages/ClientDashboard";
-import JobBoardClient from "./components/clientComponents/filtter-jobs-header";
+import JobBoardClient from "./components/clientComponents/offres-client";
 import Notification from "./components/clientComponents/Notification-Modal";
 import Conversation from "./components/clientComponents/Conversation-Modal";
 

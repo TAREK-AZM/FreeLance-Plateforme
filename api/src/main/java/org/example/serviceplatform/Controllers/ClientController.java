@@ -120,9 +120,9 @@ public class ClientController {
 
     //demander une service
     @PostMapping("services/{id}/demandes")
-    public ResponseEntity<String> demanderService(@PathVariable Integer id,@RequestBody DemandeClient demandeClient){
+    public ResponseEntity<String> demanderService(@PathVariable Integer id){
         Integer idClient= utilisateurService.getAuthenticatedUserId();
-        demandeService.envoyerDemande(idClient,id, demandeClient);
+        demandeService.envoyerDemande(idClient,id );
         return ResponseEntity.ok("votre demande est envoyée");
     }
     //voir mes demandes
@@ -154,14 +154,11 @@ public class ClientController {
                       //////////////// MES EVALUATIONS à PROPOS DES SERIVICES ///////////////
     //evaluer une service
     @PostMapping("/services/{idService}/evaluation")
-    public ResponseEntity<String> evaluer(@RequestBody Evaluation evaluation,@PathVariable Integer idService){
+    public ResponseEntity<EvaluationDTO> evaluer(@RequestBody Evaluation evaluation,@PathVariable Integer idService){
         Integer idClient=utilisateurService.getAuthenticatedUserId();
-        try {
-            evaluationService.storeEvaluation(idClient,evaluation,idService);
-            return ResponseEntity.status(HttpStatus.CREATED).body("Évaluation enregistrée avec succès.");
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-        }
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(evaluationService.storeEvaluation(idClient,evaluation,idService));
+
     }
     //changer mon evaluation pour une service
     @PutMapping("/services/evaluations")

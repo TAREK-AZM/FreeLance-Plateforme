@@ -226,6 +226,7 @@ public class PrestataireController {
     }
     //voir la liste des offres
 
+    ///////////// get the all the postulatores for one offre //////////////
 
 
 

@@ -1,7 +1,7 @@
+import { useState, useEffect } from "react";
 import JobCard  from "./Job-Card"
 import { Tabs, TabsList, TabsTrigger } from "../ui/tabs"
-import { id } from "date-fns/locale"
-
+import axios from "axios";
 // Sample job data
 const jobs = [
   {
@@ -38,8 +38,37 @@ const jobs = [
     avatar: "https://github.com/shadcn.png",
   },
 ]
-
+const BASE_URL = import.meta.env.VITE_API2; // Environment variable for API base URL
 export default function FiltterJobsHeader() {
+  const [jobs, setJobs] = useState([]);
+
+const fetchJobs = async () => {
+  try {
+    const token = localStorage.getItem("token"); // Retrieve token
+    const response = await axios.get(`${BASE_URL}/api/client/offres`, {
+      headers: {
+        Authorization: `Bearer ${token}`, // Attach token for authentication
+      },
+    });
+
+    if (response.status === 200) {
+      console.log("✅ Fetched Jobs:", response.data);
+      setJobs(response.data); // Update state with real API data
+    } else {
+      console.warn("⚠️ API returned unexpected response:", response);
+    }
+  } catch (error) {
+    console.error("❌ Error fetching jobs:", error);
+  }
+};
+
+
+  useEffect(() => {
+    fetchJobs();
+  }, []);
+
+
+
   return (
     <div className="container space-y-6 py-6">
       <div className="flex flex-col gap-4">
@@ -75,7 +104,7 @@ export default function FiltterJobsHeader() {
       </div>
       <div className="space-y-4">
         {jobs.map((job, i) => (
-          <JobCard key={i} {...job} />
+          <JobCard key={i} id={job?.id} job={job} />
         ))}
       </div>
     </div>

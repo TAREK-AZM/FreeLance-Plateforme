@@ -13,6 +13,7 @@ import org.example.serviceplatform.Repositories.PrestataireRepo;
 import org.example.serviceplatform.Repositories.ServiceRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -35,7 +36,7 @@ public class DemandeService {
         List<DemandeDTO> demandes=demandeRepo.findDemandesByPrestataireId(idPrestataire).stream().map(d-> DemandeMapper.toDemandeDTO(d)).collect(Collectors.toList());
            return demandes;
     }
-    public void envoyerDemande(Integer idClient, Integer idService, DemandeClient demandeClient) {
+    public void envoyerDemande(Integer idClient, Integer idService) {
         // Vérifier que le service existe
         Service service = serviceRepo.findById(idService)
                 .orElseThrow(() -> new RuntimeException("Service non trouvé"));
@@ -56,7 +57,7 @@ public class DemandeService {
         demande.setService(service);
         demande.setClient(client);
         demande.setStatus(StatusDemande.EN_ATTENTE);
-        demande.setDateDemande(demandeClient.getDateDemande());
+        demande.setDateDemande(LocalDateTime.now());
         demandeRepo.save(demande);
     }
     public void accepterDemande(Integer idDemande) {

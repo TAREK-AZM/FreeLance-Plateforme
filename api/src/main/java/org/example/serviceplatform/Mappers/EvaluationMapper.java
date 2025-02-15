@@ -8,7 +8,7 @@ public class EvaluationMapper {
         return EvaluationDTO.builder()
                 .id(evaluation.getId())
                 .etoiles(evaluation.getEtoiles())
-                .clientNom(evaluation.getClient().getNom())
+                .client(ClientMapper.toClientDTO(evaluation.getClient()))
                 .serviceTitre(evaluation.getService().getTitre())
                 .build();
     }

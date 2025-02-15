@@ -42,7 +42,6 @@ public class OffreService {
         offre.setVille(offreStored.getVille());
         offre.setStatus(StatutOffre.EN_COURS);
         offre.setClient(client);
-
         offreRepo.save(offre);
         // 📂 Gérer l'upload d'image
         if (imageFile != null && !imageFile.isEmpty()) {
@@ -64,12 +63,15 @@ public class OffreService {
 
                 // 🔗 Mettre à jour l'URL de l'image
                 offre.setImage("images/offres/" + fileName);
+
             } catch (IOException e) {
                 throw new RuntimeException("Erreur lors de l'enregistrement de l'image : " + e.getMessage());
             }
-          }
-        // Sauvegarder l'offre
 
+
+        }
+        // Sauvegarder l'offre
+        offreRepo.save(offre);
 
     }
     public void updateOffre( Offre offreStored, MultipartFile imageFile){

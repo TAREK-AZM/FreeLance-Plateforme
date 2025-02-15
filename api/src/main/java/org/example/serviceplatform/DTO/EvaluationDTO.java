@@ -12,6 +12,6 @@ import lombok.NoArgsConstructor;
 public class EvaluationDTO {
     private Integer id;
     private float etoiles;
-    private String clientNom; // Nom du client ayant fait l'évaluation
+    private ClientDTO client; // Nom du client ayant fait l'évaluation
     private String serviceTitre; // Titre du service évalué
 }

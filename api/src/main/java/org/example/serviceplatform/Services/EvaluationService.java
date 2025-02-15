@@ -3,6 +3,7 @@ package org.example.serviceplatform.Services;
 import org.example.serviceplatform.DTO.EvaluationDTO;
 import org.example.serviceplatform.Entities.Client;
 import org.example.serviceplatform.Entities.Evaluation;
+import org.example.serviceplatform.Mappers.CommentaireMapper;
 import org.example.serviceplatform.Mappers.EvaluationMapper;
 import org.example.serviceplatform.Repositories.ClientRepo;
 import org.example.serviceplatform.Repositories.EvaluationRepo;
@@ -23,7 +24,7 @@ public class EvaluationService {
     @Autowired
     private ServiceRepo serviceRepo;
 
-    public void storeEvaluation(Integer idClient, Evaluation evaluationStored,Integer idService) {
+    public EvaluationDTO storeEvaluation(Integer idClient, Evaluation evaluationStored,Integer idService) {
         // Vérifier si le client existe
         Client client = clientRepo.findById(idClient)
                 .orElseThrow(() -> new RuntimeException("Client introuvable"));
@@ -32,19 +33,25 @@ public class EvaluationService {
         org.example.serviceplatform.Entities.Service service = serviceRepo.findById(idService)
                 .orElseThrow(() -> new RuntimeException("Service introuvable"));
 
-        Evaluation ev =evaluationRepo.findByClientAndService(client,service).get();
-        if(ev.getId() != null){
+        // Rechercher l'évaluation existante
+        Optional<Evaluation> optionalEvaluation = evaluationRepo.findByClientAndService(client, service);
+        Evaluation ev;
+        if (optionalEvaluation.isPresent()) {
+                // Si l'évaluation existe, la mettre à jour
+            ev = optionalEvaluation.get();
                 ev.setEtoiles(evaluationStored.getEtoiles());
                 evaluationRepo.save(ev);
+            }else {
+                // Enregistrer l'évaluation
+                ev= new Evaluation();
+                ev.setClient(client);
+                ev.setService(service);
+                ev.setEtoiles(evaluationStored.getEtoiles());
+                evaluationRepo.save(ev);
+            }
+        return EvaluationMapper.toevalutationDTO(ev);
 
-        }else {
-            // Enregistrer l'évaluation
-            Evaluation evaluation = new Evaluation();
-            evaluation.setClient(client);
-            evaluation.setService(service);
-            evaluation.setEtoiles(evaluationStored.getEtoiles());
-            evaluationRepo.save(evaluation);
-        }
+
     }
 
     public List<EvaluationDTO> getEvaluationsByServiceId(Integer serviceId) {

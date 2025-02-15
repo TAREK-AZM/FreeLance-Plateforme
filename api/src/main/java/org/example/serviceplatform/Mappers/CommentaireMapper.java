@@ -9,6 +9,7 @@ public class CommentaireMapper {
                 .id(commentaire.getId())
                 .content(commentaire.getContent())
                 .datePosted(commentaire.getDatePosted())
+                .client(ClientMapper.toClientDTO(commentaire.getClient()))
                 .build();
     }
 }

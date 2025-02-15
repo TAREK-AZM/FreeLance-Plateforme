@@ -1,61 +1,251 @@
-import { Eye, FileText, Clock, DollarSign } from "lucide-react"
+import { Eye, Clock, DollarSign, MapPin, Calendar, Phone, Mail, MapPinned, HandCoins} from "lucide-react"
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar"
 import { Badge } from "../ui/badge"
 import { Button } from "../ui/button"
 import { Link } from "react-router-dom";
+import { useState, useEffect } from "react";
+import axios from "axios";
+import {Card} from "../ui/card"
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from '../ui/dialog';
+
+const BASE_URL = import.meta.env.VITE_API2; // Environment variable for API base URL
+
+export default function JobCard({id,job }) {
+  const [selectedPostulator, setSelectedPostulator] = useState(null);
+  const [postulators, setPostulas] = useState([]);
+  const fetchALlPostulers = async (offreId) => {
+    try {
+      const token = localStorage.getItem("token"); // Retrieve token
+      const response = await axios.get(`${BASE_URL}/api/client/offre/${offreId}/postulas`, {
+        headers: {
+          Authorization: `Bearer ${token}`, // Attach token for authentication
+        },
+      });
+  
+      if (response.status === 200) {
+        console.log("✅ Fetched Jobs:", response.data);
+        setPostulas(response.data); // Update state with real API data
+      } else {
+        console.warn("⚠️ API returned unexpected response:", response);
+      }
+    } catch (error) {
+      console.error("❌ Error fetching jobs:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchALlPostulers(id);
+  }, [id]);
+  
+  
+  const PostulatorDialog = ({ postulator,prix,description, isOpen, onClose }) => {
+    if (!postulator) return null;
 
 
 
-
-
-export default function JobCard({id, category, title, date, views, price, type, taskType, avatar }) {
-  return (
-    <div className="rounded-lg border bg-card p-6">
-      <div className="flex items-start justify-between">
-        <div className="space-y-4">
-          <div className="space-y-2">
-            <div className="flex items-center gap-2">
-              <FileText className="h-5 w-5 text-primary" />
-              <span className="text-sm text-[#12AE65] ">Job category: {category}</span>
-              <span className="text-sm text-muted-foreground">| Posted: {date}</span>
+    console.log("🚀 ~ file: Job-Card.jsx ~ line 101 ~ PostulatorDialog ~ postulator", postulator);
+    return (
+      <Dialog open={isOpen} onOpenChange={onClose}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle className="text-2xl font-bold">Postulator Details</DialogTitle>
+          </DialogHeader>
+          <div className="flex flex-col items-center space-y-4 p-4">
+            <Avatar className="h-24 w-24 border-4 border-[#12AE65]">
+              <AvatarImage src={postulator.imageUrl} alt={`${postulator.prenom} ${postulator.nom}`} />
+              <AvatarFallback className="bg-[#E6F9EF] text-[#12AE65] text-xl">
+              <img src={BASE_URL+"/api/images/prestataires"+postulator.imageUrl} alt={`${postulator.prenom} ${postulator.nom}`} 
+              className="h-full w-full object-cover rounded-full border-2 border-[#12AE65] cursor-pointer hover:scale-110 transition-transform" />
+              </AvatarFallback>
+            </Avatar>
+            <div className="text-center">
+              <h3 className="text-xl font-bold">{`${postulator.prenom} ${postulator.nom}`}</h3>
+              <p className="text-gray-500">{description || "No description available"}</p>
             </div>
-            <h3 className=" font-semibold">{title}</h3>
+            <div className="w-full space-y-3">
+              <div className="flex items-center">
+                <Phone className="mr-2 h-5 w-5 text-[#12AE65]" />
+                <span>{postulator.telephone}</span>
+              </div>
+              <div className="flex items-center">
+                <Mail className="mr-2 h-5 w-5 text-[#12AE65]" />
+                <span>{postulator.email}</span>
+              </div>
+              <div className="flex items-center">
+                <MapPinned className="mr-2 h-5 w-5 text-[#12AE65]" />
+                <span>{`${postulator.adresse}, ${postulator.ville}`}</span>
+              </div>
+              <div className="flex items-center">
+                <HandCoins className="mr-2 h-5 w-5 text-[#12AE65]" />
+                <span>Proposed Price: {prix} dh</span>
+              </div>
+            </div>
+            <div className="w-full flex justify-around pt-4 ">
+              <Badge className=" py-2 font-bold text-xl rounded-lg justify-center bg-[#12AE65] hover:cursor-pointer hover:bg-[#0d8d52]">
+                Accepter
+              </Badge>
+              <Badge className=" py-2 font-bold text-xl text-[#12AE65] rounded-lg justify-center bg-gray-300 hover:cursor-pointer hover:bg-[#FF4338] hover:text-white">
+                Refused
+              </Badge>
+            </div>
           </div>
-          <div className="flex flex-wrap items-center gap-3">
-            <Badge variant="secondary" className="rounded-md">
-              <Eye className="mr-1 h-3 w-3" />
-              {views}
-            </Badge>
-            <Badge variant="secondary" className="rounded-md">
-              <Clock className="mr-1 h-3 w-3" />
-              {type}
-            </Badge>
-            <Badge variant="secondary" className="rounded-md">
-              <FileText className="mr-1 h-3 w-3" />
-              {taskType}
-            </Badge>
-            <Badge variant="secondary" className="rounded-md">
-              <DollarSign className="mr-1 h-3 w-3" />
-              {price.toFixed(2)}
-            </Badge>
-          </div>
-        </div>
-        <div className="flex items-center gap-2">
-          <Avatar className="h-8 w-8">
-            <AvatarImage src={avatar} />
-            <AvatarFallback>U</AvatarFallback>
-          </Avatar>
-          <Link to={`/client/jobs/${id}`}>
-          <Button variant="ghost" size="icon">
-            
-            <Eye className="h-4 w-4" />
+        </DialogContent>
+      </Dialog>
+    );
+  };
 
-          </Button>
-          </Link>
-          
+  console.log("postulators", postulators);
+  return (
+    <Card className="w-full max-w-4xl mx-auto">
+      <div className="p-6">
+        <div className="flex flex-col space-y-4">
+          {/* Job Header */}
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div className="flex items-center space-x-4">
+              <Avatar className="h-12 w-12 border-2 border-[#12AE65]">
+                <AvatarImage src={job.image} alt={job.title} />
+                <AvatarFallback className="bg-[#E6F9EF] text-[#12AE65]">
+                  {job.title?.[0] || 'J'}
+                </AvatarFallback>
+              </Avatar>
+              <div>
+                <h3 className="text-xl font-bold text-gray-800">{job.title}</h3>
+                <div className="flex items-center text-sm text-gray-500">
+                  <MapPin className="mr-1 h-4 w-4 text-[#12AE65]" />
+                  {job.ville}
+                </div>
+              </div>
+            </div>
+            <Badge variant={job.status === "active" ? "success" : "secondary"}>
+              {job.status}
+            </Badge>
+          </div>
+
+          {/* Job Description */}
+          <p className="text-gray-600">{job.description}</p>
+
+          {/* Job Metadata */}
+          <div className="flex flex-wrap items-center gap-3">
+            <Badge variant="outline" className="rounded-full">
+              <Calendar className="mr-1 h-3 w-3 text-[#12AE65]" />
+              {new Date(job.dateCreation).toLocaleDateString()}
+            </Badge>
+            <Badge variant="outline" className="rounded-full">
+              <Clock className="mr-1 h-3 w-3 text-[#12AE65]" />
+              {new Date(job.dateExpiration).toLocaleDateString()}
+            </Badge>
+            <Badge variant="outline" className="rounded-full">
+              <DollarSign className="mr-1 h-3 w-3 text-[#12AE65]" />
+              {job.prix}€
+            </Badge>
+          </div>
+
+          {/* Postulators Section */}
+          <div className="mt-6">
+            <h4 className="text-lg font-semibold mb-3">Postulators</h4>
+            <div className="flex flex-wrap gap-3">
+              {postulators.map((postulator) => (
+                <Avatar
+                  key={postulator.prestataire.id}
+                  className="h-12 w-12 border-2 border-[#12AE65] cursor-pointer hover:scale-110 transition-transform"
+                  onClick={() => setSelectedPostulator(postulator)}
+                >
+                  <AvatarImage 
+                    src={postulator.prestataire.imageUrl} 
+                    alt={`${postulator.prestataire.prenom} ${postulator.prestataire.nom}`}
+                  />
+                  <AvatarFallback className="bg-[#E6F9EF] text-[#12AE65]">
+                    {/* {postulator.prestataire.prenom[0]} */}
+                    <img src={BASE_URL+"/api/images/prestataires"+postulator.prestataire.imageUrl} alt={`${postulator.prestataire.prenom} ${postulator.prestataire.nom}`} className="h-12 w-12 border-2 border-[#12AE65] cursor-pointer hover:scale-110 transition-transform" />
+                  </AvatarFallback>
+                </Avatar>
+              ))}
+            </div>
+          </div>
+
+          {/* Footer */}
+          <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mt-4">
+            <div className="text-sm text-gray-500">
+              <Eye className="inline mr-1 h-4 w-4 text-[#12AE65]" />
+              {Math.floor(Math.random() * 100) + 1} views
+            </div>
+            <Button className="bg-[#12AE65] hover:bg-[#0F9A59] text-white w-full sm:w-auto">
+              View Details
+              <Eye className="ml-2 h-4 w-4" />
+            </Button>
+          </div>
         </div>
       </div>
-    </div>
-  )
-}
 
+      {/* Postulator Details Dialog */}
+      <PostulatorDialog
+        postulator={selectedPostulator?.prestataire}
+        prix={selectedPostulator?.prix}
+        description={selectedPostulator?.description}
+        isOpen={!!selectedPostulator}
+        onClose={() => setSelectedPostulator(null)}
+      />
+    </Card>
+  );
+};
+
+
+
+
+
+// <div className="rounded-lg border bg-white shadow-md hover:shadow-lg transition-shadow duration-300 p-6">
+      
+      
+// <div className="flex flex-col space-y-4">
+//   <div className="flex items-center justify-between">
+//     <div className="flex items-center space-x-4">
+//       <Avatar className="h-12 w-12 border-2 border-[#12AE65]">
+//         <AvatarImage src={image} alt={title} />
+//         <AvatarFallback className="bg-[#E6F9EF] text-[#12AE65]">{title[0]}</AvatarFallback>
+//       </Avatar>
+//       <div>
+//         <h3 className="text-xl font-bold text-gray-800">{title}</h3>
+//         <div className="flex items-center text-sm text-gray-500">
+//           <MapPin className="mr-1 h-4 w-4 text-[#12AE65]" />
+//           {ville}
+//         </div>
+//       </div>
+//     </div>
+//     <Badge variant={status === "active" ? "success" : "secondary"} className="text-xs">
+//       {status}
+//     </Badge>
+//   </div>
+//   <p className="text-gray-600">{description}</p>
+//   <div className="flex flex-wrap items-center gap-3">
+//     <Badge variant="outline" className="rounded-full px-3 py-1">
+//       <Calendar className="mr-1 h-3 w-3 text-[#12AE65]" />
+//       Created: {new Date(dateCreation).toLocaleDateString()}
+//     </Badge>
+//     <Badge variant="outline" className="rounded-full px-3 py-1">
+//       <Clock className="mr-1 h-3 w-3 text-[#12AE65]" />
+//       Expires: {new Date(dateExpiration).toLocaleDateString()}
+//     </Badge>
+//     <Badge variant="outline" className="rounded-full px-3 py-1">
+//       <DollarSign className="mr-1 h-3 w-3 text-[#12AE65]" />
+//       {prix.toFixed(2)} €
+//     </Badge>
+//   </div>
+//   <div className="flex justify-between items-center">
+//     <div className="text-sm text-gray-500">
+//       <Eye className="inline mr-1 h-4 w-4 text-[#12AE65]" />
+//       {Math.floor(Math.random() * 100) + 1} views
+//     </div>
+//     <Link to={`/client/jobs/${id}`}>
+//       <Button className="bg-[#12AE65] hover:bg-[#0F9A59] text-white">
+//         View Details
+//         <Eye className="ml-2 h-4 w-4" />
+//       </Button>
+//     </Link>
+//   </div>
+// </div>
+// </div>
