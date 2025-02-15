@@ -12,8 +12,8 @@ const cardVariants = {
     hover: { scale: 1.05, transition: { duration: 0.3 } },
 };
 
-function ServiceCard({ id, title, description, price, status, img, onEdit, onDelete }) {
-    img = `${import.meta.env.VITE_FRONTEND}${img}`;
+function ServiceCard({ id, title, description, price, status, image, onEdit, onDelete }) {
+
 
     return (
         <motion.div
@@ -25,11 +25,11 @@ function ServiceCard({ id, title, description, price, status, img, onEdit, onDel
         >
             <Link to={`/prestataires/services/${id}`} className="block">
                 <motion.img
-                    src={img || DEFAULT_IMAGE}
+                    src={`${import.meta.env.VITE_API2}/api${image}`}
                     alt={title}
                     className="w-full h-40 object-cover rounded-t-md"
                     onError={(e) => {
-                        e.target.src = DEFAULT_IMAGE;
+                        e.target.src = ``;
                     }}
                     whileHover={{ scale: 1.1 }}
                 />

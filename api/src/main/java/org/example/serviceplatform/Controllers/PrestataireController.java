@@ -41,6 +41,8 @@ public class PrestataireController {
 
 
     private static final String UPLOAD_DIR = "src/main/resources/static/images/";
+    @Autowired
+    private CategoryService categoryService;
     //////////////////////////////GESTION DE PROFIL /////////////////////
 
 
@@ -215,7 +217,14 @@ public class PrestataireController {
         return ResponseEntity.ok("la service est deleted");
     }
 
-                                     ///////////GESTION DES OFFRES/////////////
+    //voir les categories avec les services
+    @GetMapping("/categories")
+    public List<Category> getAllCategories(){
+        return categoryService.getAllCategories();
+    }
+
+
+    ///////////GESTION DES OFFRES/////////////
 
     //poustuler pour une offre d'une client
     @PostMapping("/offres/{id}/postulation")
@@ -254,7 +263,6 @@ public class PrestataireController {
     public void markAllAssRead(){
         notificationService.markAllAsRead();
 }
-
 
 
 
