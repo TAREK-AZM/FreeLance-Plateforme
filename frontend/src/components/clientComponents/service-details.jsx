@@ -110,6 +110,8 @@ export default function ServiceDetails() {
     const { id } = useParams()
     const [service, setService] = useState(null)
     const [comments, setComments] = useState([])
+    const [combinedData, setCombinedData] = useState([]); // Combined comments and evaluations
+
 
     const fetchService = async (serviceId) => {
         try {
@@ -130,16 +132,73 @@ export default function ServiceDetails() {
             console.error("❌ Error fetching service:", error);
         }
     };
+    // const fetchServiceComments = async (serviceId) => {
+    //     try {
+    //         const token = localStorage.getItem("token"); // Retrieve token
+    //         const response = await axios.get(`${API_BASE_URL}/api/client/services/${serviceId}/commentaires`, {
+    //             headers: {
+    //                 Authorization: `Bearer ${token}`, // Attach token for authentication
+    //             },
+    //         });
+    //         if (response.status === 200) {
+    //             console.log("✅ Fetched Service Comments:", response.data);
+    //             setComments(response.data); // Update state with real API data
+    //         } else {
+    //             console.warn("⚠️ API returned unexpected response:", response);
+    //         }
+    //     } catch (error) {
+    //         console.error("❌ Error fetching service comments:", error);
+    //     }
+    // };
 
-    const onSubmit = async ({ name, rating, comment }) => {
+    // Fetch comments and evaluations, then combine them
+    const fetchAndCombineData = async (serviceId) => {
+        try {
+            const token = localStorage.getItem("token");
+
+            // Fetch comments
+            const commentsResponse = await axios.get(`${API_BASE_URL}/api/client/services/${serviceId}/commentaires`, {
+                headers: { Authorization: `Bearer ${token}` },
+            });
+
+            // Fetch evaluations (stars)
+            const evaluationsResponse = await axios.get(`${API_BASE_URL}/api/client/services/${serviceId}/evaluations`, {
+                headers: { Authorization: `Bearer ${token}` },
+            });
+
+            if (commentsResponse.status === 200 && evaluationsResponse.status === 200) {
+                const comments = commentsResponse.data;
+                const evaluations = evaluationsResponse.data;
+
+                // Combine comments and evaluations by client ID
+                const combined = comments.map(comment => {
+                    const evaluation = evaluations.find(e => e.client.id === comment.client.id);
+                    return {
+                        client: comment.client,
+                        comment: comment.content,
+                        datePosted: comment.datePosted,
+                        stars: evaluation ? evaluation?.etoiles : null, // Add stars if evaluation exists
+                    };
+                });
+
+                setCombinedData(combined); // Update state with combined data
+            }
+        } catch (error) {
+            console.error("Error fetching or combining data:", error);
+        }
+    };
+
+    const onSubmit = async ({ comment }) => {
         // Update comments as an array
-        setComments((prev) => [...prev, { name, rating, comment }]);
-      };
+        setComments((prev) => [...prev, comment]);
+    };
 
     useEffect(() => {
         fetchService(id);
+        fetchAndCombineData(id);
     }, [id]);
 
+    console.log("🚀 ~ file: service-details.jsx ~ line 101 ~ useEffect ~ combinedData", combinedData);
     return (
         <div className="min-h-screen bg-gray-50 p-4 md:p-8">
             <div className="mx-auto max-w-6xl">
@@ -315,21 +374,22 @@ export default function ServiceDetails() {
                     <h2 className="text-2xl font-bold mb-6">Feedback received (by clients)</h2>
 
                     {/* Recent Reviews */}
+
                     <div className="mt-8 space-y-4">
-                        {comments?.map((feedback, index) => (
+                        {combinedData?.map((feedback, index) => (
                             <div key={index} className="p-4 bg-gray-50 rounded-lg">
                                 <div className="flex items-center gap-2 mb-2">
-                                    <div className="font-medium">{feedback?.name}</div>
+                                    <div className="font-medium">{feedback?.client?.prenom}</div>
                                     <div className="flex items-center text-[#FFA500]">
                                         {Array.from({ length: 5 }).map((_, i) => (
                                             <Star
                                                 key={i}
-                                                className={`w-4 h-4 ${i < feedback.rating ? "fill-current" : "fill-gray-200"}`}
+                                                className={`w-4 h-4 ${i < (feedback?.stars || 0) ? "fill-current" : "fill-gray-200"}`}
                                             />
                                         ))}
                                     </div>
                                 </div>
-                                <p className="text-gray-700">{feedback.comment}</p>
+                                <p className="text-gray-700">{feedback?.comment}</p>
                             </div>
                         ))}
                     </div>
@@ -340,8 +400,8 @@ export default function ServiceDetails() {
                 <CommentForm onSubmit={onSubmit} serviceId={id} />
                 {/*  Add your CommentForm component here */}
             </div>
-            </div>
-            );
+        </div>
+    );
 
 }
 

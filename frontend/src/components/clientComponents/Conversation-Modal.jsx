@@ -1,5 +1,5 @@
 
-import { X, ArrowLeft } from "lucide-react"
+import { X, ArrowLeft, Home } from "lucide-react"
 import { Button } from "../ui/button"
 import { Input } from "../ui/input"
 import { ScrollArea } from "../ui/scroll-area"
@@ -50,6 +50,7 @@ const conversationHistory = [
 ]
 
 export default function ConversationModal() {
+  const path = window.location.pathname; // This will be '/client/freelancers/1'
 
   const [conversation, setConversation] = useState([]);
   const [message, setMessage] = useState("");
@@ -123,12 +124,17 @@ export default function ConversationModal() {
   }, [conversation]);
 
   return (
-    <div className="flex flex-col h-screen   ">
+    <div className="flex border border-2 border-gray-300 rounded-lg flex-col h-screen   ">
       <div className="flex items-center justify-between p-4 bg-white   shadow-sm">
         <div className="flex items-center gap-3">
           <Link to="/client/dashboard">
             <Button variant="ghost" size="icon">
-              <ArrowLeft className="h-4 w-4" />
+              {!path.startsWith("/client/freelancers/")
+                ? <ArrowLeft className="h-4 w-4" />
+                : <Link to="/">
+                  <Home className="h-4 w-4" />
+                </Link>}
+
             </Button>
           </Link>
           <Avatar className="h-10 w-10">
@@ -140,9 +146,9 @@ export default function ConversationModal() {
             <p className="text-sm text-gray-500">Online</p>
           </div>
         </div>
-      
+
       </div>
-      <ScrollArea className="flex-grow p-4 border border-2 border-gray-300 rounded-lg" ref={scrollAreaRef}>
+      <ScrollArea className="flex-grow p-4 border border-1 border-gray-300 rounded-lg" ref={scrollAreaRef}>
         <div className="space-y-4 px-4  min-h-screen">
           {conversationHistory.map((msg) => (
             <div key={msg.id} className={`flex ${msg.sender === "You" ? "justify-end" : "justify-start"}`}>
@@ -158,7 +164,11 @@ export default function ConversationModal() {
 
         </div>
 
-        <div className="p-8 bg-white border-t">
+
+
+
+      </ScrollArea>
+      <div className="p-8 bg-white border-t">
         <form onSubmit={handleSubmit} className="flex justify-between items-center gap-2">
           <Input
             placeholder="Type your message..."
@@ -172,9 +182,6 @@ export default function ConversationModal() {
         </form>
       </div>
 
-       
-      </ScrollArea>
-     
     </div>
   )
 }

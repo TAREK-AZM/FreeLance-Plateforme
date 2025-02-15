@@ -33,7 +33,7 @@ export default function CommentForm({ onSubmit, serviceId }) {
       if (response.status === 201) {
         console.log("✅ Stars sent:", stars);
         // Call onSubmit with the correct data structure
-        onSubmit({ name: user?.name || "Anonymous", rating: stars, comment: "" });
+        onSubmit({ ...response.data, comment: "" });
       } else {
         console.error("Stars request failed:", response.data.message);
       }
@@ -48,10 +48,16 @@ export default function CommentForm({ onSubmit, serviceId }) {
     try {
       const token = localStorage.getItem("token"); // Get the token
       console.log("🔑🔑🔑🔑 Using Token:🔑🔑", token);
+      console.log("🔑🔑🔑🔑 test the comment content🔑🔑", comment, new Date().toISOString());
 
       const response = await axios.post(
         `${BASE_URL}/api/client/${serviceId}/commentaire`,
-        { comment }, // Axios automatically stringifies the body
+        { 
+          "content": comment,
+          "datePosted": new Date().toISOString(),
+
+
+         }, // Axios automatically stringifies the body
         {
           headers: {
             "Content-Type": "application/json",
@@ -63,7 +69,7 @@ export default function CommentForm({ onSubmit, serviceId }) {
       if (response.status === 200) {
         console.log("✅ Comment sent:", comment);
         // Call onSubmit with the correct data structure
-        onSubmit({ name: user?.name || "Anonymous", rating: 0, comment });
+        onSubmit(response.data);
       } else {
         console.error("Comment request failed:", response.data.message);
       }
@@ -124,7 +130,7 @@ export default function CommentForm({ onSubmit, serviceId }) {
               value={comment}
               onChange={(e) => setComment(e.target.value)}
               placeholder="Share your experience working with this freelancer..."
-              className="min-h-[120px] resize-none"
+              className="min-h-[120px] resize-none border border-[#12AE65] focus:border-[#12AE65] rounded-lg p-2"
             />
           </div>
 

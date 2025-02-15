@@ -253,6 +253,7 @@ public class ClientController {
         Integer idClient=utilisateurService.getAuthenticatedUserId();
         return favorisService.getAllFavoris(idClient);
      }
+    //lorsque le prest acceptre ou refuse une demande pour une service de la part du client
 
     //supprimer de table favoris
     @DeleteMapping("/{idFavoris}/disfavoris")
@@ -264,6 +265,9 @@ public class ClientController {
 
 
     //////////////////////////// Notifications /////////////////
+    //lorsque le prest postuler pour une offre
+
+    //get la liste des notification pour un client + un prestataire
 
 
 
