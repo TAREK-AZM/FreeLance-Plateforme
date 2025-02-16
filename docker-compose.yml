@@ -128,7 +128,7 @@ services:
       # e.g., REACT_APP_API_URL: "http://spring_app:8080"
       # or VITE_API_URL: "http://spring_app:8080"
       # Adjust based on your code
-      VITE_API_URL: "http://spring_app:9090" 
+      VITE_API2: "http://spring_app:9090" 
     networks:
       - my_network
     depends_on:

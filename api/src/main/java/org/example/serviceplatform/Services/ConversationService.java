@@ -18,6 +18,7 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -39,6 +40,11 @@ public class ConversationService {
             conversation = conversationRepository.save(conversation);
         }
         return conversationMapper.toDTO(conversation);
+    }
+
+    public Optional<ConversationDTO> getConversationById(Integer id) {
+        return conversationRepository.findById(id)
+                .map(conversationMapper::toDTO); // Returns Optional<ConversationDTO>
     }
 
     public MessageDTO sendMessage(Integer conversationId, Utilisateur sender, String content) {

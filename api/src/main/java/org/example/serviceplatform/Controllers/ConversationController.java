@@ -31,6 +31,12 @@ public class ConversationController {
         return conversationService.getOrCreateConversation(currentUser, otherUser);
     }
 
+    @GetMapping("/one/{conversationId}")
+    public ConversationDTO getConversationById(@PathVariable Integer conversationId) {
+
+        return conversationService.getConversationById(conversationId).get();
+    }
+
     @GetMapping
     public List<ConversationDTO> getConversations() {
         Integer userId = utilisateurService.getAuthenticatedUserId();
@@ -53,7 +59,7 @@ public class ConversationController {
         Utilisateur user = utilisateurService.getUtilisateur(userId);
         return conversationService.sendMessage(conversationId, user, content);
     }
-
+/// mark as read
     @PutMapping("/{conversationId}/mark-read")
     public ResponseEntity<String> markMessagesAsRead(@PathVariable Integer conversationId) {
         Integer userId = utilisateurService.getAuthenticatedUserId();
@@ -61,14 +67,14 @@ public class ConversationController {
         conversationService.markMessagesAsRead(conversationId, user);
         return ResponseEntity.ok("Messages marked as read");
     }
-
+///// nomres message not reded
     @GetMapping("/{conversationId}/unread-count")
     public Long getUnreadMessageCount(@PathVariable Integer conversationId) {
         Integer userId = utilisateurService.getAuthenticatedUserId();
         Utilisateur user = utilisateurService.getUtilisateur(userId);
         return conversationService.getUnreadMessageCount(conversationId, user);
     }
-
+//////  delte conversation
     @DeleteMapping("/{conversationId}")
     public ResponseEntity<String> deleteConversation(@PathVariable Integer conversationId) {
         Integer userId = utilisateurService.getAuthenticatedUserId();
@@ -76,7 +82,7 @@ public class ConversationController {
         conversationService.deleteConversation(conversationId, user);
         return ResponseEntity.ok("Conversation deleted");
     }
-
+// deete message
     @DeleteMapping("/messages/{messageId}")
     public ResponseEntity<Void> deleteMessage(@PathVariable Integer messageId) {
         Integer userId = utilisateurService.getAuthenticatedUserId();

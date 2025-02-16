@@ -71,7 +71,7 @@ const router = createBrowserRouter(
                     <Route index element={<OffresClient />} />
                     {/* <Route path="service/:id/serviceDetails" element={<Profile />} /> */}
                     <Route path="notifications/:id" element={<Notification />} />
-                    <Route path="conversations/:id" element={<Conversation />} />
+                    <Route path="conversations/:conversationId" element={<Conversation />} />
                 </Route>
             </Route>
 

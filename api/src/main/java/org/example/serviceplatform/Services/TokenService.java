@@ -48,6 +48,7 @@ public class TokenService {
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
                 .role(user.getRole().getRoleName())
+                .userId(user.getId())
                 .build();
     }
 
