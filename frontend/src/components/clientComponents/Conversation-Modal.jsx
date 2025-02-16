@@ -99,15 +99,15 @@ const sortedMessages = [...(conversation.messages || [])].sort(
           <Avatar className="h-10 w-10">
             <AvatarImage 
               src="/placeholder-avatar.jpg" 
-              alt={conversation.prestataireName} 
+              alt={(role==="CLIENT") ? conversation.prestataireName: conversation.clientName}
             />
             <AvatarFallback>
-              {conversation.prestataireName?.[0]}
+              {(role==="CLIENT") ? conversation.prestataireName?.[0] :conversation.clientName?.[0]}
             </AvatarFallback>
           </Avatar>
           <div>
             <h2 className="text-lg font-semibold">
-              {conversation.prestataireName}
+              {(role==="CLIENT") ? conversation.prestataireName: conversation.clientName}
             </h2>
             <p className="text-sm text-gray-500">Online</p>
           </div>
