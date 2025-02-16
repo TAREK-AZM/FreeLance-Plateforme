@@ -62,7 +62,7 @@ public class DemandeService {
     }
     public void accepterDemande(Integer idDemande) {
         DemandeClient demande=demandeRepo.findById(idDemande).get();
-        demande.setStatus(StatusDemande.EN_COURS);
+        demande.setStatus(StatusDemande.TERMINEE);
         demandeRepo.save(demande);
         // 🔔 Notification pour le client
         String sujet = "Demande Acceptée";
