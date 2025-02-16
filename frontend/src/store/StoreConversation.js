@@ -20,6 +20,7 @@ export const useConversationStore = create((set, get) => ({
       });
 
       if (response.status === 200) {
+        console.log("conversations :",response.data);
         set({ conversations: response.data, isLoading: false });
       }
     } catch (error) {

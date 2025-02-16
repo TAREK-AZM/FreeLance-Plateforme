@@ -46,7 +46,9 @@ const router = createBrowserRouter(
                     <Route path="jobboard" element={<JobBoard />} />
                     <Route path="profile" element={<Profile />} />
                     <Route path="users" element={<Users />} />
+                    <Route path="conversations/:conversationId" element={<Conversation />} />
                 </Route>
+                <Route path="conversations/:conversationId" element={<Conversation />} />
             </Route>
 
             {/* Client Pages (Home is the default under /client) */}
