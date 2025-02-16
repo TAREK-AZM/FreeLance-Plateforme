@@ -1,69 +1,157 @@
-import { Bell } from "lucide-react"
-import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
-import { Button } from "@/components/ui/button"
-import { ScrollArea } from "@/components/ui/scroll-area"
-import { Link } from "react-router-dom"
-const notifications = [
-  {
-    id: 1,
-    title: "New job application",
-    description: "John Doe applied for Front-end Developer position",
-    time: "2 minutes ago",
-  },
-  {
-    id: 2,
-    title: "Message from client",
-    description: "You have a new message from Sarah regarding the project",
-    time: "1 hour ago",
-  },
-  {
-    id: 3,
-    title: "Payment received",
-    description: "You received a payment of $500 for your recent job",
-    time: "3 hours ago",
-  },
-  {
-    id: 4,
-    title: "New job posted",
-    description: "A new job matching your skills has been posted",
-    time: "1 day ago",
-  },
-]
+import { useState, useEffect } from "react";
+import axios from "axios";
+import { Bell } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Badge } from "@/components/ui/badge";
 
-export function NotificationsPopover() {
+export default  function NotificationsPopover( ) {
+  const [notifications, setNotifications] = useState([]);
+  const [unreadCount, setUnreadCount] = useState(0);
+
+  const API_URL = `${import.meta.env.VITE_API2}`;
+
+
+  // Fetch notifications
+  const fetchNotifications = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.get(`${API_URL}/api/client/MesNotifications`, {
+        headers: {
+          Authorization: `Bearer ${token}`, // Attach token in Authorization header
+        },
+      });
+      setNotifications(response.data);
+      calculateUnreadCount(response.data);
+    } catch (error) {
+      console.error("Error fetching notifications:", error);
+    }
+  };
+
+  // Mark a notification as read
+  const handleNotificationClick = async (id) => {
+    try {
+      const token = localStorage.getItem("token");
+      await axios.put(
+          `${API_URL}/api/client/${id}/read`,
+          {}, // Empty body since it's a PUT request with no data payload
+          {
+            headers: {
+              Authorization: `Bearer ${token}`, // Attach token in Authorization header
+            },
+          }
+      );
+
+      const updatedNotifications = notifications.map((n) =>
+          n.id === id ? { ...n, read: true } : n
+      );
+      setNotifications(updatedNotifications);
+      calculateUnreadCount(updatedNotifications);
+    } catch (error) {
+      console.error("Error marking notification as read:", error);
+    }
+  };
+
+  // Mark all notifications as read
+  const markAllAsRead = async () => {
+    try {
+      // const unreadNotifications = notifications.filter((n) => !n.read);
+      const token = localStorage.getItem("token");
+      await axios.put(
+          `${API_URL}/api/client/readAll`,
+          {}, // Empty body since it's a PUT request with no data payload
+          {
+            headers: {
+              Authorization: `Bearer ${token}`, // Attach token in Authorization header
+            },
+          }
+      );
+      const updatedNotifications = notifications?.map((n) => ({
+        ...n,
+        read: true,
+      }));
+      setNotifications(updatedNotifications);
+      setUnreadCount(0);
+    } catch (error) {
+      console.error("Error marking all notifications as read:", error);
+    }
+  };
+
+  // Calculate unread notifications
+  const calculateUnreadCount = (notifications) => {
+    const count = notifications.filter((n) => !n.read).length;
+    setUnreadCount(count);
+  };
+
+  useEffect(() => {
+    fetchNotifications();
+  }, []);
+
   return (
-    <Popover>
-      <PopoverTrigger asChild>
-        <Button variant="ghost" size="icon" className="relative">
-          <Bell className="h-5 w-5" />
-          <span className="sr-only">Notifications</span>
-          <span className="absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-[#ff6934] text-xs font-medium text-white">
-            {notifications.length}
-          </span>
+       <DropdownMenu>
+
+<DropdownMenuTrigger asChild>
+  <Button
+      variant="outline"
+      size="icon"
+      className="relative bg-white text-stone-600 border-stone-200 hover:bg-stone-100 hover:text-stone-800"
+  >
+    <Bell className="h-5 w-5" />
+    {unreadCount > 0 && (
+        <Badge className="absolute -top-2 -right-2 px-2 py-1 text-xs bg-red-500 text-white rounded-full">
+          {unreadCount}
+        </Badge>
+    )}
+  </Button>
+</DropdownMenuTrigger>
+<DropdownMenuContent className="w-80">
+  <DropdownMenuLabel className="flex justify-between items-center">
+    <span>Notifications</span>
+    {unreadCount > 0 && (
+        <Button variant="ghost" size="sm" onClick={markAllAsRead}>
+          Mark all as read
         </Button>
-      </PopoverTrigger>
-      <PopoverContent className="w-80">
-        <div className="flex items-center justify-between border-b pb-2">
-          <h4 className="text-sm font-semibold">Notifications</h4>
-          <Button variant="ghost" size="sm">
-            Mark all as read
-          </Button>
+    )}
+  </DropdownMenuLabel>
+  <DropdownMenuSeparator />
+  {notifications.map((notification) => (
+
+      <DropdownMenuItem
+          key={notification.id}
+          onClick={() => handleNotificationClick(notification.id)}
+          className={`cursor-pointer ${
+              notification.read ? "opacity-50" : "font-semibold"
+          }`}
+      >
+        <div className="flex flex-col space-y-1">
+          <p className={`${notification.read ? "" : "font-semibold"}`}>
+            {notification.subject}
+          </p>
+          <p className="text-sm text-gray-500">
+            {notification.message}
+          </p>
+          <p className="text-xs text-gray-400">{notification.date}</p>
         </div>
-        <ScrollArea className="h-[300px] py-2">
-          {notifications.map((notification) => (
-            <Link to={`/client/dashboard/notifications/${notification.id}`} key={notification.id} className="mb-2 rounded-md p-2 hover:bg-muted">
-              <div key={notification.id} className="mb-2 rounded-md p-2 hover:bg-muted">
-                <h5 className="text-sm font-medium">{notification.title}</h5>
-                <p className="text-xs text-muted-foreground">{notification.description}</p>
-                <span className="text-xs text-muted-foreground">{notification.time}</span>
-              </div>
-
-            </Link>
-
-          ))}
-        </ScrollArea>
-      </PopoverContent>
-    </Popover>
-  )
+        {!notification.isRead && (
+            <Badge className="ml-auto" variant="secondary">
+              New
+            </Badge>
+        )}
+      </DropdownMenuItem>
+  ))}
+  {notifications.length === 0 && (
+      <DropdownMenuItem disabled>No notifications</DropdownMenuItem>
+  )}
+</DropdownMenuContent>
+</DropdownMenu>
+  
+     
+  );
 }
-

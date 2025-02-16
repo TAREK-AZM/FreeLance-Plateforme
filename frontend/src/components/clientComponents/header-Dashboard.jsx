@@ -5,10 +5,9 @@ import { Button } from "../ui/button"
 import { SidebarTrigger } from "../ui/sidebar"
 import { useAuthStore } from "../../store/store"
 import { Link } from "react-router-dom";
-import { NotificationsPopover} from "./Notifications-Proper"
+import  NotificationsPopover from "./Notifications-Proper"
 import { MessagesPopover } from "./Messages-Proper" // ✅ Import the Messages component
 export default function HeaderDashboard() {
-  const [showPostJobForm, setShowPostJobForm] = useState(false)
 
     const { isAuthenticated } = useAuthStore()
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)

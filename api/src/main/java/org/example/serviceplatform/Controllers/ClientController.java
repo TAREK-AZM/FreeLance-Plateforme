@@ -7,6 +7,7 @@ import org.example.serviceplatform.Entities.*;
 import org.example.serviceplatform.Repositories.ClientRepo;
 import org.example.serviceplatform.Repositories.CommentaireRepo;
 import org.example.serviceplatform.Services.*;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -31,6 +32,8 @@ public class ClientController {
     private final FavorisService favorisService;
     private final ServiceService serviceService;
     private final ObjectMapper objectMapper;
+    @Autowired
+    private NotificationService notificationService;
 
     public ClientController(ClientRepo clientRepo, ClientService clientService, CategoryService categoryService, DemandeService demandeService, CommentaireService commentaireService, CommentaireRepo commentaireRepo, EvaluationService evaluationService, OffreService offreService, PostulationService postulationService, UtilisateurService utilisateurService, FavorisService favorisService, ServiceService serviceService,ObjectMapper objectMapper) {
         this.clientRepo = clientRepo;
@@ -267,7 +270,27 @@ public class ClientController {
     //get la liste des notification pour un client + un prestataire
 
 
+    //////////////////////////////////  Gestion des notifications ///////////////////////////
 
+    // voir mes notifications
+    @GetMapping("/MesNotifications")
+    public List<NotificationDTO> getNotifications() {
+        Integer idPrest=utilisateurService.getAuthenticatedUserId();
+        //Integer idPrest=2;
+        return notificationService.getAllNotificationsofUser(idPrest);
+    }
+
+    //marquer la notification comme lue
+    @PutMapping("/{idNotification}/read")
+    public void markAsRead(@PathVariable Integer idNotification){
+        notificationService.markAsRead(idNotification);
+    }
+
+    //mark all as read
+    @PutMapping("/readAll")
+    public void markAllAssRead(){
+        notificationService.markAllAsRead();
+    }
 
 
 }

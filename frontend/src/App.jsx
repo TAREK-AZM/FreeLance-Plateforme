@@ -21,7 +21,6 @@ import ServiceClientDetails from "./clientPages/ServiceDetailsPage";
 import JobDetails from "./components/clientComponents/Job-Details";
 import DashboearClient from "./clientPages/ClientDashboard";
 import OffresClient from "./components/clientComponents/offres-client";
-import Notification from "./components/clientComponents/Notification-Modal";
 import Conversation from "./components/clientComponents/Conversation-Modal";
 
 // i mean by jobs the offres that the client post 
@@ -69,8 +68,6 @@ const router = createBrowserRouter(
                 {/* Client Dashboard - Nested routes inside `DashboearClient` */}
                 <Route path="dashboard" element={<DashboearClient />}>
                     <Route index element={<OffresClient />} />
-                    {/* <Route path="service/:id/serviceDetails" element={<Profile />} /> */}
-                    <Route path="notifications/:id" element={<Notification />} />
                     <Route path="conversations/:conversationId" element={<Conversation />} />
                 </Route>
             </Route>
