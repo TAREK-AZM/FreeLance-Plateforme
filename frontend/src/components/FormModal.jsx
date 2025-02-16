@@ -2,22 +2,45 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 
 const FormModal = ({ isVisible, onClose, onSubmit, formData, isEdit }) => {
-    const [formValues, setFormValues] = useState({ title: "", description: "", price: "", status: true });
+    const [formValues, setFormValues] = useState({id:"", titre: "", description: "", prix: "", status: true, category: "" });
+    const [categories, setCategories] = useState([]);
+    const token = localStorage.getItem("token");
+
+    // Fetch categories
+    useEffect(() => {
+        const fetchCategories = async () => {
+            try {
+                const response = await axios.get(`${import.meta.env.VITE_API2}/api/prestataire/categories`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
+                setCategories(response.data);
+            } catch (err) {
+                console.error("Error fetching categories:", err);
+            }
+        };
+        fetchCategories();
+    }, []);
 
     // Pre-fill form when editing or reset when adding
     useEffect(() => {
         if (formData) {
-            console.log("Editing data:", formData); // Debugging
+            console.log("Editing data:", formData);
             setFormValues(formData);
         } else {
-            console.log("Adding new service"); // Debugging
-            setFormValues({ title: "", description: "", price: "", status: true });
+            console.log("Adding new service");
+            setFormValues({ titre: "", description: "", prix: "", status: true, image: null, category: "" });
         }
     }, [formData]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormValues((prev) => ({ ...prev, [name]: value }));
+    };
+
+    const handleFileChange = (e) => {
+        setFormValues((prev) => ({ ...prev, image: e.target.files[0] }));
     };
 
     const toggleStatus = () => {
@@ -27,15 +50,41 @@ const FormModal = ({ isVisible, onClose, onSubmit, formData, isEdit }) => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            if (isEdit) {
+            const selectedCategory = categories.find(cat => cat.id == formValues.category);
+            const formDataToSend = new FormData();
+            formDataToSend.append("file", formValues.image);
+            formDataToSend.append("service", JSON.stringify({
+                titre: formValues.titre,
+                description: formValues.description,
+                prix: parseFloat(formValues.prix),
+                status: formValues.status,
+                category: selectedCategory
+            }));
 
-                await axios.put(`${import.meta.env.VITE_API}/services/${formValues.id}`, formValues);
+            if (isEdit) {
+                console.log("data sent is: ", formDataToSend)
+                await axios.put(
+                    `${import.meta.env.VITE_API2}/api/prestataire/service/update`,
+                    formDataToSend,
+                    {
+                        headers: {
+                            "Content-Type": "multipart/form-data",
+                            Authorization: `Bearer ${token}`,
+                        },
+                    }
+                );
+
 
             } else {
-                await axios.post(`${import.meta.env.VITE_API}/services`, formValues);
-
+                console.log("data sent is: ", formDataToSend)
+                await axios.post(`${import.meta.env.VITE_API2}/api/prestataire/service/add`, formDataToSend, {
+                    headers: {
+                        "Content-Type": "multipart/form-data",
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
             }
-            onClose(); // Close modal after success
+            onClose();
         } catch (err) {
             console.error("Error submitting form:", err);
         }
@@ -49,11 +98,11 @@ const FormModal = ({ isVisible, onClose, onSubmit, formData, isEdit }) => {
                 <h2 className="text-2xl font-bold mb-4">{isEdit ? "Edit Service" : "Add New Service"}</h2>
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <div>
-                        <label className="block text-sm font-medium">Title</label>
+                        <label className="block text-sm font-medium">Titre</label>
                         <input
                             type="text"
-                            name="title"
-                            value={formValues.title}
+                            name="titre"
+                            value={formValues.titre}
                             onChange={handleChange}
                             className="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-blue-500 focus:border-blue-500"
                         />
@@ -68,29 +117,37 @@ const FormModal = ({ isVisible, onClose, onSubmit, formData, isEdit }) => {
                         />
                     </div>
                     <div>
-                        <label className="block text-sm font-medium">Price</label>
+                        <label className="block text-sm font-medium">Prix</label>
                         <input
                             type="number"
-                            name="price"
-                            value={formValues.price}
+                            name="prix"
+                            value={formValues.prix}
                             onChange={handleChange}
                             className="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-blue-500 focus:border-blue-500"
                         />
                     </div>
-                    <div className="flex items-center">
-                        <label className="text-sm font-medium mr-3">Active:</label>
-                        <div
-                            onClick={toggleStatus}
-                            className={`relative w-10 h-5 rounded-full cursor-pointer flex items-center ${
-                                formValues.status ? "bg-green-500" : "bg-gray-300"
-                            }`}
+                    <div>
+                        <label className="block text-sm font-medium">Image</label>
+                        <input
+                            type="file"
+                            name="image"
+                            onChange={handleFileChange}
+                            className="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-blue-500 focus:border-blue-500"
+                        />
+                    </div>
+                    <div>
+                        <label className="block text-sm font-medium">Category</label>
+                        <select
+                            name="category"
+                            value={formValues.category}
+                            onChange={handleChange}
+                            className="w-full border border-gray-300 rounded-md px-3 py-2 focus:ring-blue-500 focus:border-blue-500"
                         >
-                            <div
-                                className={`absolute h-4 w-4 bg-white rounded-full transition-transform ${
-                                    formValues.status ? "translate-x-5" : "translate-x-0"
-                                }`}
-                            />
-                        </div>
+                            <option value="">Select a category</option>
+                            {categories.map(category => (
+                                <option key={category.id} value={category.id}>{category.name}</option>
+                            ))}
+                        </select>
                     </div>
                     <div className="flex justify-end space-x-3">
                         <button

@@ -34,15 +34,15 @@ const LoginPage = () => {
             console.log("✅ Response Status:", response.status);
             console.log("✅ Response Data:", response.data);
 
-            if (response.status === 200 && response.data.accessToken && response.data.role) {
-                console.log("🔑 Token Received:", response.data.accessToken);
+            if (response.status === 200 && response.data.refreshToken && response.data.role) {
+                console.log("🔑 Token Received:", response.data.refreshToken);
             
                 // ✅ Store the access token correctly in localStorage
-                localStorage.setItem("token", response.data.accessToken);
+                localStorage.setItem("token", response.data.refreshToken);
             
                 console.log("👤 User Role:", response.data.role);
             
-                login(response.data.accessToken, response.data.role); // Save to AuthContext
+                login(response.data.refreshToken, response.data.role); // Save to AuthContext
             
                 // ✅ Navigate based on user role
                 if (response.data.role === "PRESTATAIRE") {

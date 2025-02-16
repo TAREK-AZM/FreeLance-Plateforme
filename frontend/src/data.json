@@ -248,14 +248,14 @@
       "title": "New message",
       "description": "You have a new message from John Doe",
       "time": "5 min ago",
-      "read": true
+      "read": false
     },
     {
       "id": "2",
       "title": "Project update",
       "description": "Your project 'Web Development' has been updated",
       "time": "1 hour ago",
-      "read": true
+      "read": false
     },
     {
       "id": "3",

@@ -52,13 +52,15 @@ public class CertificationService {
                 Files.write(filePath, imageFile.getBytes());
 
                 // 🔗 Mettre à jour l'URL de l'image
-                c.setImageUrl("/images/certification/" + fileName); // Ajouter un '/' au début
+                c.setImageUrl("/images/certifications/" + fileName); // Ajouter un '/' au début
                 prestataire.getCertifications().add(c);
+
             } catch (IOException e) {
                 throw new RuntimeException("Erreur lors de l'enregistrement de l'image : " + e.getMessage());
             }
-        }
 
+        }
+        certificationRepo.save(c);
 
     }
     public void UpdateCertification(Certification certification, MultipartFile imageFile) {

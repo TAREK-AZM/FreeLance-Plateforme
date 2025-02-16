@@ -71,6 +71,8 @@ public class ImageController {
                 return BASE_DIRECTORY + "prestataires/";
             case "clients":
                 return BASE_DIRECTORY + "clients/";
+            case "certifications":
+                return BASE_DIRECTORY + "certifications/";
             default:
                 return null; // Type non reconnu
         }

@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input.jsx";
 import { PlusCircle, Search } from "lucide-react";
 import { Card } from "@/components/ui/card.jsx";
 import { Button } from "@/components/ui/button.jsx";
-import { Toaster,toast} from "react-hot-toast";
+import { Toaster, toast } from "react-hot-toast";
 
 function Services() {
     const [searchTerm, setSearchTerm] = useState("");
@@ -15,11 +15,15 @@ function Services() {
     const [error, setError] = useState(null);
     const [isModalVisible, setModalVisible] = useState(false);
     const [editData, setEditData] = useState(null);
-
+    const token = localStorage.getItem("token");
     // Fetch all services
     const fetchServices = async () => {
         try {
-            const response = await axios.get(`${import.meta.env.VITE_API}/services`);
+            const response = await axios.get(`${import.meta.env.VITE_API2}/api/prestataire/mesServices`, {
+                headers: {
+                    Authorization: `Bearer ${token}`, // Attach token in Authorization header
+                },
+            });
             setServices(response.data);
         } catch (err) {
             console.error("Error fetching services:", err);
@@ -48,7 +52,11 @@ function Services() {
     // Delete a service
     const handleDelete = async (id) => {
         try {
-            await axios.delete(`${import.meta.env.VITE_API}/services/${id}`);
+            await axios.delete(`${import.meta.env.VITE_API2}/api/prestataire/mesServices/${id}/delete`, {
+                headers: {
+                    Authorization: `Bearer ${token}`, // Attach token in Authorization header
+                },
+            });
             setServices((prevServices) => prevServices.filter((service) => service.id !== id));
             console.log(`Service with ID ${id} deleted successfully`);
             toast.success("Service deleted successfully!");
@@ -60,13 +68,13 @@ function Services() {
     // Close the modal and refresh the services list
     const closeModal = () => {
         setModalVisible(false);
-        toast.success('service edited successfully!')
+        toast.success('Service edited successfully!');
         fetchServices(); // Refresh services after adding/editing
     };
 
     // Filter services based on search term
     const filteredServices = services.filter((service) =>
-        service.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        service.titre.toLowerCase().includes(searchTerm.toLowerCase()) ||
         service.description.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
@@ -75,8 +83,7 @@ function Services() {
 
     return (
         <div>
-            <Toaster position="top-center"
-                     reverseOrder={false} />
+            <Toaster position="top-center" reverseOrder={false} />
 
             <form className="flex gap-2 mb-6">
                 <div className="relative flex-grow">
@@ -117,7 +124,7 @@ function Services() {
             <FormModal
                 isVisible={isModalVisible}
                 onClose={closeModal}
-                onSubmit="services"
+                onSubmit={editData ? "api/prestataire/service/update" : "api/prestataire/service/add"}
                 formData={editData}
                 isEdit={!!editData}
             />

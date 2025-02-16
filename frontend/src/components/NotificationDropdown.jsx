@@ -16,12 +16,18 @@ export function NotificationDropdown() {
   const [notifications, setNotifications] = useState([]);
   const [unreadCount, setUnreadCount] = useState(0);
 
-  const API_URL = `${import.meta.env.VITE_API}/notifications`;
+  const API_URL = `${import.meta.env.VITE_API2}`;
+
 
   // Fetch notifications
   const fetchNotifications = async () => {
     try {
-      const response = await axios.get(API_URL);
+      const token = localStorage.getItem("token");
+      const response = await axios.get(`${API_URL}/api/prestataire/MesNotifications`, {
+        headers: {
+          Authorization: `Bearer ${token}`, // Attach token in Authorization header
+        },
+      });
       setNotifications(response.data);
       calculateUnreadCount(response.data);
     } catch (error) {
@@ -32,7 +38,17 @@ export function NotificationDropdown() {
   // Mark a notification as read
   const handleNotificationClick = async (id) => {
     try {
-      await axios.patch(`${API_URL}/${id}`, { read: true });
+      const token = localStorage.getItem("token");
+      await axios.put(
+          `${API_URL}/api/prestataire/${id}/read`,
+          {}, // Empty body since it's a PUT request with no data payload
+          {
+            headers: {
+              Authorization: `Bearer ${token}`, // Attach token in Authorization header
+            },
+          }
+      );
+
       const updatedNotifications = notifications.map((n) =>
           n.id === id ? { ...n, read: true } : n
       );
@@ -46,11 +62,16 @@ export function NotificationDropdown() {
   // Mark all notifications as read
   const markAllAsRead = async () => {
     try {
-      const unreadNotifications = notifications.filter((n) => !n.read);
-      await Promise.all(
-          unreadNotifications?.map((notification) =>
-              axios.patch(`${API_URL}/${notification.id}`, { read: true })
-          )
+      // const unreadNotifications = notifications.filter((n) => !n.read);
+      const token = localStorage.getItem("token");
+      await axios.put(
+          `${API_URL}/api/prestataire/readAll`,
+          {}, // Empty body since it's a PUT request with no data payload
+          {
+            headers: {
+              Authorization: `Bearer ${token}`, // Attach token in Authorization header
+            },
+          }
       );
       const updatedNotifications = notifications?.map((n) => ({
         ...n,
@@ -109,14 +130,14 @@ export function NotificationDropdown() {
               >
                 <div className="flex flex-col space-y-1">
                   <p className={`${notification.read ? "" : "font-semibold"}`}>
-                    {notification.title}
+                    {notification.subject}
                   </p>
                   <p className="text-sm text-gray-500">
-                    {notification.description}
+                    {notification.message}
                   </p>
-                  <p className="text-xs text-gray-400">{notification.time}</p>
+                  <p className="text-xs text-gray-400">{notification.date}</p>
                 </div>
-                {!notification.read && (
+                {!notification.isRead && (
                     <Badge className="ml-auto" variant="secondary">
                       New
                     </Badge>
