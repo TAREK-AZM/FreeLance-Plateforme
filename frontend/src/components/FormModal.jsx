@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 
 const FormModal = ({ isVisible, onClose, onSubmit, formData, isEdit }) => {
-    const [formValues, setFormValues] = useState({ titre: "", description: "", prix: "", status: true, category: "" });
+    const [formValues, setFormValues] = useState({id:"", titre: "", description: "", prix: "", status: true, category: "" });
     const [categories, setCategories] = useState([]);
     const token = localStorage.getItem("token");
 
@@ -62,13 +62,21 @@ const FormModal = ({ isVisible, onClose, onSubmit, formData, isEdit }) => {
             }));
 
             if (isEdit) {
-                await axios.put(`${import.meta.env.VITE_API2}/api/prestataire/service/update`, formDataToSend, {
-                    headers: {
-                        "Content-Type": "multipart/form-data",
-                        Authorization: `Bearer ${token}`,
-                    },
-                });
+                console.log("data sent is: ", formDataToSend)
+                await axios.put(
+                    `${import.meta.env.VITE_API2}/api/prestataire/service/update`,
+                    formDataToSend,
+                    {
+                        headers: {
+                            "Content-Type": "multipart/form-data",
+                            Authorization: `Bearer ${token}`,
+                        },
+                    }
+                );
+
+
             } else {
+                console.log("data sent is: ", formDataToSend)
                 await axios.post(`${import.meta.env.VITE_API2}/api/prestataire/service/add`, formDataToSend, {
                     headers: {
                         "Content-Type": "multipart/form-data",

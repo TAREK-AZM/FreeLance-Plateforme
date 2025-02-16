@@ -12,7 +12,7 @@ const cardVariants = {
     hover: { scale: 1.05, transition: { duration: 0.3 } },
 };
 
-function ServiceCard({ id, title, description, price, status, image, onEdit, onDelete }) {
+function ServiceCard({ id, titre, description, prix, status, image, onEdit, onDelete }) {
 
 
     return (
@@ -26,7 +26,7 @@ function ServiceCard({ id, title, description, price, status, image, onEdit, onD
             <Link to={`/prestataires/services/${id}`} className="block">
                 <motion.img
                     src={`${import.meta.env.VITE_API2}/api${image}`}
-                    alt={title}
+                    alt={titre}
                     className="w-full h-40 object-cover rounded-t-md"
                     onError={(e) => {
                         e.target.src = ``;
@@ -34,7 +34,7 @@ function ServiceCard({ id, title, description, price, status, image, onEdit, onD
                     whileHover={{ scale: 1.1 }}
                 />
                 <CardHeader className="p-4">
-                    <CardTitle className="text-gray-900">{title}</CardTitle>
+                    <CardTitle className="text-gray-900">{titre}</CardTitle>
                     <CardDescription className="text-gray-600">{description}</CardDescription>
                 </CardHeader>
             </Link>
@@ -43,7 +43,7 @@ function ServiceCard({ id, title, description, price, status, image, onEdit, onD
                     <Link to={`/prestataires/services/${id}`} className="block">
                         <div className="flex items-center justify-between">
                             <span className="text-sm text-gray-500">Price:</span>
-                            <span className="font-medium text-gray-900">${price}</span>
+                            <span className="font-medium text-gray-900">${prix}</span>
                         </div>
                         <div className="flex items-center justify-between">
                             <span className="text-sm text-gray-500">Status:</span>

@@ -117,7 +117,7 @@ function Header({ name, email, activeTab, setActiveTab }) {
               >
                 <NotificationDropdown />
                 <div className="flex items-center gap-3">
-                  <Link to="/profile">
+                  <Link to="/prestataires/profile">
                     <div className="text-right">
                       <h2 className="text-sm font-semibold text-gray-100">
                         {name}
@@ -127,7 +127,7 @@ function Header({ name, email, activeTab, setActiveTab }) {
                       </p>
                     </div>
                   </Link>
-                  <Link to="/profile">
+                  <Link to="/prestataires/profile">
                     <Avatar className="h-10 w-10">
                       <AvatarImage src="/placeholder.svg" />
                       <AvatarFallback>

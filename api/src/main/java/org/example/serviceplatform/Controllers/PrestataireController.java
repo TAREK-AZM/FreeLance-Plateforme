@@ -43,6 +43,10 @@ public class PrestataireController {
     private static final String UPLOAD_DIR = "src/main/resources/static/images/";
     @Autowired
     private CategoryService categoryService;
+    @Autowired
+    private CommentaireService commentaireService;
+    @Autowired
+    private OffreService offreService;
     //////////////////////////////GESTION DE PROFIL /////////////////////
 
 
@@ -222,7 +226,11 @@ public class PrestataireController {
     public List<Category> getAllCategories(){
         return categoryService.getAllCategories();
     }
-
+    //aficher les commentaires d'une service
+    @GetMapping("/services/{idService}/commentaires")
+    public List<CommentaireDTO> getAllCommentairesofService(@PathVariable Integer idService){
+        return commentaireService.getCommentairesByIdService(idService);
+    }
 
     ///////////GESTION DES OFFRES/////////////
 
@@ -233,7 +241,7 @@ public class PrestataireController {
         postulationService.storePostulation(id,idPrest,postulation);
         return ResponseEntity.ok("postulation stored");
     }
-    //voir la liste des offres
+
 
     ///////////// get the all the postulatores for one offre //////////////
 
