@@ -2,8 +2,9 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import RequestCard from "../components/RequestCard";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
 import { Search } from "lucide-react";
+import { Toaster, toast } from "react-hot-toast";
+
 
 function Requests() {
     const [searchTerm, setSearchTerm] = useState("");
@@ -11,14 +12,15 @@ function Requests() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const token = localStorage.getItem("token");
+
     useEffect(() => {
         const fetchClientRequests = async () => {
             try {
                 const response = await axios.get(`${import.meta.env.VITE_API2}/api/prestataire/demandes`, {
-                        headers: {
-                            Authorization: `Bearer ${token}`, // Attach token in Authorization header
-                        },
-                    }) // Replace with your API URL
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
                 setClientRequests(response.data);
             } catch (err) {
                 console.error("Error fetching client requests:", err);
@@ -29,7 +31,16 @@ function Requests() {
         };
 
         fetchClientRequests();
-    }, []); // Runs only once after the component mounts
+    }, []);
+
+    // Function to update the status without removing the request
+    const updateRequestStatus = (id, newStatus) => {
+        setClientRequests(prevRequests =>
+            prevRequests.map(request =>
+                request.id === id ? { ...request, status: newStatus } : request
+            )
+        );
+    };
 
     const filteredRequests = clientRequests.filter(request =>
         request.service.titre.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -41,6 +52,7 @@ function Requests() {
 
     return (
         <div>
+            <Toaster position="top-center" reverseOrder={false} />
             <form className="flex gap-2 mb-6">
                 <div className="relative flex-grow">
                     <Input
@@ -52,11 +64,10 @@ function Requests() {
                     />
                     <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-stone-500" />
                 </div>
-
             </form>
             <div className="grid gap-4">
                 {filteredRequests.map(request => (
-                    <RequestCard key={request.id} {...request} />
+                    <RequestCard key={request.id} {...request} onUpdateStatus={updateRequestStatus} />
                 ))}
             </div>
         </div>

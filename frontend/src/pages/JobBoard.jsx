@@ -10,20 +10,25 @@ function JobBoard() {
     const [jobPostings, setJobPostings] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-    const [skills, setSkills] = useState([]);
-    const [selectedSkills, setSelectedSkills] = useState([]);
-
+    // const [skills, setSkills] = useState([]);
+    // const [selectedSkills, setSelectedSkills] = useState([]);
+    const token = localStorage.getItem("token");
     useEffect(() => {
         const fetchJobPostings = async () => {
             try {
-                const response = await axios.get(`${import.meta.env.VITE_API}/jobPostings`);
+                const response = await axios.get(`${import.meta.env.VITE_API2}/api/prestataire/Alloffres`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                });
+
                 setJobPostings(response.data);
 
                 // Extract unique skills from job postings
-                const uniqueSkills = [
-                    ...new Set(response.data.flatMap((job) => job.skills)),
-                ];
-                setSkills(uniqueSkills);
+                // const uniqueSkills = [
+                //     ...new Set(response.data.flatMap((job) => job.skills)),
+                // ];
+                // setSkills(uniqueSkills);
             } catch (err) {
                 console.error("Error fetching job postings:", err);
                 setError(err);
@@ -35,25 +40,26 @@ function JobBoard() {
         fetchJobPostings();
     }, []);
 
-    const handleSkillChange = (skill) => {
-        setSelectedSkills((prev) =>
-            prev.includes(skill)
-                ? prev.filter((s) => s !== skill)
-                : [...prev, skill]
-        );
-    };
+    // const handleSkillChange = (skill) => {
+    //     setSelectedSkills((prev) =>
+    //         prev.includes(skill)
+    //             ? prev.filter((s) => s !== skill)
+    //             : [...prev, skill]
+    //     );
+    // };
 
     const filteredJobs = jobPostings.filter((job) => {
         const matchesSearchTerm =
             job.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
             job.description.toLowerCase().includes(searchTerm.toLowerCase());
-        const matchesSkills =
-            selectedSkills.length === 0 ||
-            selectedSkills.every((skill) =>
-                job.skills.map((s) => s.toLowerCase()).includes(skill.toLowerCase())
-            );
+        // const matchesSkills =
+        //     selectedSkills.length === 0 ||
+        //     selectedSkills.every((skill) =>
+        //         job.skills.map((s) => s.toLowerCase()).includes(skill.toLowerCase())
+        //     );
 
-        return matchesSearchTerm && matchesSkills;
+        // return matchesSearchTerm && matchesSkills;
+        return matchesSearchTerm ;
     });
 
     if (loading) return <div>Loading job postings...</div>;
@@ -62,11 +68,11 @@ function JobBoard() {
     return (
         <div className="container mx-auto p-4">
             <div className="flex items-center gap-4">
-                <Filters
-                    skills={skills}
-                    selectedSkills={selectedSkills}
-                    onSkillChange={handleSkillChange}
-                />
+                {/*<Filters*/}
+                {/*    skills={skills}*/}
+                {/*    selectedSkills={selectedSkills}*/}
+                {/*    onSkillChange={handleSkillChange}*/}
+                {/*/>*/}
                 {/* Search Input */}
                 <div className="relative flex-grow">
                     <Input
