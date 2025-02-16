@@ -10,11 +10,15 @@ function Requests() {
     const [clientRequests, setClientRequests] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-
+    const token = localStorage.getItem("token");
     useEffect(() => {
         const fetchClientRequests = async () => {
             try {
-                const response = await axios.get(`${import.meta.env.VITE_API}/clientRequests`); // Replace with your API URL
+                const response = await axios.get(`${import.meta.env.VITE_API2}/api/prestataire/demandes`, {
+                        headers: {
+                            Authorization: `Bearer ${token}`, // Attach token in Authorization header
+                        },
+                    }) // Replace with your API URL
                 setClientRequests(response.data);
             } catch (err) {
                 console.error("Error fetching client requests:", err);
@@ -28,8 +32,8 @@ function Requests() {
     }, []); // Runs only once after the component mounts
 
     const filteredRequests = clientRequests.filter(request =>
-        request.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        request.description.toLowerCase().includes(searchTerm.toLowerCase())
+        request.service.titre.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        request.service.description.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
     if (loading) return <div>Loading requests...</div>;

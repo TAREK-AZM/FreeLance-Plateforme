@@ -125,5 +125,9 @@ public class OffreService {
         return client.getOffres().stream().map(OffreMapper::toOffreDTO).collect(Collectors.toList());
     }
 
+    public List<OffreDTO> getAllOffres(){
+        return offreRepo.findAll().stream().map(OffreMapper::toOffreDTO).collect(Collectors.toList());
+    }
+
 
 }

@@ -275,6 +275,12 @@ public class PrestataireController {
 
 
 
+    //afficher tous les offres
+    @GetMapping("/Alloffres")
+    public List<OffreDTO> getAllOffre(){
+        return offreService.getAllOffres();
+}
+
 
 
 }

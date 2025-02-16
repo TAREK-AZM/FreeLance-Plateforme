@@ -1,14 +1,14 @@
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 
-function RequestCard({ title, description, status }) {
+function RequestCard({ service, status }) {
     const getBadgeStyle = (status) => {
         switch (status) {
-            case "PENDING":
+            case "EN_COURS":
                 return "bg-yellow-100 text-yellow-700";
-            case "IN PROGRESS":
-                return "bg-blue-100 text-blue-700";
-            case "COMPLETED":
+            case "ANNULEE":
+                return "bg-red-100 text-red-700";
+            case "TERMINEE":
                 return "bg-green-100 text-green-700";
             default:
                 return "bg-gray-100 text-gray-700";
@@ -21,18 +21,18 @@ function RequestCard({ title, description, status }) {
                 <CardHeader>
                     {/* Title and Status */}
                     <div className="flex items-center justify-between">
-                        <CardTitle className="font-semibold text-lg text-gray-900">{title}</CardTitle>
+                        <CardTitle className="font-semibold text-lg text-gray-900">{service.titre}</CardTitle>
                         <Badge
                             className={`py-1 px-3 rounded-full text-sm ${getBadgeStyle(status)}`}
                         >
                             {status}
                         </Badge>
                     </div>
-                    <CardDescription className="text-gray-600 mt-2">{description}</CardDescription>
+                    <CardDescription className="text-gray-600 mt-2">{service.description}</CardDescription>
                 </CardHeader>
 
                 {/* Footer with Hover Effects */}
-                {status === "PENDING" && (
+                {status === "EN_COURS" && (
                     <CardContent className="relative">
                         <div className="flex justify-around items-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                             <div className="relative group">

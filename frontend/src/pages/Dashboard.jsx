@@ -9,13 +9,21 @@ const Dashboard = () => {
     const [clientRequests, setClientRequests] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
-
+    const token = localStorage.getItem("token");
     useEffect(() => {
         const fetchData = async () => {
             try {
                 const [providerRes, servicesRes, clientRequestsRes] = await Promise.all([
-                    axios.get(`${import.meta.env.VITE_API}/providerData`),
-                    axios.get(`${import.meta.env.VITE_API}/services`),
+                 axios.get(`${import.meta.env.VITE_API2}/api/prestataire/profil`, {
+                    headers: {
+                        Authorization: `Bearer ${token}`,
+                    },
+                }),
+                    axios.get(`${import.meta.env.VITE_API2}/api/prestataire/mesServices`, {
+                        headers: {
+                            Authorization: `Bearer ${token}`, // Attach token in Authorization header
+                        },
+                    }),
                     axios.get(`${import.meta.env.VITE_API}/clientRequests`),
                 ]);
 
