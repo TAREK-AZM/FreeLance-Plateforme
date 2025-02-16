@@ -18,16 +18,17 @@ export const useConversationStore = create((set) => ({
     // get just the unread messages of the prestataire
     const authecatedUserId = localStorage.getItem("token");
     set({ unreadMessages: response.data.flatMap(conversation =>
-      conversation.messages.filter(message => message.status != "READ" && message.senderId == authecatedUserId)
-  ) })
+          conversation.messages.filter(message => message.status != "READ" && message.senderId == authecatedUserId)
+      ) })
+      
 
-  console.log("conversations", unreadMessages)
+    // console.log("conversations", unreadMessages)
   },
 
   markConversationAsRead: (conversationId) => {
     set((state) => ({
       conversations: state.conversations.map((conv) =>
-        conv.id === conversationId ? { ...conv, unreadCount: 0 } : conv
+          conv.id === conversationId ? { ...conv, unreadCount: 0 } : conv
       ),
     }));
   },

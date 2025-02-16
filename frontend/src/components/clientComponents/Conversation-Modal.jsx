@@ -6,10 +6,10 @@ import { ScrollArea } from "../ui/scroll-area";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Link, useParams } from "react-router-dom";
 import axios from "axios";
-import { te } from "date-fns/locale";
+// import { te } from "date-fns/locale";
 
 const API_BASE_URL = import.meta.env.VITE_API2;
-
+const role = localStorage.getItem("role");
 export default function ConversationModal() {
   const { conversationId } = useParams();
   const [conversation, setConversation] = useState(null);
@@ -61,6 +61,7 @@ export default function ConversationModal() {
     setMessage("");
 
     try {
+      console.log(tempMessage.content)
       await axios.post(
         `${API_BASE_URL}/api/conversations/${conversationId}/messages`,
       tempMessage.content,
@@ -87,10 +88,10 @@ const sortedMessages = [...(conversation.messages || [])].sort(
   (a, b) => new Date(a.sentAt) - new Date(b.sentAt)
 );
   return (
-    <div className="flex border border-2 border-gray-300 rounded-lg flex-col h-screen">
+    <div className="flex px-14 border border-2 border-gray-300 rounded-lg flex-col h-screen">
       <div className="flex items-center justify-between p-4 bg-blue-50 shadow-sm">
         <div className="flex items-center gap-3">
-          <Link to="/client/dashboard">
+          <Link to={role==="CLIENT"?"/client/dashboard":"/prestataires/"}>
             <Button variant="ghost" size="icon">
               <ArrowLeft className="h-4 w-4" />
             </Button>
@@ -122,8 +123,8 @@ const sortedMessages = [...(conversation.messages || [])].sort(
               key={msg.id} 
               className={`flex ${
                 msg.senderId === conversation.clientId 
-                  ? "justify-end" 
-                  : "justify-start"
+                  ? (role==="CLIENT") ? "justify-end" :"justify-start"
+                  : (role==="CLIENT") ? "justify-start" :"justify-end"
               }`}
             >
               <div

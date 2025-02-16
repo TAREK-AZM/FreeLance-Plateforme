@@ -82,6 +82,7 @@ import { NotificationDropdown } from "./NotificationDropdown";
 import { Link } from "react-router-dom";
 import SideBar from "./SideBar";
 import { useState } from "react";
+import {MessagesPopover} from "./Messages-Proper_P.jsx";
 
 function Header({ name, email, activeTab, setActiveTab }) {
   const [isSidebarOpen, setSidebarOpen] = useState(false);
@@ -115,6 +116,7 @@ function Header({ name, email, activeTab, setActiveTab }) {
                       isSidebarOpen ? "hidden" : "flex"
                   }`}
               >
+                <MessagesPopover />
                 <NotificationDropdown />
                 <div className="flex items-center gap-3">
                   <Link to="/prestataires/profile">
