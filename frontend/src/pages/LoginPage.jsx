@@ -39,7 +39,7 @@ const LoginPage = () => {
             
                 // ✅ Store the access token correctly in localStorage
                 localStorage.setItem("token", response.data.refreshToken);
-                localStorage.setItem("token", response.data.user.id);
+                localStorage.setItem("token", response.data.userId);
 
             
                 console.log("👤 User Role:", response.data.role);
