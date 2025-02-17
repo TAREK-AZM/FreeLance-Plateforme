@@ -1,4 +1,4 @@
-import { se } from "date-fns/locale";
+import { QrCode } from "lucide-react";
 import { create } from "zustand";
 
 const API_BASE_URL = import.meta.env.VITE_API2; // Use environment variable for API base URL
@@ -57,6 +57,10 @@ export const useCategoriesStore = create((set) => ({
     set((state) => ({
       Categories: state.Categories.filter((c) => c.id !== id),
     })),
+}));
+export const useSearchStore = create((set) => ({
+  query: "",
+  setQuery: (newQuery) => set({ query: newQuery }),
 }));
  
 

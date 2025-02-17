@@ -11,85 +11,37 @@ const BASE_URL = import.meta.env.VITE_API2; // Environment variable for API base
 export default function FreelancersHome() {
   const [activeCategory, setActiveCategory] = useState("freelancers"); // Default category
   const [searchQuery, setSearchQuery] = useState("");
+  const [freelancers, setFreelancers] = useState([]);
 
-  // Zustand store
-  const freelancers = useFreelancerStore((state) => state.freelancers);
-  const setFreelancers = useFreelancerStore((state) => state.setFreelancers);
-
-  // Fetch freelancers from API
   useEffect(() => {
-    const fetchFreelancers = async () => {
+    const FetchFreelancers = async () => {
       try {
-        // this is fake data untill get it from API
-        const freelancersFake = [ 
-          {
-          name: "Francesco",
-          role: "Mobile App Maintenance and Optimization Specialist with Expertise in Cross-Platform Development, Bug Fixing, and Performance Enhancement for E-commerce Applications",
-          rating: 5.0,
-          reviews: 1,
-          projects: 3,
-          rate: 26.0,
-          skills: ["E-commerce", "Shopify", "UX/UI"],
-          image: "https://demo.yo-gigs.com/image/show/4/7/MEDIUM",
-        },
-          {
-          name: "Francesco",
-          role: "Mobile App Maintenance and Optimization Specialist with Expertise in Cross-Platform Development, Bug Fixing, and Performance Enhancement for E-commerce Applications",
-          rating: 5.0,
-          reviews: 1,
-          projects: 3,
-          rate: 26.0,
-          skills: ["E-commerce", "Shopify", "UX/UI"],
-          image: "https://demo.yo-gigs.com/image/show/4/7/MEDIUM",
-        },
-          {
-          name: "Francesco",
-          role: "Mobile App Maintenance and Optimization Specialist with Expertise in Cross-Platform Development, Bug Fixing, and Performance Enhancement for E-commerce Applications",
-          rating: 5.0,
-          reviews: 1,
-          projects: 3,
-          rate: 26.0,
-          skills: ["E-commerce", "Shopify", "UX/UI"],
-          image: "https://demo.yo-gigs.com/image/show/4/7/MEDIUM",
-        },
-      ]
-        setFreelancers(freelancersFake); // Update Zustand store
+        const token = localStorage.getItem("token"); // Get the token
+        console.log("🔑🔑🔑🔑 Using Token:🔑🔑", token);
 
-        const token = localStorage.getItem("token"); // Retrieve token
-        const response = await axios.get(`${BASE_URL}/freelancers`, {
+        const response = await axios.get(`${BASE_URL}/api/prestataire/all`, {
           headers: {
-            Authorization: `Bearer ${token}`, // Attach token for authentication
+            Authorization: `${token}`, // Attach token in Authorization header
           },
         });
-       
-        console.log("✅ Fetched Freelancers:", response.data);
 
-        if (response.status === 200) {
-          // const freelancersFake = [ {
-          //   name: "Francesco",
-          //   role: "Mobile App Maintenance and Optimization Specialist with Expertise in Cross-Platform Development, Bug Fixing, and Performance Enhancement for E-commerce Applications",
-          //   rating: 5.0,
-          //   reviews: 1,
-          //   projects: 3,
-          //   rate: 26.0,
-          //   skills: ["E-commerce", "Shopify", "UX/UI"],
-          //   image: "https://demo.yo-gigs.com/image/show/4/7/MEDIUM",
-          // },]
-          // setFreelancers(freelancersFake); // Update Zustand store
-        }
+        console.log("✅ freelancers fetched:", response.data);
+        setFreelancers(response.data); // Store services in Zustand
       } catch (error) {
-        console.error("❌ Error fetching freelancers:", error);
+        console.error("❌ Error fetching services:", error);
       }
     };
 
-    fetchFreelancers();
-  }, [setFreelancers]); // Run once when component mounts
+    FetchFreelancers(); // Call the fetch function when component mounts
+  }, []);
+
 
   // Filter freelancers based on search query
-  const filteredFreelancers = freelancers.filter((freelancer) =>
-    freelancer.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    freelancer.role.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  // const filteredFreelancers = freelancers.filter((freelancer) =>
+  //   freelancer.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+  //   freelancer.role.toLowerCase().includes(searchQuery.toLowerCase())
+  // );
+
 
   return (
     <div className="min-h-screen bg-white">
@@ -103,7 +55,7 @@ export default function FreelancersHome() {
         />
 
         {/* Dynamic Section Rendering */}
-        {activeCategory === "freelancers" && <FreelancerGrid freelancers={filteredFreelancers} />}
+        {activeCategory === "freelancers" && <FreelancerGrid freelancers={freelancers} />}
         
       </main>
       <Footer />

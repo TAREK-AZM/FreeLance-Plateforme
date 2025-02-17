@@ -1,18 +1,14 @@
-
+import { BriefcaseBusiness } from 'lucide-react';
 import { useState, useEffect } from "react";
 import { Star } from "lucide-react";
 import { Card, CardContent } from "../ui/card";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious, } from "../ui/carousel";
 import axios from "axios";
 import { useFreelancerStore } from "../../store/store";
+import { Button } from "../ui/button";
+import { Eye } from "lucide-react";
 
-
-const Base_URL = import.meta.env.VITE_API2; // API Base URL from environment variables
-
-
-
-
-
+const BASE_URL = import.meta.env.VITE_API2; // API Base URL from environment variables
 
 export default function Freelancers() {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -20,100 +16,25 @@ export default function Freelancers() {
   const freelancers = useFreelancerStore((state) => state.freelancers);
 
   useEffect(() => {
-    const fetchFreelancers = async () => {
+    const FetchFreelancers = async () => {
       try {
-        const freelancers = [
-          {
-            name: "Francesco",
-            role: "Mobile App Maintenance",
-            rating: 5.0,
-            reviews: 1,
-            projects: 3,
-            rate: 26.0,
-            image: "https://demo.yo-gigs.com/image/show/4/7/MEDIUM",
-          },
-          {
-            name: "Jessica",
-            role: "Video SEO Expert",
-            rating: 4.0,
-            reviews: 2,
-            projects: 2,
-            rate: 32.0,
-            image: "https://demo.yo-gigs.com/image/show/4/8/MEDIUM",
-          },
-          {
-            name: "Mamie",
-            role: "Shopify Designer",
-            rating: 4.0,
-            reviews: 1,
-            projects: 1,
-            rate: 37.0,
-            image: "https://demo.yo-gigs.com/image/show/4/42/MEDIUM",
-          },
-          {
-            name: "Alison",
-            role: "WordPress Developer",
-            rating: 3.0,
-            reviews: 2,
-            projects: 2,
-            rate: 35.0,
-            image: "https://demo.yo-gigs.com/image/show/4/1/MEDIUM",
-          },
-          {
-            name: "Cameron",
-            role: "Cloud Security Engineer",
-            rating: 3.5,
-            reviews: 2,
-            projects: 2,
-            rate: 34.0,
-            image: "https://demo.yo-gigs.com/image/show/4/19/MEDIUM",
-          },
-          {
-            name: "Cameron",
-            role: "Cloud Security Engineer",
-            rating: 3.5,
-            reviews: 2,
-            projects: 2,
-            rate: 34.0,
-            image: "https://demo.yo-gigs.com/image/show/4/19/MEDIUM",
-          },
-          {
-            name: "Cameron",
-            role: "Cloud Security Engineer",
-            rating: 3.5,
-            reviews: 2,
-            projects: 2,
-            rate: 34.0,
-            image: "https://demo.yo-gigs.com/image/show/4/19/MEDIUM",
-          },
-          {
-            name: "Cameron",
-            role: "Cloud Security Engineer",
-            rating: 3.5,
-            reviews: 2,
-            projects: 2,
-            rate: 34.0,
-            image: "https://demo.yo-gigs.com/image/show/4/19/MEDIUM",
-          },
-        ];
-        setFreelancers(freelancers); // Update Zustand store
         const token = localStorage.getItem("token"); // Get the token
         console.log("🔑🔑🔑🔑 Using Token:🔑🔑", token);
 
-        const response = await axios.get(`${Base_URL}/api/client/freelancers`, {
+        const response = await axios.get(`${BASE_URL}/api/prestataire/all`, {
           headers: {
-            Authorization: `${token}`, // Attach token in Authorization header
+            Authorization: `Bearer ${token}`, // Attach token in Authorization header
           },
         });
 
-        console.log("✅ Freelancers fetched:", response.data);
-        setFreelancers(response.data); // Store freelancers in Zustand
+        console.log("✅ freelancers fetched:", response.data);
+        setFreelancers(response.data); // Store services in Zustand
       } catch (error) {
-        console.error("❌ Error fetching freelancers:", error);
+        console.error("❌ Error fetching services:", error);
       }
     };
 
-    fetchFreelancers(); // Call the fetch function when component mounts
+    FetchFreelancers(); // Call the fetch function when component mounts
   }, [currentSlide]);
 
   return (
@@ -141,12 +62,12 @@ export default function Freelancers() {
 
               <CarouselItem key={index} className="md:basis-1/6 lg:basis-1/6">
                 <div className="p-1">
-                  <Card className="bg-white text-gray-900">
-                    <CardContent className="flex flex-col p-6">
+                  <Card className="bg-white text-gray-900 h-[450px]">
+                    <CardContent className=" relative flex justify-end flex-col p-6 w-full">
                       <div className="relative mb-4 aspect-[4/3]">
                         <img
-                          src={freelancer.image || "/placeholder.svg"}
-                          alt={freelancer.name}
+                          src={BASE_URL + "/api" + freelancer.imageUrl || "/placeholder.svg"}
+                          alt={freelancer.prenom}
                           className="w-full h-full object-cover rounded-full"
                         />
                         <div className="absolute  right-0 bg-white rounded-full p-1 text-white z-30">
@@ -159,41 +80,41 @@ export default function Freelancers() {
                       </div>
 
                       <h3 className="font-semibold text-lg mb-1">
-                        {freelancer.name}
+                        {freelancer.nom + " " + freelancer.prenom}
                       </h3>
                       <p className="text-sm text-gray-600 mb-2">
-                        {freelancer.role}
+                        {freelancer?.description?.slice(0, 100)}
                       </p>
 
                       <div className="flex items-center gap-1 mb-2">
                         <Star className="h-4 w-4 text-yellow-400 fill-current" />
-                        <span className="text-sm">{freelancer.rating}/5</span>
-                        <span className="text-sm text-gray-500">
+                        {/* <span className="text-sm">{freelancer.rating}/5</span> */}
+                        {/* <span className="text-sm text-gray-500">
                           ({freelancer.reviews} Review
                           {freelancer.reviews !== 1 ? "s" : ""})
-                        </span>
+                        </span> */}
                       </div>
 
-                      <div className="flex items-center justify-between mt-auto">
+                      <div className="  flex items-center justify-between mt-auto">
                         <div className="flex items-center gap-1">
-                          <svg viewBox="0 0 24 24" className="h-4 w-4 text-gray-400">
-                            <path
-                              fill="currentColor"
-                              d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 14h-2v-2h2v2zm0-4h-2V7h2v6z"
-                            />
-                          </svg>
-                          <span className="text-sm">{freelancer.projects}</span>
+                       
+
+                          {/* <span className="text-sm">{freelancer.projects}</span> */}
                         </div>
-                        <div className="text-right">
-                          <span className="text-sm text-gray-500">
-                            Starting at
-                          </span>
+                        {/* <div className="text-right">
+                         
                           <p className="font-semibold">
                             ${freelancer.rate.toFixed(2)}
-                          </p>
-                        </div>
+                          </p> 
+                        </div> */}
+                         <Button className="bg-[#12AE65] hover:bg-[#0F9A59] text-white w-full sm:w-auto">
+                            View Details
+                            <Eye className="ml-2 h-4 w-4" />
+                          </Button>
                       </div>
+
                     </CardContent>
+
                   </Card>
                 </div>
               </CarouselItem>

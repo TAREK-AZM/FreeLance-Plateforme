@@ -1,7 +1,7 @@
 import { Heart } from "lucide-react";
 import {Link} from "react-router-dom";
 
-
+const BASE_URL = import.meta.env.VITE_API2; // Environment variable for API base URL
 
 export default function FreelancerCard({ freelancer, isListView }) {
   return (
@@ -16,10 +16,10 @@ export default function FreelancerCard({ freelancer, isListView }) {
       </button>
 
       {/* Profile Image */}
-      <div className="relative h-24 w-24 flex-shrink-0">
+      <div className="relative h-24 w-24 flex-shrink-0 mb-12">
         <img
-          src={freelancer.image || "/placeholder.svg"}
-          alt={freelancer.name}
+          src={BASE_URL+"/api"+freelancer.imageUrl || "/placeholder.svg"}
+          alt={freelancer.nom}
           fill
           className="rounded-full object-cover"
         />
@@ -27,22 +27,22 @@ export default function FreelancerCard({ freelancer, isListView }) {
 
       {/* Freelancer Info */}
       <div className="flex-1">
-        <h3 className="font-semibold text-lg">{freelancer.name}</h3>
-        <p className="text-sm text-gray-600">{freelancer.role}</p>
+        <h3 className="font-semibold text-lg">{freelancer.prenom}</h3>
+        <p className="text-sm text-gray-600">{freelancer.description}</p>
 
         <div className="mt-1 flex items-center gap-2">
-          <span className="text-sm font-medium">{freelancer.rating.toFixed(1)}/5</span>
-          <span className="text-sm text-gray-500">({freelancer.reviews})</span>
+          {/* <span className="text-sm font-medium">{freelancer.rating.toFixed(1)}/5</span> */}
+          {/* <span className="text-sm text-gray-500">({freelancer.reviews})</span> */}
         </div>
 
         {/* Description (Only in List View) */}
-        {isListView && <p className="mt-2 text-sm text-gray-600">{freelancer.description}</p>}
+        {isListView && <p className="mt-2 text-sm text-gray-600">{freelancer?.description}</p>}
 
         {/* Skills */}
         <div className="mt-3 flex flex-wrap gap-2">
-          {freelancer.skills.slice(0, 4).map((skill) => (
-            <span key={skill} className="rounded-full bg-green-100 px-3 py-1 text-xs text-green-700">
-              {skill}
+          {freelancer.competences.slice(0, 4).map((c) => (
+            <span key={c.id} className="rounded-full bg-green-100 px-3 py-1 text-xs text-green-700">
+              {c.name}
             </span>
           ))}
         </div>

@@ -33,16 +33,14 @@ public class PrestataireService {
         // 🔍 Vérifier si le prestataire existe
         Prestataire prestataire = prestataireRepo.findById(idPrest)
                 .orElseThrow(() -> new RuntimeException("Prestataire non trouvé avec l'ID: " + idPrest));
-
         // 🛠️ Mettre à jour les champs
-        prestataire.setNom(prestataireUpdated.getNom());
-        prestataire.setPrenom(prestataireUpdated.getPrenom());
-        prestataire.setDescription(prestataireUpdated.getDescription());
-        prestataire.setEmail(prestataireUpdated.getEmail());
-        prestataire.setTelephone(prestataireUpdated.getTelephone());
-        prestataire.setAdresse(prestataireUpdated.getAdresse());
-        prestataire.setVille(prestataireUpdated.getVille());
-
+        if (prestataireUpdated.getNom() != null) prestataire.setNom(prestataireUpdated.getNom());
+        if (prestataireUpdated.getPrenom() != null) prestataire.setPrenom(prestataireUpdated.getPrenom());
+        if (prestataireUpdated.getDescription() != null) prestataire.setDescription(prestataireUpdated.getDescription());
+        if (prestataireUpdated.getEmail() != null) prestataire.setEmail(prestataireUpdated.getEmail());
+        if (prestataireUpdated.getTelephone() != null) prestataire.setTelephone(prestataireUpdated.getTelephone());
+        if (prestataireUpdated.getAdresse() != null) prestataire.setAdresse(prestataireUpdated.getAdresse());
+        if (prestataireUpdated.getVille() != null) prestataire.setVille(prestataireUpdated.getVille());
         // 📂 Gérer l'upload d'image
         if (imageFile != null && !imageFile.isEmpty()) {
             String UPLOAD_DIR = "uploads/images/prestataires/";

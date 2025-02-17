@@ -10,6 +10,9 @@ export default function FreelancerGrid({ freelancers }) {
   const [isGridView, setIsGridView] = useState(true); // Default: Grid View
   const itemsPerPage = 6;
   const totalPages = Math.ceil(freelancers.length / itemsPerPage);
+ 
+
+
 
   const currentFreelancers = freelancers.slice(
     (currentPage - 1) * itemsPerPage,

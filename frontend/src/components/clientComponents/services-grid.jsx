@@ -1,27 +1,94 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Grid, List, ArrowLeft, ArrowRight, ArrowUpDown } from "lucide-react";
 import cn from "classnames";
 import ServiceCard from "./ServiceCard";
-import { useServiceStore } from "../../store/store";
+import { useServiceStore ,useSearchStore} from "../../store/store";
+import axios from "axios";
 
-// Define the Service Type
-
-
-// Fake Data
 
 
 export default function ServiceGrid() {
-  const services = useServiceStore((state) => state.services);
+
+  const {services, setServices} = useServiceStore();
   const [currentPage, setCurrentPage] = useState(1);
   const [isGridView, setIsGridView] = useState(true);
   const itemsPerPage = 12;
   const totalPages = Math.ceil(services.length / itemsPerPage);
 
+
+/// Ai will overides the existing data
+// Define the Service Type
+const { query } = useSearchStore(); // <-- get the global search query
+
+
+// useEffect(() => {
+// if(query.length > 0){
+//   const fetchAndFilter = async () => {
+
+//     try {
+//       const token = localStorage.getItem("token"); // Get the token
+//       console.log("🔑🔑🔑🔑 Using Token:🔑🔑", token);
+
+//       const response1 = await axios.post(`${import.meta.env.VITE_API2}/api/ai/search`,
+//         {
+//           "prompt": query,
+//         }
+//         , {
+//         headers: {
+//           Authorization: `Bearer ${token}`, // Attach token in Authorization header
+//         },
+//       });
+
+//       if (response1.status === 200) {
+//         console.log("✅✅✅ services fetched By the AI ✅✅✅:", response1.data);
+//         setServices(response1.data); // Store services in Zustand
+//       }
+      
+//     }catch (error) {
+//       console.error(error);
+//       }
+//   };
+// }
+//   fetchAndFilter();
+// }, [query,setServices]);
+
+useEffect(() => {
+  // Only run AI search when query is not empty
+  if (query) {
+    const fetchAndFilter = async () => {
+      try {
+        const token = localStorage.getItem("token"); // Get the token
+        console.log("🔑🔑🔑🔑 Using Token:🔑🔑", token);
+
+        // AI search
+        const response1 = await axios.post(
+          `${import.meta.env.VITE_API2}/api/ai/search`,
+          { "prompt": query },
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+
+        if (response1.status === 200) {
+          console.log("✅✅✅ services fetched by AI ✅✅✅:", response1.data);
+          
+          // Replace existing services with the AI results
+          setServices(response1.data);
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchAndFilter();
+  }
+}, [query, setServices]); // Depend on query to trigger AI search
+
   const currentServices = services.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
+
+
 
   return (
     <div className="px-4 lg:px-24 py-8 md:px-6 lg:px-8">

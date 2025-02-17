@@ -36,7 +36,7 @@ const setServices = useServiceStore((state) => state.setServices);
     };
 
     fetchServices(); // Call the fetch function when component mounts
-  }, [setServices]);
+  }, []);
 
 
   // Filter results based on search query

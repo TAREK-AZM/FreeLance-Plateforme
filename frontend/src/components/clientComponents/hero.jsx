@@ -1,15 +1,16 @@
 
 import { useState, useEffect } from "react";
 import { Search, ChevronDown } from "lucide-react";
-
+import {useNavigate} from "react-router-dom";
 const slides = [
     "https://sjc.microlink.io/vdt8OfYm3I9slvrKcgwh-gtfQlG2ls4Ez_lkFwnUsolbZLPktFh1qVawpQ7qE3rr6ILObvs2JQJIL3M3tGHlUg.jpeg",
     "https://demo.yo-gigs.com/image/show/21/6/LARGE?t=1711602501",
     "https://demo.yo-gigs.com/image/show/21/10/LARGE?t=1712226712",
 ];
 
-export default function Hero() {
+export default function Hero({ searchQuery, setSearchQuery }) {
     const [currentSlide, setCurrentSlide] = useState(0);
+    const navigate = useNavigate(); // React Router's navigate function
 
     useEffect(() => {
         const timer = setInterval(() => {
@@ -49,19 +50,27 @@ export default function Hero() {
                         {/* Search Bar */}
                         <div className="flex items-center bg-white rounded-lg shadow-sm overflow-hidden mb-4">
                             <div className="relative">
-                                <select className="appearance-none bg-transparent border-r border-gray-300 py-3 pl-4 pr-10 text-gray-700">
+                                {/* <select className="appearance-none bg-transparent border-r border-gray-300 py-3 pl-4 pr-10 text-gray-700">
                                     <option>Freelancers</option>
-                                </select>
+                                </select> */}
                                 <ChevronDown className="absolute right-2 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400 pointer-events-none" />
                             </div>
                             <input
-                                type="text"
-                                placeholder="Search..."
-                                className="flex-grow py-3 px-4 focus:outline-none"
-                            />
-                            <button className="flex items-center justify-center gap-2 bg-[#12AE65] rounded-lg p-3 text-white hover:bg-[#0d8d52] transition-colors">
-                                <Search className="h-5 w-5" /> Search
-                            </button>
+                type="text"
+                placeholder="Ask AI for Searching ..."
+                className="flex-grow py-4 px-4 focus:outline-none rounded-l-full"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)} // Update the query in state
+              />
+              <button
+                className="flex items-center justify-center gap-2 bg-[#12AE65] rounded-lg p-3 text-white hover:bg-[#0d8d52] transition-colors"
+                onClick={() => {
+                  setSearchQuery(searchQuery);  // Set search query to store (Zustand or state)
+                  navigate("/client/services");  // Navigate to services page with the query
+                }}
+              >
+                <Search className="h-5 w-5" /> Search With AI
+              </button>
                         </div>
 
                         {/* Popular Jobs */}

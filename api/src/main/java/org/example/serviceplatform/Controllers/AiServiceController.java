@@ -3,7 +3,6 @@ package org.example.serviceplatform.Controllers;
 import org.example.serviceplatform.DTO.ServiceClientDTO;
 import org.example.serviceplatform.Repositories.ServiceRepo;
 import org.example.serviceplatform.Services.api.AdvancedSearchService;
-import org.example.serviceplatform.Services.api.DynamicKeywordService;
 import org.example.serviceplatform.Services.api.GroqService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -21,8 +20,7 @@ public class AiServiceController {
 
     @Autowired
     private ServiceRepo serviceRepo;
-    @Autowired
-    private DynamicKeywordService dynamicKeywordService;
+
     @Autowired
      private AdvancedSearchService advancedSearchService;
 

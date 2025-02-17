@@ -6,8 +6,11 @@ import { useAuthStore } from "../../store/store"
 import { Login } from "./login"
 import { Register } from "./register"
 import { Link } from "react-router-dom";
+import { MessagesPopover } from "./Messages-Proper" // ✅ Import the Messages component
+import { PostJobForm } from "./PostJobForm"
 
 export default function Header() {
+  const [showPostJobForm, setShowPostJobForm] = useState(false)
   const { isAuthenticated } = useAuthStore()
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [showLogin, setShowLogin] = useState(false)
@@ -34,7 +37,7 @@ export default function Header() {
       <div className="container mx-auto flex h-16 items-center justify-between px-4">
         <div className="flex items-center gap-6">
           <Link to="/" className="flex items-center gap-2">
-            
+
             <span className="text-xl font-bold text-[#12AE65]">Yo!Gigs</span>
           </Link>
           <nav className="hidden md:flex items-center gap-6">
@@ -48,7 +51,7 @@ export default function Header() {
             <Link to="/client/services" className="text-gray-700 hover:text-gray-900">
               Find service package
             </Link>
-            
+
           </nav>
         </div>
 
@@ -56,7 +59,7 @@ export default function Header() {
           {isAuthenticated ? (
             <>
               <button className="relative p-2 text-gray-700 hover:text-gray-900">
-                <MessageSquare className="h-5 w-5" />
+                <MessagesPopover />
               </button>
               <button className="relative p-2 text-gray-700 hover:text-gray-900">
                 <Bell className="h-5 w-5" />
@@ -123,7 +126,7 @@ export default function Header() {
             <>
               <Link to={"/login"}>
                 Login/Sign-up
-            </Link>
+              </Link>
               <Button
                 variant="outline"
                 className="hidden sm:inline-flex bg-[#E7F7EF] text-[#12AE65] border-[#12AE65] hover:bg-[#d5f0e3]"
@@ -132,7 +135,7 @@ export default function Header() {
               </Button>
             </>
           )}
-          <Button className="hidden sm:inline-flex bg-[#12AE65] hover:bg-[#0d8d52]">
+          <Button onClick={() => setShowPostJobForm(true)} className="hidden sm:inline-flex bg-[#12AE65] hover:bg-[#0d8d52]">
             <Plus className="mr-2 h-4 w-4" /> Post a job
           </Button>
           <button
@@ -159,7 +162,7 @@ export default function Header() {
             <Link to="/client/services" className="text-gray-700">
               Find service package
             </Link>
-            
+
             <hr className="my-2" />
             {isAuthenticated ? (
               <>
@@ -192,9 +195,9 @@ export default function Header() {
             ) : (
 
 
-                <Link to={"/login"}>
+              <Link to={"/login"}>
                 Login/Sign-up
-                </Link>
+              </Link>
 
 
             )}
@@ -231,6 +234,10 @@ export default function Header() {
           }}
         />
       )}
+
+
+      {showPostJobForm && <PostJobForm onClose={() => setShowPostJobForm(false)} />}
+
     </header>
   )
 }

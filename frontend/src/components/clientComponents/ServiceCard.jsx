@@ -7,7 +7,7 @@ export default function ServiceCard({ service }) {
     <div className="relative rounded-lg border bg-white shadow-sm transition-shadow hover:shadow-md">
       {/* Service Image */}
       <div className="relative w-full h-56 overflow-hidden rounded-t-lg">
-        <img src={BASE_URL+service.image} alt={service.titre} layout="fill" className="object-cover" />
+        <img src={BASE_URL+"/api"+service.image} alt={service.titre} layout="fill" className="object-cover" />
       </div>
 
       {/* Service Details */}
@@ -19,7 +19,7 @@ export default function ServiceCard({ service }) {
         <div className="text-green-600 font-bold text-lg">${service.prix}</div>
 
         {/* View Details Button */}
-        <Link to={`/client/service/${service.id}/serviceDetails`}>
+        <Link to={`/client/services/${service.id}`}>
         <button className="bg-green-600 text-white rounded-full px-4 py-2 w-full mt-2">
           View details
         </button>
