@@ -3,14 +3,15 @@ import { create } from "zustand";
 
 const API_BASE_URL = import.meta.env.VITE_API2; // Use environment variable for API base URL
 
-
+const isAuthenticated = localStorage.getItem("isAuthenticated");
 export const useAuthStore = create((set) => ({
-  isAuthenticated: true,
+  isAuthenticated: isAuthenticated,
   user: {
-    name: "Tarek",
-    email: "alex@yogigs.com",
+    name: "Tarek5",
+    email: "tarek5@gmail.com",
     image: "https://demo.yo-gigs.com/image/show/4/7/LARGE",
   },
+  setAuthentication: (isAuthenticated) => set({ isAuthenticated }),
   setUser: (user) => set({ user }),
   login: (userData) => set({ isAuthenticated: true, user: userData }),
   logout: () => set({ isAuthenticated: false, user: null }),

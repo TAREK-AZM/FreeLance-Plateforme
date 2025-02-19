@@ -52,8 +52,10 @@ const FormModal = ({ isVisible, onClose, onSubmit, formData, isEdit }) => {
         try {
             const selectedCategory = categories.find(cat => cat.id == formValues.category);
             const formDataToSend = new FormData();
+
             formDataToSend.append("file", formValues.image);
             formDataToSend.append("service", JSON.stringify({
+                id:formValues.id,
                 titre: formValues.titre,
                 description: formValues.description,
                 prix: parseFloat(formValues.prix),

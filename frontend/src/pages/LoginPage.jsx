@@ -7,10 +7,12 @@ import { Label } from "@/components/ui/label";
 import { Link } from "react-router-dom";
 import VantaBackground from "@/components/VantaBackground";
 import AuthContext from "../context/AuthContext"; // Import Auth Context
+import {useAuthStore} from "../store/store.js";
 
 const API_BASE_URL = import.meta.env.VITE_API2; // Use environment variable for API base URL
 
 const LoginPage = () => {
+    const {setAuthentication} = useAuthStore();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState(null);
@@ -39,7 +41,7 @@ const LoginPage = () => {
             
                 // ✅ Store the access token correctly in localStorage
                 localStorage.setItem("token", response.data.refreshToken);
-                localStorage.setItem("token", response.data.user.id);
+                localStorage.setItem("id", response.data.userId);
 
             
                 console.log("👤 User Role:", response.data.role);
@@ -50,6 +52,8 @@ const LoginPage = () => {
                 if (response.data.role === "PRESTATAIRE") {
                     navigate("/prestataires");
                 } else {
+                    localStorage.setItem("isAuthenticated", true);
+                    setAuthentication(true);
                     navigate("/");
                 }
             } else {

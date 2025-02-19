@@ -5,11 +5,23 @@ import { Button } from "../ui/button"
 import { useAuthStore } from "../../store/store"
 import { Login } from "./login"
 import { Register } from "./register"
-import { Link } from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import { MessagesPopover } from "./Messages-Proper" // ✅ Import the Messages component
 import { PostJobForm } from "./PostJobForm"
+import { useContext, useCallback } from "react";
+import AuthContext from "../../context/AuthContext";
+
+
+
 
 export default function Header() {
+  const { logout } = useContext(AuthContext);
+  const navigate = useNavigate();
+
+  const handleLogout = useCallback(() => {
+    logout(); // Clears authentication state
+    navigate("/login"); // Redirects to login page
+  }, [logout, navigate]);
   const [showPostJobForm, setShowPostJobForm] = useState(false)
   const { isAuthenticated } = useAuthStore()
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
@@ -27,9 +39,9 @@ export default function Header() {
   }
 
   const userMenuItems = [
-    { icon: LayoutDashboard, label: "Dashboard", href: "/dashboard" },
-    { icon: Wallet, label: "My wallet", href: "/wallet" },
-    { icon: User, label: "My account", href: "/account" },
+    { icon: LayoutDashboard, label: "Dashboard", href: "/client/dashboard" },
+    // { icon: Wallet, label: "My wallet", href: "/wallet" },
+    // { icon: User, label: "My account", href: "/account" },
   ]
 
   return (
@@ -38,7 +50,7 @@ export default function Header() {
         <div className="flex items-center gap-6">
           <Link to="/" className="flex items-center gap-2">
 
-            <span className="text-xl font-bold text-[#12AE65]">Yo!Gigs</span>
+            <span className="text-xl font-bold text-[#12AE65]">FreeLance</span>
           </Link>
           <nav className="hidden md:flex items-center gap-6">
             <button className="flex items-center gap-2 text-gray-700 hover:text-gray-900">Categories</button>
@@ -62,10 +74,10 @@ export default function Header() {
                 <MessagesPopover />
               </button>
               <button className="relative p-2 text-gray-700 hover:text-gray-900">
-                <Bell className="h-5 w-5" />
-                <span className="absolute right-1 top-1 flex h-4 w-4 items-center justify-center rounded-full bg-orange-500 text-[10px] text-white">
-                  54
-                </span>
+                {/*<Bell className="h-5 w-5" />*/}
+                {/*<span className="absolute right-1 top-1 flex h-4 w-4 items-center justify-center rounded-full bg-orange-500 text-[10px] text-white">*/}
+                {/*  54*/}
+                {/*</span>*/}
               </button>
               <div className="relative hidden sm:block">
                 <button
@@ -114,8 +126,13 @@ export default function Header() {
                           /* handle logout */
                         }}
                       >
+                        <Button
+                            onClick={handleLogout}
+                            className="flex items-center px-4 py-3 text-red-500 hover:text-red-400 transition-colors w-full"
+                        >
                         <LogOut className="h-4 w-4" />
                         Log out
+                          </Button>
                       </button>
                     </div>
                   </div>
@@ -123,42 +140,43 @@ export default function Header() {
               </div>
             </>
           ) : (
-            <>
+              <>
               <Link to={"/login"}>
                 Login/Sign-up
               </Link>
-              <Button
-                variant="outline"
-                className="hidden sm:inline-flex bg-[#E7F7EF] text-[#12AE65] border-[#12AE65] hover:bg-[#d5f0e3]"
-              >
-                Become a freelancer
+                <Button
+                    variant="outline"
+                    className="hidden sm:inline-flex bg-[#E7F7EF] text-[#12AE65] border-[#12AE65] hover:bg-[#d5f0e3]"
+                >
+                  Become a freelancer
+                </Button>
+              </>
+              )}
+              <Button onClick={() => setShowPostJobForm(true)}
+                      className="hidden sm:inline-flex bg-[#12AE65] hover:bg-[#0d8d52]">
+                <Plus className="mr-2 h-4 w-4"/> Post a job
               </Button>
-            </>
-          )}
-          <Button onClick={() => setShowPostJobForm(true)} className="hidden sm:inline-flex bg-[#12AE65] hover:bg-[#0d8d52]">
-            <Plus className="mr-2 h-4 w-4" /> Post a job
-          </Button>
-          <button
-            className="inline-flex items-center justify-center p-2 rounded-md text-gray-700 sm:hidden"
-            onClick={toggleMobileMenu}
-            aria-label="Toggle navigation"
-          >
-            {isMobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-          </button>
-        </div>
-      </div>
+              <button
+                  className="inline-flex items-center justify-center p-2 rounded-md text-gray-700 sm:hidden"
+                  onClick={toggleMobileMenu}
+                  aria-label="Toggle navigation"
+              >
+                {isMobileMenuOpen ? <X className="h-6 w-6"/> : <Menu className="h-6 w-6"/>}
+              </button>
+              </div>
+            </div>
 
-      {/* Mobile Menu */}
-      {isMobileMenuOpen && (
-        <div className="border-t bg-white px-4 py-3 md:hidden">
-          <nav className="flex flex-col gap-3">
-            <button className="flex items-center gap-2 text-gray-700">Categories</button>
+          {/* Mobile Menu */}
+          {isMobileMenuOpen && (
+              <div className="border-t bg-white px-4 py-3 md:hidden">
+                <nav className="flex flex-col gap-3">
+                  {/*<button className="flex items-center gap-2 text-gray-700">Categories</button>*/}
             <Link to="client/freelancers" className="text-gray-700">
               Find a freelancer
             </Link>
-            <Link to="/client/jobs" className="text-gray-700">
-              Find jobs
-            </Link>
+            {/*<Link to="/client/jobs" className="text-gray-700">*/}
+            {/*  Find jobs*/}
+            {/*</Link>*/}
             <Link to="/client/services" className="text-gray-700">
               Find service package
             </Link>
@@ -188,8 +206,13 @@ export default function Header() {
                     /* handle logout */
                   }}
                 >
+                  <Button
+                      onClick={handleLogout}
+                      className="flex items-center px-4 py-3 text-red-500 hover:text-red-400 transition-colors w-full"
+                  >
                   <LogOut className="h-4 w-4" />
                   Log out
+                  </Button>
                 </button>
               </>
             ) : (

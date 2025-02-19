@@ -70,7 +70,7 @@ function RequestCard({ id, service, status, onUpdate }) {
                 </CardHeader>
 
                 {/* Accept/Decline Buttons (Only if status is EN_COURS) */}
-                {currentStatus === "EN_COURS" && (
+                {currentStatus === "EN_ATTENTE" && (
                     <CardContent className="relative">
                         <div className="flex justify-around items-center opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                             <div className="relative group">
