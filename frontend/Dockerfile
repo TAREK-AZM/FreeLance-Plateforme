@@ -1,39 +1,24 @@
-# =========================
-# 1) Build Stage
-# =========================
-FROM node:18-alpine AS build
-
-# Set the working directory in the container
+# Development stage (with live reload)
+FROM node:18-alpine AS dev
 WORKDIR /app
-
-# Copy package.json and package-lock.json (or yarn.lock) first
-COPY package*.json ./
-# (If using yarn, COPY package.json yarn.lock ./)
-
-# Install dependencies
+COPY package.json .
 RUN npm install
-# (If using yarn, RUN yarn install)
-
-# Copy the rest of your source code
 COPY . .
+CMD ["npm", "run", "dev"]
 
-# Build the app for production (Vite outputs to `dist` by default)
+# Production build
+FROM node:18-alpine AS build
+WORKDIR /app
+COPY package.json .
+RUN npm install
+COPY . .
 RUN npm run build
 
-# =========================
-# 2) Production Stage
-# =========================
-FROM nginx:stable-alpine
-
-# Remove existing static files (just to be safe)
-RUN rm -rf /usr/share/nginx/html/*
-
-# Copy the Vite production bundle from the `build` stage
-# Note: Vite’s default output folder is `dist`
-COPY --from=build /app/dist /usr/share/nginx/html
-
-# Expose port 80 on the container
+# Production server
+FROM node:18-alpine
+WORKDIR /app
+COPY --from=build /app/dist ./dist
+COPY --from=build /app/node_modules ./node_modules
+COPY --from=build /app/package.json .
 EXPOSE 3000
-
-# Start Nginx in the foreground
-CMD ["nginx", "-g", "daemon off;"]
+CMD ["npm", "run", "preview"]

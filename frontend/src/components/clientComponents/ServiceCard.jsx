@@ -7,7 +7,7 @@ export default function ServiceCard({ service }) {
     <div className="relative rounded-lg border bg-white shadow-sm transition-shadow hover:shadow-md">
       {/* Service Image */}
       <div className="relative w-full h-56 overflow-hidden rounded-t-lg">
-        <img src={BASE_URL+"/api"+service.image} alt={service.titre} layout="fill" className="object-cover" />
+        <img src={BASE_URL+"/api"+service?.image} alt={service.titre} layout="fill" className="w-full h-full object-cover" />
       </div>
 
       {/* Service Details */}

@@ -1,72 +1,233 @@
-# version: "3.9"
-# services:
-#   postgres_db:
-#     container_name: postgres_db
-#     image: postgres:16.2
-#     environment:
-#       POSTGRES_USER: postgres
-#       POSTGRES_PASSWORD: pgufc
-#       POSTGRES_DB: springboot
-#       PGDATA: /var/lib/postgresql/data/pgdata
-#     ports:
-#       - "5433:5432"
-#     volumes:
-#       - postgres_data:/var/lib/postgresql/data
-#     networks:
-#       - spring_network
-#     restart: unless-stopped
-#     healthcheck:
-#       test: ["CMD-SHELL", "pg_isready -U postgres"]
-#       interval: 10s
-#       timeout: 5s
-#       retries: 5
+## version: "3.9"
+## services:
+##   postgres_db:
+##     container_name: postgres_db
+##     image: postgres:16.2
+##     environment:
+##       POSTGRES_USER: postgres
+##       POSTGRES_PASSWORD: pgufc
+##       POSTGRES_DB: springboot
+##       PGDATA: /var/lib/postgresql/data/pgdata
+##     ports:
+##       - "5433:5432"
+##     volumes:
+##       - postgres_data:/var/lib/postgresql/data
+##     networks:
+##       - spring_network
+##     restart: unless-stopped
+##     healthcheck:
+##       test: ["CMD-SHELL", "pg_isready -U postgres"]
+##       interval: 10s
+##       timeout: 5s
+##       retries: 5
+#
+##   spring_app:
+##     container_name: spring_app
+##     build:
+##       context: ./api
+##       args:
+##         - PROFILE=dev
+##         - APP_VERSION=1.0.0
+##     image: spring_app_image
+##     ports:
+##       - "9090:9090"
+#
+##     environment:
+##       - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres_db:5432/springboot
+##       - SPRING_DATASOURCE_USERNAME=postgres
+##       - SPRING_DATASOURCE_PASSWORD=pgufc
+##       - SPRING_PROFILES_ACTIVE=dev
+##     networks:
+##       - spring_network
+##     depends_on:
+##       postgres_db:
+##         condition: service_healthy
+##     restart: on-failure
+#
+##   # Optional: Add additional services as needed
+##   # For example, you might want to add a mail service, frontend, etc.
+#
+## networks:
+##   spring_network:
+##     driver: bridge
+#
+## volumes:
+##   postgres_data:
+##     driver: local
+#
+#
+#
+#
+###### add the react app #####################
+## version: "3.9"
+#
+## services:
+##   # -----------------------------------------
+##   # POSTGRES DB
+##   # -----------------------------------------
+##   postgres_db:
+##     image: postgres:16.2
+##     container_name: postgres_db
+##     environment:
+##       POSTGRES_USER: postgres
+##       POSTGRES_PASSWORD: pgufc
+##       POSTGRES_DB: springboot
+##       PGDATA: /var/lib/postgresql/data/pgdata
+##     ports:
+##       - "5433:5432"
+##     volumes:
+##       - postgres_data:/var/lib/postgresql/data
+##     networks:
+##       - my_network
+##     healthcheck:
+##       test: ["CMD-SHELL", "pg_isready -U postgres"]
+##       interval: 10s
+##       timeout: 5s
+##       retries: 5
+##     restart: unless-stopped
+#
+##   # -----------------------------------------
+##   # SPRING BOOT (Backend)
+##   # -----------------------------------------
+##   spring_app:
+##     container_name: spring_app
+##     build:
+##       context: ./api
+##       # e.g., Dockerfile if named "Dockerfile"
+##       dockerfile: Dockerfile
+##     image: my_spring_app
+##     # Expose or publish the Spring Boot port (e.g., 8080)
+##     ports:
+##       - "8090:8090"
+##     environment:
+##       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres_db:5432/springboot
+##       SPRING_DATASOURCE_USERNAME: postgres
+##       SPRING_DATASOURCE_PASSWORD: pgufc
+##       SPRING_PROFILES_ACTIVE: dev
+##     networks:
+##       - my_network
+##     depends_on:
+##       postgres_db:
+##         condition: service_healthy
+##     restart: on-failure
+#
+##   # -----------------------------------------
+##   # REACT (Frontend)
+##   # -----------------------------------------
+##   react_frontend:
+##     container_name: react_frontend
+##     build:
+##       context: ./frontend
+##       dockerfile: Dockerfile
+##     image: my_react_app
+##     # If you are serving via Nginx, inside container it might be 80
+##     ports:
+##       - "80:80"
+##     # If your React app calls the backend, you might need an env var like:
+##     environment:
+##       # e.g., REACT_APP_API_URL: "http://spring_app:8080"
+##       # or VITE_API_URL: "http://spring_app:8080"
+##       # Adjust based on your code
+##       VITE_API2: "http://spring_app:8090"
+##     networks:
+##       - my_network
+##     depends_on:
+##       - spring_app
+##     restart: unless-stopped
+#
+## networks:
+##   my_network:
+##     driver: bridge
+#
+## volumes:
+##   postgres_data:
+##     driver: local
+######## version 3 of testing the docker compose file #########
+#services:
+#  # -----------------------------------------
+#  # POSTGRES DB
+#  # -----------------------------------------
+#  postgres_db:
+#    image: postgres:16.2
+#    container_name: postgres_db
+#    environment:
+#      POSTGRES_USER: postgres
+#      POSTGRES_PASSWORD: pgufc
+#      POSTGRES_DB: springboot
+#      PGDATA: /var/lib/postgresql/data/pgdata
+#    ports:
+#      - "5433:5432"
+#    volumes:
+#      - postgres_data:/var/lib/postgresql/data
+#    networks:
+#      - my_network
+#    healthcheck:
+#      test: ["CMD-SHELL", "pg_isready -U postgres"]
+#      interval: 10s
+#      timeout: 5s
+#      retries: 5
+#    restart: unless-stopped
+#
+#  # -----------------------------------------
+#  # SPRING BOOT (Backend)
+#  # -----------------------------------------
+#  spring_app:
+#    container_name: spring_app
+#    build:
+#      context: ./api
+#      dockerfile: Dockerfile
+#    image: my_spring_app
+#    ports:
+#      - "8090:8090"
+#    environment:
+#      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres_db:5432/springboot
+#      SPRING_DATASOURCE_USERNAME: postgres
+#      SPRING_DATASOURCE_PASSWORD: pgufc
+#      SPRING_PROFILES_ACTIVE: dev
+#    networks:
+#      - my_network
+#    depends_on:
+#      postgres_db:
+#        condition: service_healthy
+#    restart: on-failure
+#
+#  # -----------------------------------------
+#  # REACT (Frontend)
+#  # -----------------------------------------
+#  react_frontend:
+#    container_name: react_frontend
+#    build:
+#      context: ./frontend
+#      dockerfile: Dockerfile
+#    image: my_react_app
+#    ports:
+#      - "80:80"
+#    environment:
+#      VITE_API2: "http://spring_app:8090"  # Using exposed port
+#    networks:
+#      - my_network
+#    depends_on:
+#      - spring_app
+#    restart: unless-stopped
+#
+#networks:
+#  my_network:
+#    driver: bridge
+#
+#volumes:
+#  postgres_data:
+#    driver: local
 
-#   spring_app:
-#     container_name: spring_app
-#     build:
-#       context: ./api
-#       args:
-#         - PROFILE=dev
-#         - APP_VERSION=1.0.0
-#     image: spring_app_image
-#     ports:
-#       - "9090:9090"
-
-#     environment:
-#       - SPRING_DATASOURCE_URL=jdbc:postgresql://postgres_db:5432/springboot
-#       - SPRING_DATASOURCE_USERNAME=postgres
-#       - SPRING_DATASOURCE_PASSWORD=pgufc
-#       - SPRING_PROFILES_ACTIVE=dev
-#     networks:
-#       - spring_network
-#     depends_on:
-#       postgres_db:
-#         condition: service_healthy
-#     restart: on-failure
-
-#   # Optional: Add additional services as needed
-#   # For example, you might want to add a mail service, frontend, etc.
-
-# networks:
-#   spring_network:
-#     driver: bridge
-
-# volumes:
-#   postgres_data:
-#     driver: local
 
 
-
-
-##### add the react app #####################
-# version: "3.9"
+version: '3.8'
 
 services:
   # -----------------------------------------
   # POSTGRES DB
   # -----------------------------------------
   postgres_db:
-    image: postgres:16.2
+    image: postgres:16.2  # Using alpine for smaller size
     container_name: postgres_db
     environment:
       POSTGRES_USER: postgres
@@ -77,8 +238,6 @@ services:
       - "5433:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
-    networks:
-      - my_network
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 10s
@@ -90,55 +249,89 @@ services:
   # SPRING BOOT (Backend)
   # -----------------------------------------
   spring_app:
-    container_name: spring_app
     build:
       context: ./api
-      # e.g., Dockerfile if named "Dockerfile"
       dockerfile: Dockerfile
-    image: my_spring_app
-    # Expose or publish the Spring Boot port (e.g., 8080)
-    ports:
-      - "9090:9090"
+    container_name: spring_app
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://postgres_db:5432/springboot
       SPRING_DATASOURCE_USERNAME: postgres
       SPRING_DATASOURCE_PASSWORD: pgufc
       SPRING_PROFILES_ACTIVE: dev
-    networks:
-      - my_network
     depends_on:
       postgres_db:
         condition: service_healthy
     restart: on-failure
+    # Don't expose ports directly - route through NGINX
+    expose:
+      - "8090"
 
   # -----------------------------------------
-  # REACT (Frontend)
+  # REACT (Frontend) - Built via Node then served via NGINX
   # -----------------------------------------
   react_frontend:
-    container_name: react_frontend
     build:
       context: ./frontend
       dockerfile: Dockerfile
-    image: my_react_app
-    # If you are serving via Nginx, inside container it might be 80
-    ports:
-      - "3000:80"
-    # If your React app calls the backend, you might need an env var like:
+    container_name: react_app
+    expose:
+      - "3000"  # Internal port
     environment:
-      # e.g., REACT_APP_API_URL: "http://spring_app:8080"
-      # or VITE_API_URL: "http://spring_app:8080"
-      # Adjust based on your code
-      VITE_API2: "http://spring_app:9090" 
-    networks:
-      - my_network
-    depends_on:
-      - spring_app
+      VITE_API_URL: "/api"  # Points to NGINX proxy
     restart: unless-stopped
 
+    # NGINX (Main Entry Point)
+  nginx_proxy:
+      image: nginx:alpine
+      container_name: nginx_gateway
+      ports:
+        - "80:80"
+      volumes:
+        - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      depends_on:
+        - react_frontend
+        - spring_app
+      restart: unless-stopped
+
 networks:
-  my_network:
-    driver: bridge
+      default:
+        name: my_network
+        driver: bridge
 
 volumes:
-  postgres_data:
-    driver: local
+      postgres_data:
+
+#networks:
+#  default:
+#    name: my_network
+#    driver: bridge
+#
+#volumes:
+#  postgres_data:
+#
+
+#    react_frontend:
+#      build:
+#        context: ./frontend
+#        dockerfile: Dockerfile
+#      container_name: react_frontend
+#      # Don't expose ports directly - route through NGINX
+#      expose:
+#        - "80"
+#
+#    # -----------------------------------------
+#    # NGINX (Reverse Proxy/Router)
+#    # -----------------------------------------
+#    nginx_proxy:
+#      image: nginx:alpine
+#      container_name: nginx_proxy
+#      ports:
+#        - "80:80"  # Public port
+#        - "443:443" # For future HTTPS
+#      volumes:
+#        - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+#        - ./nginx/certs:/etc/nginx/certs  # For future HTTPS
+#      depends_on:
+#        - react_frontend
+#        - spring_app
+#      restart: unless-stopped

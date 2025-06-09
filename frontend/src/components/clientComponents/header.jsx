@@ -38,7 +38,7 @@ export default function Header() {
         <div className="flex items-center gap-6">
           <Link to="/" className="flex items-center gap-2">
 
-            <span className="text-xl font-bold text-[#12AE65]">Yo!Gigs</span>
+            <span className="text-xl font-bold text-[#12AE65]">FreeLance</span>
           </Link>
           <nav className="hidden md:flex items-center gap-6">
             <button className="flex items-center gap-2 text-gray-700 hover:text-gray-900">Categories</button>

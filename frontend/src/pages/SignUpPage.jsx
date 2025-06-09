@@ -35,8 +35,8 @@ const SignUpPage = () => {
 
         const endpoint =
             activeForm === "client"
-                ? `${API_BASE_URL}/api/client/register`
-                : `${API_BASE_URL}/api/prestataire/register`;
+                ? `${API_BASE_URL}/client/register`
+                : `${API_BASE_URL}/prestataire/register`;
 
         try {
             const response = await axios.post(endpoint, formData);

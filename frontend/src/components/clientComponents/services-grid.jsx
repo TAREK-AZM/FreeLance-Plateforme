@@ -13,7 +13,7 @@ export default function ServiceGrid() {
   const {services, setServices} = useServiceStore();
   const [currentPage, setCurrentPage] = useState(1);
   const [isGridView, setIsGridView] = useState(true);
-  const itemsPerPage = 12;
+  const itemsPerPage = 50;
   const totalPages = Math.ceil(services.length / itemsPerPage);
 
 

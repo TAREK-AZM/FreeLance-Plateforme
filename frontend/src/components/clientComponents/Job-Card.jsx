@@ -109,7 +109,7 @@ export default function JobCard({id,job }) {
                 className={`bg-[#E6F9EF]  border-4 border-[#12AE65] text-xl  `}
               >
                 <img
-                   src={BASE_URL + "/api/images/prestataires" + prestataire.imageUrl}
+                   src={BASE_URL + "/api" + prestataire.imageUrl}
                    alt={`${prestataire.prenom} ${prestataire.nom}`}
                    className="h-full w-full object-cover rounded-full border-2 border-[#12AE65] cursor-pointer hover:scale-110 transition-transform"
                 />
@@ -227,7 +227,7 @@ export default function JobCard({id,job }) {
                   />
                   <AvatarFallback className="bg-[#E6F9EF] text-[#12AE65]">
                     {/* {postulator.prestataire.prenom[0]} */}
-                    <img src={BASE_URL+"/api/images/prestataires"+postulator.prestataire.imageUrl} alt={`${postulator.prestataire.prenom} ${postulator.prestataire.nom}`} 
+                    <img src={BASE_URL+"/api"+postulator.prestataire.imageUrl} alt={`${postulator.prestataire.prenom} ${postulator.prestataire.nom}`} 
                     className="h-12 w-12 border-2 border-[#12AE65] cursor-pointer hover:scale-110 transition-transform" />
                   </AvatarFallback>
                 </Avatar>
