@@ -16,6 +16,7 @@ public class ServiceClientDTO {
     private String description;
     private Double prix; // Prix du service
     private Boolean status;
+    private String image;
     private PrestataireDTO prestataire;
     private Category category;
 }

@@ -17,5 +17,6 @@ public class PostulationDTO {
     private Double prix;
     private StatutPost status;
     private LocalDateTime datePostulation;
+    private String image;
     private PrestataireDTO prestataire;
 }

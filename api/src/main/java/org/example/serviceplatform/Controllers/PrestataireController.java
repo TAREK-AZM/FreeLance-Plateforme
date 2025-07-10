@@ -1,5 +1,8 @@
 package org.example.serviceplatform.Controllers;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.annotation.JsonAppend;
 import org.example.serviceplatform.DTO.*;
 import org.example.serviceplatform.Entities.*;
 import org.example.serviceplatform.Repositories.CertificationRepo;
@@ -8,13 +11,15 @@ import org.example.serviceplatform.Repositories.PrestataireRepo;
 import org.example.serviceplatform.Repositories.ServiceRepo;
 import org.example.serviceplatform.Services.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.example.serviceplatform.DTO.ConversationDTO;
-import org.example.serviceplatform.DTO.MessageDTO;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
 @RestController
@@ -35,9 +40,13 @@ public class PrestataireController {
     @Autowired
     private NotificationService notificationService;
     @Autowired
-    private ConversationService conversationService;
+    private ObjectMapper objectMapper;
 
+
+    private static final String UPLOAD_DIR = "src/main/resources/static/images/";
     //////////////////////////////GESTION DE PROFIL /////////////////////
+
+
 
 
 
@@ -47,20 +56,49 @@ public class PrestataireController {
         Integer idPrest=utilisateurService.getAuthenticatedUserId(); //le id de user authentifié
        return prestataireService.getPrestataire(idPrest);
     }
+
     /////// UPDATE  les infos personnels de prestataire
-    @PutMapping("/profil")
-    public ResponseEntity<String> updateProfil(@RequestBody Prestataire prestataire) {
-        Integer idPrest=utilisateurService.getAuthenticatedUserId();
-         prestataireService.updatePrestataire(idPrest,prestataire);
-          return ResponseEntity.ok("Profil updated");
+    @PutMapping(value = "/profil/update", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<String> updateProfil(
+            @RequestPart("prestataire") String prestataireJson,  // JSON en String
+            @RequestPart(value = "file", required = false) MultipartFile file) {
+
+         //Convertir le JSON String en Objet Prestataire
+     //   ObjectMapper objectMapper = new ObjectMapper();
+        Prestataire prestataire;
+        try {
+            prestataire = objectMapper.readValue(prestataireJson, Prestataire.class);
+        } catch (JsonProcessingException e) {
+            return ResponseEntity.badRequest().body("Erreur lors de la conversion JSON : " + e.getMessage());
+        }
+
+        Integer idPrest = utilisateurService.getAuthenticatedUserId();
+
+        // 📌 Mettre à jour les infos du prestataire
+        prestataireService.updatePrestataire(idPrest, prestataire, file);
+
+        return ResponseEntity.ok("✅ Profil mis à jour avec succès.");
     }
 
-                    ////////////////////////////// Gestion de certification//////////////////////////////
+
+    ////////////////////////////// Gestion de certification//////////////////////////////
 
     @PostMapping("/certification/add")
-    public ResponseEntity<String>  ajouterCertification(@RequestBody Certification certification) {
-        Integer idPrest=utilisateurService.getAuthenticatedUserId();
-        certificationService.StoreCertification(idPrest,certification);
+    public ResponseEntity<String>  ajouterCertification(
+            @RequestPart("certification") String certificationJson,
+            @RequestPart(value = "file", required = false) MultipartFile file) {
+
+
+        //Convertir le JSON String en Objet Prestataire
+       // ObjectMapper objectMapper = new ObjectMapper();
+        Certification certification;
+        try {
+            certification= objectMapper.readValue(certificationJson, Certification.class);
+        } catch (JsonProcessingException e) {
+            return ResponseEntity.badRequest().body("Erreur lors de la conversion JSON : " + e.getMessage());
+        }
+            Integer idPrest=utilisateurService.getAuthenticatedUserId();
+        certificationService.StoreCertification(idPrest,certification,file);
          return ResponseEntity.ok("Certification stored");
 
     }
@@ -70,8 +108,18 @@ public class PrestataireController {
         return ResponseEntity.ok("Certification deleted");
     }
     @PutMapping("/certification/update")
-    public ResponseEntity<String>  updateCertification(@RequestBody Certification certification) {
-         certificationService.UpdateCertification(certification);
+    public ResponseEntity<String>  updateCertification(
+            @RequestPart String certificationJson,
+            @RequestPart(value = "file", required = false) MultipartFile file) {
+        //Convertir le JSON String en Objet Prestataire
+       // ObjectMapper objectMapper = new ObjectMapper();
+        Certification certification;
+        try {
+            certification= objectMapper.readValue(certificationJson, Certification.class);
+        } catch (JsonProcessingException e) {
+            return ResponseEntity.badRequest().body("Erreur lors de la conversion JSON : " + e.getMessage());
+        }
+         certificationService.UpdateCertification(certification,file);
         return ResponseEntity.ok("Certification updated");
     }
 
@@ -110,18 +158,44 @@ public class PrestataireController {
         Integer idPrest=utilisateurService.getAuthenticatedUserId();
         return serviceService.getServices(idPrest);
  }
+
+
+
+
+
     /////////ajouter une service//////////
-    @PostMapping("/mesServices/add")
-    public ResponseEntity<String>  addService(@RequestBody Service service) {
+    @PostMapping("/service/add")
+    public ResponseEntity<String>  addService(
+            @RequestPart("service") String servicejson,
+            @RequestPart(value = "file", required = false) MultipartFile file) {
         Integer idPrest=utilisateurService.getAuthenticatedUserId();
-         serviceService.storeService(idPrest,service);
+        //Convertir le JSON String en Objet Service
+        //ObjectMapper objectMapper = new ObjectMapper();
+        Service service;
+        try {
+            service = objectMapper.readValue(servicejson, Service.class);
+        } catch (JsonProcessingException e) {
+            return ResponseEntity.badRequest().body("Erreur lors de la conversion JSON : " + e.getMessage());
+        }
+         serviceService.storeService(idPrest,service,file);
         return ResponseEntity.ok("votre service est bien ajoutée");
     }
 
     //////////////modifier une service///////
-    @PutMapping("/mesServices/update")
-    public ResponseEntity<String> updateService(@RequestBody Service service )  {
-        serviceService.updateService(service);
+    @PutMapping("/service/update")
+    public ResponseEntity<String> updateService(
+            @RequestPart("service") String servicejson,
+            @RequestPart(value = "file", required = false) MultipartFile file)   {
+        //Convertir le JSON String en Objet Service
+        ObjectMapper objectMapper = new ObjectMapper();
+        Service service;
+        try {
+            service = objectMapper.readValue(servicejson, Service.class);
+        } catch (JsonProcessingException e) {
+            return ResponseEntity.badRequest().body("Erreur lors de la conversion JSON : " + e.getMessage());
+        }
+
+        serviceService.updateService(service,file);
         return ResponseEntity.ok("la service est updated");
     }
     //////// le details d'une service/////////
@@ -168,6 +242,13 @@ public class PrestataireController {
     public void markAsRead(@PathVariable Integer idNotification){
         notificationService.markAsRead(idNotification);
     }
+
+
+
+
+
+
+
 
 
 }

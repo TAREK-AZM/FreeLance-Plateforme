@@ -1,6 +1,7 @@
 package org.example.serviceplatform.Controllers;
 
-import lombok.AllArgsConstructor;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.example.serviceplatform.DTO.*;
 import org.example.serviceplatform.Entities.*;
 import org.example.serviceplatform.Repositories.ClientRepo;
@@ -9,15 +10,11 @@ import org.example.serviceplatform.Services.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.example.serviceplatform.DTO.ConversationDTO;
-import org.example.serviceplatform.DTO.MessageDTO;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 import java.util.Map;
 
-@AllArgsConstructor
 @RestController
 @RequestMapping("/api/client")
 public class ClientController {
@@ -32,10 +29,24 @@ public class ClientController {
     private final PostulationService postulationService;
     private final UtilisateurService utilisateurService;
     private final FavorisService favorisService;
-    private final ConversationService conversationService;
+    private final ServiceService serviceService;
+    private final ObjectMapper objectMapper;
 
-
-
+    public ClientController(ClientRepo clientRepo, ClientService clientService, CategoryService categoryService, DemandeService demandeService, CommentaireService commentaireService, CommentaireRepo commentaireRepo, EvaluationService evaluationService, OffreService offreService, PostulationService postulationService, UtilisateurService utilisateurService, FavorisService favorisService, ServiceService serviceService,ObjectMapper objectMapper) {
+        this.clientRepo = clientRepo;
+        this.clientService = clientService;
+        this.categoryService = categoryService;
+        this.demandeService = demandeService;
+        this.commentaireService = commentaireService;
+        this.commentaireRepo = commentaireRepo;
+        this.evaluationService = evaluationService;
+        this.offreService = offreService;
+        this.postulationService = postulationService;
+        this.utilisateurService = utilisateurService;
+        this.favorisService = favorisService;
+        this.serviceService = serviceService;
+        this.objectMapper = objectMapper;
+    }
 
                         ////////////// GESTION DE PROFIL///////////
 
@@ -49,9 +60,20 @@ public class ClientController {
 
     }
     @PutMapping("/profil/update")
-    public ResponseEntity<String> updateProfil(@RequestBody ClientDTO clientDTO){
+    public ResponseEntity<String> updateProfil(
+            @RequestPart String clientDTOjson ,
+            @RequestPart(value = "file", required = false) MultipartFile file){
+
+        //Convertir le JSON String en Objet ClientDTO
+        ObjectMapper objectMapper = new ObjectMapper();
+        ClientDTO clientDTO;
+        try {
+            clientDTO = objectMapper.readValue(clientDTOjson , ClientDTO.class);
+        } catch (JsonProcessingException e) {
+            return ResponseEntity.badRequest().body("Erreur lors de la conversion JSON : " + e.getMessage());
+        }
         Integer idClient=utilisateurService.getAuthenticatedUserId();
-        clientService.updateClient(idClient,clientDTO);
+        clientService.updateClient(idClient,clientDTO,file);
         return ResponseEntity.ok("Client updated");
     }
     @DeleteMapping("/profil/delete")
@@ -80,7 +102,22 @@ public class ClientController {
 
 
 
-                          ///////////////////////////GERER MES DEMANDES //////////////////////////
+                          ///////////////////////////GERER MES DEMANDES et SERVICES //////////////////////////
+   //get all services
+    @GetMapping("services/all")
+    public List<ServiceClientDTO> getAllServices(){
+        return serviceService.getAllServices();
+    }
+
+    //Details d'une service
+    //////// le details d'une service/////////
+    @GetMapping("/service/{idService}/serviceDetails")
+    public ServiceClient2DTO afficherService(@PathVariable Integer idService) {
+        return serviceService.getDetailstoClient(idService);
+    }
+
+
+
     //demander une service
     @PostMapping("services/{id}/demandes")
     public ResponseEntity<String> demanderService(@PathVariable Integer id,@RequestBody DemandeClient demandeClient){
@@ -147,12 +184,40 @@ public class ClientController {
         return offreService.getOffresOfClient(utilisateurService.getAuthenticatedUserId());
    }
 
+
     //creer un post (offre) pour chercher une service
     @PostMapping("/offre/create")
-    public ResponseEntity<String> storeOffre(@RequestBody Offre offre){
+    public ResponseEntity<String> storeOffre(
+                @RequestPart("offre") String offrejson ,
+                @RequestPart(value = "file", required = false) MultipartFile file){
+        //Convertir le JSON String en Objet Offre
+       // ObjectMapper objectMapper = new ObjectMapper();
+        Offre offre;
+        try {
+            offre = objectMapper.readValue(offrejson , Offre.class);
+        } catch (JsonProcessingException e) {
+            return ResponseEntity.badRequest().body("Erreur lors de la conversion JSON : " + e.getMessage());
+        }
         Integer idClient=utilisateurService.getAuthenticatedUserId();    //authentifié
-         offreService.createOffre(idClient,offre);
+         offreService.createOffre(idClient,offre,file);
          return ResponseEntity.ok("offre stored");
+      }
+      //update offre
+      @PutMapping("/offre/update")
+      public ResponseEntity<String> updateOffre(
+              @RequestPart String offrejson ,
+              @RequestPart(value = "file", required = false) MultipartFile file){
+          //Convertir le JSON String en Objet Offre
+          ObjectMapper objectMapper = new ObjectMapper();
+          Offre offre;
+          try {
+              offre = objectMapper.readValue(offrejson , Offre.class);
+          } catch (JsonProcessingException e) {
+              return ResponseEntity.badRequest().body("Erreur lors de la conversion JSON : " + e.getMessage());
+          }
+
+          offreService.updateOffre(offre,file);
+          return ResponseEntity.ok("offre updated");
       }
       //voir les postulas des prestataires  pour une offre
     @GetMapping("/offre/{id}/postulas")
@@ -199,15 +264,9 @@ public class ClientController {
 
 
     //////////////////////////// Notifications /////////////////
-    // lorsque le client accepte une postulation
 
 
-    //lorsque le prest acceptre ou refuse une demande pour une service de la part du client
 
-
-    //lorsque le prest postuler pour une offre
-
-    //get la liste des notification pour un client + un prestataire
 
 
 }

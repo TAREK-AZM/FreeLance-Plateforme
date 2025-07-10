@@ -14,4 +14,5 @@ public class CategoryDTO {
     private Integer id;       // Identifiant unique de la catégorie
     private String name;      // Nom de la catégorie
     private String description; // Description de la catégorie
+    private String image;
 }
