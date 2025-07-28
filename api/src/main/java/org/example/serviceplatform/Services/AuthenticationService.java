@@ -98,7 +98,7 @@ public class AuthenticationService {
                     .ville(request.getVille())
                     .adresse(request.getAdresse())
                     .role(role)
-                    .actif(true)
+                    .actif(false)
                     .build();
         } else if (roleName == RoleType.PRESTATAIRE) {
             return Prestataire.builder()
@@ -110,7 +110,7 @@ public class AuthenticationService {
                     .ville(request.getVille())
                     .adresse(request.getAdresse())
                     .role(role)
-                    .actif(true)
+                    .actif(false)
                     .build();
         } else {
             throw new IllegalArgumentException("Type d'utilisateur non supporté");

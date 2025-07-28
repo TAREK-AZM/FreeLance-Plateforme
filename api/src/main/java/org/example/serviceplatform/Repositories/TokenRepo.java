@@ -9,4 +9,5 @@ import java.util.Optional;
 public interface TokenRepo extends JpaRepository<Token, Integer> {
     Optional<Token> findByToken(String token);
     List<Token> findAllValidTokensByUserId(Integer userId);
+    void deleteAllByExpiredAndRevoked(boolean expired, boolean revoked);
 }

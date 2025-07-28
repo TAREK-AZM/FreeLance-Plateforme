@@ -12,7 +12,6 @@ import org.example.serviceplatform.Entities.Enums.RoleType;
 public class AuthenticationResponse {
     private String accessToken;
     private String refreshToken;
-    private RoleType roleType;
     private String message;
     private RoleType role;
 }

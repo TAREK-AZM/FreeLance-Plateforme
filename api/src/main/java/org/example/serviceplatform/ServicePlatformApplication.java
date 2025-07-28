@@ -10,6 +10,7 @@ import org.springframework.boot.web.server.ConfigurableWebServerFactory;
 import org.springframework.boot.web.server.WebServerFactoryCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -21,6 +22,7 @@ import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.Date;
 
+@EnableScheduling
 @SpringBootApplication
 @EnableJpaRepositories(basePackages = "org.example.serviceplatform.Repositories")
 public class ServicePlatformApplication {
