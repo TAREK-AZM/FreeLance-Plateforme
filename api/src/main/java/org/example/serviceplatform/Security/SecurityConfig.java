@@ -50,7 +50,7 @@ public class SecurityConfig {
                         ).permitAll()
                         .requestMatchers("/api/conversations/**").hasAnyAuthority("CLIENT", "PRESTATAIRE")
                         .requestMatchers("/api/client/**").hasAuthority("CLIENT")
-                        .requestMatchers("/api/prestataire/**").hasAuthority("PRESTATAIRE")
+//                        .requestMatchers("/api/prestataire/**").hasAuthority("PRESTATAIRE")
                         .requestMatchers("/api/admin/**").hasAuthority("ADMIN")
                         .anyRequest().authenticated()
                 )
@@ -81,7 +81,7 @@ public class SecurityConfig {
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.setAllowedOriginPatterns(Arrays.asList(
-                "http://localhost",
+                "http://localhost:3000",
                 "http://localhost:80",
                 "http://react_frontend",
                 "http://react_frontend:80")); // Allow all origins
