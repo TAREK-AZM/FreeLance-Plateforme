@@ -8,6 +8,7 @@ import JobBoard from "./pages/JobBoard";
 import Profile from "./pages/Profile";
 import LoginPage from "./pages/LoginPage";
 import SignUpPage from "./pages/SignUpPage";
+import ActivationPage from "./pages/ActivationPage";
 import UserDetails from "./pages/UserDetails";
 import Users from "./pages/Users"
 import ProtectedRoute from "./components/ProtectedRoute";
@@ -30,6 +31,7 @@ const router = createBrowserRouter(
            {/* Public routes */}
            <Route path="/login" element={<LoginPage />} />
             <Route path="/signup" element={<SignUpPage />} />
+            <Route path="/activate" element={<ActivationPage />} />
 
             {/* Redirect the first-time visit to the client homepage */}
             <Route path="/" element={<Navigate to="/client/homepage" />} />

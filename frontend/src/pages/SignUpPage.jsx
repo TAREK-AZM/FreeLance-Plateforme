@@ -35,14 +35,14 @@ const SignUpPage = () => {
 
         const endpoint =
             activeForm === "client"
-                ? `${API_BASE_URL}/client/register`
-                : `${API_BASE_URL}/prestataire/register`;
+                ? `${API_BASE_URL}/api/client/register`
+                : `${API_BASE_URL}/api/prestataire/register`;
 
         try {
             const response = await axios.post(endpoint, formData);
 
             if (response.status === 200) {
-                navigate("/login"); // Redirect to login after successful sign-up
+                navigate("/activate"); // Redirect to login after successful sign-up
             }
         } catch (err) {
             console.error("❌ Registration Error:", err);
